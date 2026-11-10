@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-10T11:01:01.840Z",
+        "reason": "Nauvi-merkboek (DESIGN.md): Inter is het vastgelegde lettertype voor tekst, navigatie en knoppen."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "src/components/marketing/company-brain.module.css"
+        ],
+        "createdAt": "2026-11-10T11:01:01.853Z",
+        "reason": "Agent: de gemelde overgang wijzigt de stroke-width van een SVG-pad in de Company Brain-demo. Die eigenschap verandert de lijntekening zonder de paginalay-out te wijzigen."
+      }
+    ]
+  }
+}

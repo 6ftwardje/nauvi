@@ -1,4 +1,8 @@
 .hero {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--navbar-height));
+  min-height: calc(100svh - var(--navbar-height));
   background: var(--canvas);
   border-bottom: 1px solid var(--border);
   color: var(--ink);
@@ -6,13 +10,15 @@
 }
 
 .inner {
+  flex: 1;
   display: grid;
   grid-template-columns: minmax(0, .43fr) minmax(0, .57fr);
+  align-content: center;
   align-items: start;
   gap: 37px;
+  width: 100%;
   max-width: 1344px;
-  min-height: 590px;
-  margin: auto;
+  margin-inline: auto;
   padding: 37px 48px 30px;
 }
 
@@ -67,29 +73,17 @@
 }
 
 @media (max-width: 920px) {
-  .inner { grid-template-columns: minmax(0, 1fr); gap: 20px; min-height: 0; padding: 36px 30px 34px; }
+  .inner { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 36px 30px 34px; }
   .copy { max-width: 620px; width: 100%; margin: auto; padding-top: 0; }
   .hero .headline { max-width: 20ch; margin-bottom: 20px; font-size: clamp(39px, 6vw, 53px); }
   .hero .description { max-width: 53ch; }
   .actions { margin-top: 22px; }
   .heroTools { margin-top: 18px; }
-  .companyLogos { max-width: 680px; grid-template-columns: 1fr; margin-inline: auto; padding-bottom: 27px; }
+  .companyLogos { grid-template-columns: 1fr; margin-inline: max(30px, calc((100% - 680px) / 2)); padding-bottom: 27px; }
   .referenceIntro { display: flex; align-items: center; gap: 24px; }
   .hero .referenceIntro>p { margin: 0; }
   .referenceIntro>span { max-width: none; font-size: 12px; }
   .referenceSubject { font-size: 11px; }
-}
-
-@media (max-width: 740px) {
-  .companyLogos { margin-inline: 30px; }
-}
-
-@media (max-width: 760px) {
-  .inner {
-    min-height: 100vh;
-    min-height: 100dvh;
-    align-content: center;
-  }
 }
 
 @media (max-width: 600px) {

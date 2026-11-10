@@ -178,11 +178,23 @@
 .visual .extraSources [data-source="documents"] { display: none; }
 
 .demo {
-  padding: 10px 12px 11px;
+  --demo-inset: 13px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  isolation: isolate;
+}
+
+.demo::before {
+  content: "";
+  z-index: -1;
+  grid-area: 1 / 1;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--white);
 }
+
+.demo:is([data-status="answered"], [data-status="unmatched"])::before { grid-row-end: 3; }
+.demoControls { grid-area: 1 / 1; padding: 11px var(--demo-inset) 12px; }
 
 .prompt {
   display: grid;
@@ -248,11 +260,20 @@
 .questions button:is(:hover, [aria-expanded="true"]) { text-decoration: underline; text-underline-offset: 3px; }
 .questions svg { flex-shrink: 0; }
 
-.reply { font-size: 13px; color: var(--ink); line-height: 1.6; }
-.reply:has(> :not(.srOnly)) { margin: 3px 3px 0; padding: 7px 0 4px; border-top: 1px solid var(--border); animation: replyEnter .22s ease both; }
-.replyHeading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.replySlot {
+  --reply-heading-height: 36px;
+  grid-area: 2 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline: calc(var(--demo-inset) + 3px);
+}
+.reply { grid-area: 1 / 1; font-size: 13px; color: var(--ink); line-height: 1.6; }
+.reply:has(> :not(.srOnly)) { padding: 7px 0 16px; border-top: 1px solid var(--border); }
+.replySizer { visibility: hidden; }
+.reply:not(.replySizer):has(> :not(.srOnly)) { animation: replyEnter .22s ease both; }
+.replyHeading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: var(--reply-heading-height); }
 .replyHeading strong { color: var(--muted); font-size: 11px; font-weight: 650; }
-.visual .replyHeading button { display: grid; place-items: center; width: 44px; height: 36px; border: 0; border-radius: 6px; background: transparent; color: var(--ink); cursor: pointer; }
+.visual .replyHeading button { display: grid; place-items: center; width: 44px; height: var(--reply-heading-height); border: 0; border-radius: 6px; background: transparent; color: var(--ink); cursor: pointer; }
 .reply p { margin: 0; font-size: inherit; }
 .reply > span { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; }
 
@@ -289,14 +310,15 @@
   .sources .source > :is(img, svg) { flex-basis: 15px; width: 15px; height: 15px; }
   .meta { justify-content: flex-start; min-height: 44px; margin-bottom: 3px; gap: 7px; }
   .credit { display: inline-flex; align-items: center; min-height: 44px; }
-  .demo { padding: 7px 9px; }
+  .demo { --demo-inset: 10px; }
+  .demoControls { padding-block: 8px; }
   .prompt { gap: 4px; grid-template-columns: auto minmax(0, 1fr) auto; }
   .demoLabel { display: none; }
   .prompt input { font-size: 16px; }
   .visual .prompt button { width: 44px; height: 44px; }
   .questions { display: grid; gap: 0; }
   .visual .questions button { min-height: 44px; justify-content: space-between; font-size: 12px; }
-  .visual .replyHeading button { height: 44px; }
+  .replySlot { --reply-heading-height: 44px; }
 }
 
 @media (max-width: 760px) and (prefers-reduced-motion: no-preference) {

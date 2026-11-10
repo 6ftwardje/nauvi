@@ -21,6 +21,7 @@
   --border: #deddd6;
   --border-strong: #b9b7af;
   --display-font: "Hubot Sans", Inter, sans-serif;
+  --navbar-height: 88px;
   background: var(--canvas);
   color: var(--ink);
   font-family: Inter, sans-serif;
@@ -225,8 +226,11 @@
   .page .serviceExample:first-child h3 { font-size: 30px; }
   .page .valueSection { gap: 40px; }
 }
+@media (max-width: 1023px) {
+  .page { --navbar-height: 78px; }
+}
 @media (max-width: 760px) {
-  .page { --section-gutter: 22px; --section-space: 56px; }
+  .page { --section-gutter: 22px; --section-space: 56px; --navbar-height: 74px; }
   .page .controlSection { display: block; }
   .page .controlMark { display: none; }
   .page .controlSection h2 { font-size: 36px; }

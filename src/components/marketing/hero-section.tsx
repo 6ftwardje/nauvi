@@ -7,6 +7,7 @@ import s from "./hero.module.css";
 
 const familiarTools = [
   { id: "googledrive", name: "Google Drive" },
+  { id: "microsoft", name: "Microsoft 365" },
   { id: "slack", name: "Slack" },
   { id: "gmail", name: "Gmail" },
   { id: "notion", name: "Notion" },

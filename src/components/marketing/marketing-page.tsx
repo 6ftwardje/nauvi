@@ -16,6 +16,7 @@ import s from "./marketing.module.css";
 
 const tools = [
   { id: "googledrive", name: "Google Drive", category: "Kennis" },
+  { id: "microsoft", name: "Microsoft 365", category: "Kennis" },
   { id: "slack", name: "Slack", category: "Communicatie" },
   { id: "notion", name: "Notion", category: "Kennis" },
   { id: "hubspot", name: "HubSpot", category: "CRM & sales" },
@@ -127,7 +128,7 @@ function IntegrationExplorer() {
       </div>)}
     </div>
     <button className={s.marqueeToggle} type="button" aria-pressed={staticTools} onClick={() => setStaticTools(value => !value)}>Statische lijst</button>
-    <p className={s.toolsDisclaimer}>Voorbeelden van tools voor maatwerk, geen ingebouwde koppelingen. Microsoft 365 of een ander systeem? Dat bekijken we ook.</p>
+    <p className={s.toolsDisclaimer}>Voorbeelden van tools voor maatwerk, geen ingebouwde koppelingen.</p>
   </div>;
 }
 

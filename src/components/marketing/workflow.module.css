@@ -9,18 +9,7 @@
   color: var(--ink);
 }
 
-/* Dry ink at the start of the workflow chapter. */
-.copy { position: relative; min-width: 0; }
-.copy::before {
-  content: "";
-  position: absolute;
-  inset-block-start: -22px;
-  inset-inline-start: 0;
-  width: clamp(80px, 8vw, 116px);
-  height: 7px;
-  background: url("/marketing/materials/ink-rule.svg") left center / contain no-repeat;
-  pointer-events: none;
-}
+.copy { min-width: 0; }
 
 .section .copy h2 { margin: 0; font-size: clamp(34px, 3.2vw, 46px); line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
 .section .description { max-width: 42ch; margin: 25px 0 29px; color: var(--ink); font-size: 17px; line-height: 1.8; }
@@ -29,77 +18,33 @@
 .cta svg { flex-shrink: 0; }
 .section .reassurance { margin: 17px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
 
-.visual { min-width: 0; margin: 0; }
-.panel { padding: 28px; border: 1px solid var(--border); border-radius: 16px; background: var(--white); }
-.exampleLabel { display: inline-block; padding: 5px 11px; border-radius: 6px; background: color-mix(in srgb, var(--bone) 28%, var(--white)); color: var(--ink); font-size: 11px; font-weight: 600; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; }
-.section .panel h3 { margin: 13px 0 28px; font-size: clamp(25px, 2.1vw, 30px); line-height: 1.2; letter-spacing: -.03em; text-wrap: balance; }
-.nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; list-style: none; margin: 0; padding: 0; }
-.node { position: relative; min-width: 0; min-height: 176px; padding: 18px 15px; border: 1px solid var(--border); border-radius: 14px; background: var(--white); transition: border-color .18s, background-color .18s; }
-.node[data-knowledge=true] { border-color: transparent; background: color-mix(in srgb, var(--bone) 24%, var(--white)); }
-.node:hover { border-color: var(--bone); background: color-mix(in srgb, var(--bone) 15%, var(--white)); }
-.nodeIcon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 15px; border-radius: 10px; background: color-mix(in srgb, var(--bone) 22%, var(--white)); color: var(--ink); }
-.node[data-knowledge=true] .nodeIcon { background: color-mix(in srgb, var(--bone) 42%, var(--white)); }
-.section .node h4 { margin: 0 0 7px; font-size: 15px; line-height: 1.4; letter-spacing: -.02em; }
-.section .node p { margin: 0; color: var(--ink); font-size: 13px; line-height: 1.65; }
-.connector { position: absolute; left: 100%; top: 50%; width: 28px; height: 8px; transform: translateY(-50%); overflow: visible; pointer-events: none; }
-.connectionBase { stroke: var(--border-strong); stroke-width: 1.5; }
-.connectionProgress { stroke: var(--success); stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: 1; }
-.connector circle { fill: var(--border-strong); }
-.visual[data-revealed=true] .connectionProgress { animation: connect .7s cubic-bezier(.16, 1, .3, 1) both; animation-delay: calc(.1s + var(--flow-order) * .3s); }
-.approval { display: flex; align-items: center; gap: 17px; margin-top: 25px; padding: 19px; border-radius: 12px; background: color-mix(in srgb, var(--bone) 24%, var(--white)); }
-.approval>svg { flex-shrink: 0; color: var(--success); }
-.approval strong { display: block; color: var(--ink); font-size: 16px; font-weight: 600; line-height: 1.45; letter-spacing: -.02em; }
-.section .approval p { margin: 4px 0 0; color: var(--ink); font-size: 13px; line-height: 1.6; }
-.visual[data-revealed=true] .approval { animation: approve .8s .65s ease-out both; }
-.caption { max-width: 68ch; margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.75; }
-
-@keyframes connect { to { stroke-dashoffset: 0; } }
-@keyframes approve { from { background-color: color-mix(in srgb, var(--bone) 12%, var(--white)); } to { background-color: color-mix(in srgb, var(--bone) 24%, var(--white)); } }
+.videoPlaceholder {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--linen);
+  color: var(--muted);
+  font-size: 14px;
+}
 
 @media (max-width: 1100px) {
   .section { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .copy { max-width: 660px; }
   .section .copy h2 { font-size: 44px; }
   .section .description { max-width: 54ch; font-size: 16px; }
-  .visual { width: 100%; max-width: 840px; }
+  .videoPlaceholder { max-width: 840px; }
 }
 @media (max-width: 760px) {
   .section { gap: 34px; }
   .section .copy h2 { font-size: clamp(32px, 6vw, 40px); }
   .section .description { margin: 22px 0 25px; font-size: 15px; }
-  .panel { padding: 24px; }
-  .nodes { gap: 24px; }
-  .node { padding: 17px 13px; }
-  .connector { width: 24px; }
-  .section .node h4 { font-size: 14px; }
 }
 @media (max-width: 600px) {
   .section .copy h2 { font-size: clamp(31px, 8.3vw, 38px); }
-  .panel { padding: 22px; }
-  .section .panel h3 { max-width: 20ch; margin-bottom: 25px; font-size: 27px; }
-  .nodes { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .node { display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: 4px 14px; min-height: 0; padding: 17px; }
-  .nodeIcon { grid-row: 1 / 3; margin: 0; }
-  .section .node h4 { align-self: end; margin: 0; font-size: 15px; }
-  .section .node p { grid-column: 2; }
-  .connector { left: 50%; top: calc(100% + 10px); width: 28px; transform: translateX(-50%) rotate(90deg); }
-  .approval { align-items: flex-start; gap: 12px; margin-top: 24px; padding: 17px; }
-  .approval>svg { width: 27px; height: 27px; margin-top: 2px; }
-  .approval strong { font-size: 15px; }
-  .section .approval p { font-size: 13px; }
-  .caption { font-size: 12px; }
-}
-@media (max-width: 370px) {
-  .panel { padding: 18px; }
-  .section .panel h3 { font-size: 25px; }
-  .node { padding: 14px; gap: 5px 11px; grid-template-columns: 34px minmax(0, 1fr); }
-  .nodeIcon { width: 34px; height: 38px; border-radius: 8px; }
-  .nodeIcon svg { width: 22px; height: 22px; }
-  .section .node h4 { font-size: 14px; }
-  .section .node p { font-size: 13px; }
-  .approval { gap: 10px; padding: 15px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .section *, .section *::before, .section *::after { animation: none!important; transition: none!important; }
-  .connectionProgress { stroke-dashoffset: 0; }
 }
