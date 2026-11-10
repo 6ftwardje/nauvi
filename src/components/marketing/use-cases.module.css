@@ -1,0 +1,275 @@
+.section {
+  --case-border: var(--border);
+  --case-surface: var(--white);
+  --case-tint: var(--bone);
+  padding: var(--section-space) var(--section-inset);
+  border-bottom: 1px solid var(--border);
+  background: var(--accent-tint) url("/marketing/materials/blue-halftone.webp") right top / clamp(350px, 43vw, 640px) auto no-repeat;
+  color: var(--ink);
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 28px 56px;
+  margin-bottom: 36px;
+}
+
+.section .intro h2 {
+  font-size: clamp(36px, 3.7vw, 50px);
+  line-height: 1.15;
+  letter-spacing: -.035em;
+  font-weight: 400;
+}
+
+.section .intro p {
+  max-width: 45ch;
+  padding-bottom: 2px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.tabs {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--case-border);
+}
+
+.tabs > button {
+  position: relative;
+  min-height: 48px;
+  padding: 9px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.tabs > button:hover,
+.tabs > button[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.tabs > button[aria-selected="true"]::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+
+.tabs > button:focus-visible,
+.panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cards[data-count="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cardScene {
+  display: grid;
+  min-width: 0;
+  perspective: 1000px;
+}
+
+.card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(16px, 1.8vw, 24px);
+  border: 1px solid var(--case-border);
+  border-radius: 16px;
+  background: var(--case-surface);
+  transform-style: preserve-3d;
+  transition: box-shadow .25s ease-out;
+}
+
+.cardVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 14px);
+  min-height: 88px;
+  padding: 13px 14px;
+  border-radius: 10px;
+  background: var(--case-tint);
+  color: var(--ink);
+  transform-style: preserve-3d;
+}
+
+.sourcePlate,
+.resultPlate {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgb(22 15 12 / 9%);
+}
+
+.sourcePlate {
+  background: var(--white);
+  transform: rotate(-7deg);
+}
+
+.resultPlate {
+  background: var(--espresso);
+  color: var(--white);
+  transform: rotate(6deg);
+}
+
+.connection {
+  display: flex;
+  flex: 1 1 auto;
+  max-width: 110px;
+  align-items: center;
+  gap: 6px;
+}
+
+.connection::before,
+.connection::after {
+  flex: 1;
+  border-top: 1px dashed currentColor;
+  opacity: .32;
+  content: "";
+}
+
+.connection img { flex-shrink: 0; }
+
+.cardCopy {
+  margin: 20px 0;
+}
+
+.section .cardCopy h3 {
+  margin-bottom: 9px;
+  font-size: clamp(19px, 1.7vw, 23px);
+  line-height: 1.25;
+  letter-spacing: -.03em;
+}
+
+.section .cardCopy p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.section .result {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 13px;
+  border-top: 1px solid var(--case-border);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.result svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.section .reassurance {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.reassurance svg {
+  flex-shrink: 0;
+  color: var(--success);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .cardScene:hover .card {
+    box-shadow: 0 12px 24px rgb(22 15 12 / 12%);
+  }
+
+  .cardVisual, .cardCopy, .section .result, .sourcePlate, .resultPlate {
+    transition: transform .25s ease-out;
+  }
+
+  .cardScene:hover .cardVisual { transform: translateZ(6px); }
+  .cardScene:hover .sourcePlate { transform: translateZ(18px) rotate(-7deg); }
+  .cardScene:hover .resultPlate { transform: translateZ(34px) rotate(6deg); }
+  .cardScene:hover .cardCopy { transform: translateZ(12px); }
+  .cardScene:hover .result { transform: translateZ(9px); }
+}
+
+@media (max-width: 1120px) {
+  .cards[data-count="4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 810px) {
+  .intro { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .section .intro p { max-width: 54ch; }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .intro { margin-bottom: 22px; }
+  .section .intro h2 { font-size: clamp(30px, 8vw, 38px); }
+  .section .intro p { font-size: 15px; }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 17px;
+  }
+
+  .tabs > button { padding: 8px 3px; font-size: 13px; }
+  .cardVisual { min-height: 72px; padding: 10px; }
+  .cardCopy { margin: 15px 0; }
+}
+
+@media (max-width: 760px) {
+  .cards, .cards[data-count="4"] {
+    display: flex;
+    gap: 12px;
+    margin-inline: calc(-1 * var(--section-gutter));
+    padding: 4px 7.5vw;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .cards::-webkit-scrollbar { display: none; }
+  .cards:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+  .cardScene { flex: 0 0 85vw; scroll-snap-align: center; }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .card {
+    transform: none !important;
+  }
+}

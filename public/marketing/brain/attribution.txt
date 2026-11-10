@@ -1,0 +1,20 @@
+Synaps Company Brain — modelbron en licentie
+
+Brain, Male v1.3, Human Reference Atlas (HRA) / HuBMAP.
+Gebaseerd op Allen Human Reference Atlas – 3D, 2020 (Ding et al., 2016).
+De Human Reference Atlas heeft de structuren gespiegeld en herschaald
+voor de Visible Human-referentielichamen.
+
+Bronvermelding:
+https://3d.nih.gov/entries/3DPX-020960?version=1
+https://purl.humanatlas.io/ref-organ/brain-male/v1.3
+
+Origineel GLB:
+https://cdn.humanatlas.io/digital-objects/ref-organ/brain-male/v1.3/assets/3d-vh-m-allen-brain.glb
+
+Licentie: Creative Commons Naamsvermelding 4.0 Internationaal.
+https://creativecommons.org/licenses/by/4.0/
+
+Synaps heeft een selectie van de anatomische structuren samengevoegd,
+opnieuw georiënteerd, vereenvoudigd, gladgemaakt en gekwantiseerd voor
+weergave op het web. De WebP is een render van dit aangepaste model.

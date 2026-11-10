@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-08T15:39:39Z",
+  "title": "Nauvi",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Nauvi-blauw",
+        "tonalRamp": [
+          "oklch(15% 0.2067 260.1)",
+          "oklch(26% 0.2067 260.1)",
+          "oklch(38% 0.2067 260.1)",
+          "oklch(49% 0.2067 260.1)",
+          "oklch(61% 0.2067 260.1)",
+          "oklch(72% 0.2067 260.1)",
+          "oklch(84% 0.2067 260.1)",
+          "oklch(95% 0.2067 260.1)"
+        ]
+      },
+      "espresso": {
+        "role": "neutral",
+        "displayName": "Espresso",
+        "tonalRamp": [
+          "oklch(15% 0.0134 44.4)",
+          "oklch(26% 0.0134 44.4)",
+          "oklch(38% 0.0134 44.4)",
+          "oklch(49% 0.0134 44.4)",
+          "oklch(61% 0.0134 44.4)",
+          "oklch(72% 0.0134 44.4)",
+          "oklch(84% 0.0134 44.4)",
+          "oklch(95% 0.0134 44.4)"
+        ]
+      },
+      "button-hover": {
+        "role": "neutral",
+        "displayName": "Espresso bij hover",
+        "tonalRamp": [
+          "oklch(15% 0.0209 48.0)",
+          "oklch(26% 0.0209 48.0)",
+          "oklch(38% 0.0209 48.0)",
+          "oklch(49% 0.0209 48.0)",
+          "oklch(61% 0.0209 48.0)",
+          "oklch(72% 0.0209 48.0)",
+          "oklch(84% 0.0209 48.0)",
+          "oklch(95% 0.0209 48.0)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Wit",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.0)",
+          "oklch(26% 0.0000 0.0)",
+          "oklch(38% 0.0000 0.0)",
+          "oklch(49% 0.0000 0.0)",
+          "oklch(61% 0.0000 0.0)",
+          "oklch(72% 0.0000 0.0)",
+          "oklch(84% 0.0000 0.0)",
+          "oklch(95% 0.0000 0.0)"
+        ]
+      },
+      "linen": {
+        "role": "neutral",
+        "displayName": "Linnen",
+        "tonalRamp": [
+          "oklch(15% 0.0026 106.4)",
+          "oklch(26% 0.0026 106.4)",
+          "oklch(38% 0.0026 106.4)",
+          "oklch(49% 0.0026 106.4)",
+          "oklch(61% 0.0026 106.4)",
+          "oklch(72% 0.0026 106.4)",
+          "oklch(84% 0.0026 106.4)",
+          "oklch(95% 0.0026 106.4)"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "Been",
+        "tonalRamp": [
+          "oklch(15% 0.0068 97.4)",
+          "oklch(26% 0.0068 97.4)",
+          "oklch(38% 0.0068 97.4)",
+          "oklch(49% 0.0068 97.4)",
+          "oklch(61% 0.0068 97.4)",
+          "oklch(72% 0.0068 97.4)",
+          "oklch(84% 0.0068 97.4)",
+          "oklch(95% 0.0068 97.4)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Inkt",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.0)",
+          "oklch(26% 0.0000 0.0)",
+          "oklch(38% 0.0000 0.0)",
+          "oklch(49% 0.0000 0.0)",
+          "oklch(61% 0.0000 0.0)",
+          "oklch(72% 0.0000 0.0)",
+          "oklch(84% 0.0000 0.0)",
+          "oklch(95% 0.0000 0.0)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Grafiet",
+        "tonalRamp": [
+          "oklch(15% 0.0000 0.0)",
+          "oklch(26% 0.0000 0.0)",
+          "oklch(38% 0.0000 0.0)",
+          "oklch(49% 0.0000 0.0)",
+          "oklch(61% 0.0000 0.0)",
+          "oklch(72% 0.0000 0.0)",
+          "oklch(84% 0.0000 0.0)",
+          "oklch(95% 0.0000 0.0)"
+        ]
+      },
+      "label": {
+        "role": "neutral",
+        "displayName": "Grijs",
+        "tonalRamp": [
+          "oklch(15% 0.0053 78.3)",
+          "oklch(26% 0.0053 78.3)",
+          "oklch(38% 0.0053 78.3)",
+          "oklch(49% 0.0053 78.3)",
+          "oklch(61% 0.0053 78.3)",
+          "oklch(72% 0.0053 78.3)",
+          "oklch(84% 0.0053 78.3)",
+          "oklch(95% 0.0053 78.3)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Lichte lijn",
+        "tonalRamp": [
+          "oklch(15% 0.0095 100.0)",
+          "oklch(26% 0.0095 100.0)",
+          "oklch(38% 0.0095 100.0)",
+          "oklch(49% 0.0095 100.0)",
+          "oklch(61% 0.0095 100.0)",
+          "oklch(72% 0.0095 100.0)",
+          "oklch(84% 0.0095 100.0)",
+          "oklch(95% 0.0095 100.0)"
+        ]
+      },
+      "border-strong": {
+        "role": "neutral",
+        "displayName": "Donkere lijn",
+        "tonalRamp": [
+          "oklch(15% 0.0114 95.2)",
+          "oklch(26% 0.0114 95.2)",
+          "oklch(38% 0.0114 95.2)",
+          "oklch(49% 0.0114 95.2)",
+          "oklch(61% 0.0114 95.2)",
+          "oklch(72% 0.0114 95.2)",
+          "oklch(84% 0.0114 95.2)",
+          "oklch(95% 0.0114 95.2)"
+        ]
+      }
+    },
+    "shadows": [
+      {
+        "name": "compacte-navigatie",
+        "value": "0 10px 35px rgb(22 15 12 / 10%)",
+        "purpose": "Zachte schaduw bij de compacte desktopnavigatie."
+      },
+      {
+        "name": "afspraakvenster",
+        "value": "0 30px 100px rgb(22 15 12 / 22%)",
+        "purpose": "Scheiding tussen het afspraakvenster en de pagina."
+      }
+    ],
+    "motion": [
+      {
+        "name": "interactiestaat",
+        "value": "0.2s ease",
+        "purpose": "Kleur en positie bij hover op knoppen en tegels."
+      },
+      {
+        "name": "hero-intro",
+        "value": "0.7s cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Korte entree voor kop, beschrijving en acties."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "secties-medium",
+        "value": "1100px"
+      },
+      {
+        "name": "mobiele-navigatie",
+        "value": "1023px"
+      },
+      {
+        "name": "hero-één-kolom",
+        "value": "920px"
+      },
+      {
+        "name": "secties-mobiel",
+        "value": "760px"
+      },
+      {
+        "name": "hero-compact",
+        "value": "600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Hoofdknop",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "De directe actie om een kennismaking te plannen.",
+      "html": "<button type=\"button\" class=\"ds-primary\">Plan een kennismaking <svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button>",
+      "css": ".ds-primary { display: inline-flex; justify-content: center; align-items: center; gap: 18px; min-height: 50px; padding: 13px 22px; border-radius: 7px; font: 500 13px/1.4 Inter, sans-serif; cursor: pointer; transition: background .2s, transform .2s; border: 1px solid #160f0c; background: #160f0c; color: #fff; } .ds-primary:hover { background: #352923; transform: translateY(-2px); } .ds-primary:focus-visible { outline: 3px solid #1768e7; outline-offset: 5px; } @media (prefers-reduced-motion: reduce) { .ds-primary { transition: none; } .ds-primary:hover { transform: none; } }"
+    },
+    {
+      "name": "Omrande knop",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "De lichte actie bij het integratieoverzicht.",
+      "html": "<button type=\"button\" class=\"ds-outline\">Plan een kennismaking <svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button>",
+      "css": ".ds-outline { display: inline-flex; justify-content: center; align-items: center; gap: 18px; min-height: 50px; padding: 13px 22px; border-radius: 7px; font: 500 13px/1.4 Inter, sans-serif; cursor: pointer; transition: background .2s, transform .2s; border: 1px solid #b9b7af; background: transparent; color: #0d0d0d; } .ds-outline:hover { background: #edece7; transform: translateY(-2px); } .ds-outline:focus-visible { outline: 3px solid #1768e7; outline-offset: 5px; } @media (prefers-reduced-motion: reduce) { .ds-outline { transition: none; } .ds-outline:hover { transform: none; } }"
+    },
+    {
+      "name": "Integratiezoekveld",
+      "kind": "input",
+      "refersTo": "tool-search",
+      "description": "Het zoekveld boven de integratietegels.",
+      "html": "<label class=\"ds-search\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.35-4.35\"/></svg><input type=\"search\" aria-label=\"Zoek een tool\" placeholder=\"Zoek jouw tool…\"><span aria-hidden=\"true\">↵</span></label>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 10px; height: 47px; padding: 0 15px; border: 1px solid #deddd6; border-radius: 7px; background: #f7f7f5; color: #686663; font: 400 12px Inter, sans-serif; } .ds-search input { min-width: 0; width: 100%; border: 0; background: transparent; color: #0d0d0d; font: inherit; } .ds-search input::placeholder { color: #686663; } .ds-search:focus-within { border-color: #1768e7; }"
+    },
+    {
+      "name": "Categoriefilter",
+      "kind": "chip",
+      "description": "Een actieve categorie in het integratieoverzicht.",
+      "html": "<button type=\"button\" class=\"ds-filter\" aria-pressed=\"true\">Kennis</button>",
+      "css": ".ds-filter { min-height: 30px; padding: 5px 9px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: #686663; font: 400 9px Inter, sans-serif; } .ds-filter[aria-pressed=\"true\"] { color: #0d0d0d; background: #edf5ff; border-color: #1768e7; } .ds-filter:focus-visible { outline: 3px solid #1768e7; outline-offset: 5px; } @media (max-width: 760px) { .ds-filter { min-height: 40px; } }"
+    },
+    {
+      "name": "Navigatielink",
+      "kind": "nav",
+      "description": "Een sectielink met een beenkleurige pil bij hover.",
+      "html": "<nav aria-label=\"Hoofdnavigatie\"><a class=\"ds-nav-link\" href=\"#werkwijze\">Zo werkt het</a></nav>",
+      "css": ".ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 999px; color: #444; font: 500 12px/1.5 Inter, sans-serif; text-decoration: none; } .ds-nav-link:hover { background: #edece7; } .ds-nav-link:focus-visible { outline: 3px solid #1768e7; outline-offset: 4px; }"
+    },
+    {
+      "name": "Integratietegel",
+      "kind": "card",
+      "refersTo": "tool-tile",
+      "description": "Een tool met beeldmerk en naam in het integratieoverzicht.",
+      "html": "<div class=\"ds-tool\"><svg width=\"25\" height=\"25\" aria-hidden=\"true\" viewBox=\"0 0 87.3 78\" xmlns=\"http://www.w3.org/2000/svg\">\n\t<path d=\"m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z\" fill=\"#0066da\"/>\n\t<path d=\"m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44a9.06 9.06 0 0 0 -1.2 4.5h27.5z\" fill=\"#00ac47\"/>\n\t<path d=\"m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z\" fill=\"#ea4335\"/>\n\t<path d=\"m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z\" fill=\"#00832d\"/>\n\t<path d=\"m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z\" fill=\"#2684fc\"/>\n\t<path d=\"m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z\" fill=\"#ffba00\"/>\n</svg><span>Google Drive</span></div>",
+      "css": ".ds-tool { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 9px; min-height: 79px; border: 1px solid #deddd6; border-radius: 7px; background: #fff; color: #686663; font: 400 9px/1.6 Inter, sans-serif; transition: transform .2s, border-color .2s; } .ds-tool:hover { transform: translateY(-3px); border-color: #b9b7af; } @media (prefers-reduced-motion: reduce) { .ds-tool { transition: none; } .ds-tool:hover { transform: none; } }"
+    }
+  ],
+  "narrative": {
+    "overview": "De publieke route `/` volgt het Nauvi Merkboek, versie 3. Witruimte, lichte materialen en regelmatige typografie geven de tekst en productdemonstraties ruimte. De login verwijst naar de zelfstandige Synaps-klantomgeving.",
+    "dos": [
+      "Gebruik het officiële woordmerk en de officiële ster in hun oorspronkelijke verhoudingen en kleuren.",
+      "Houd de publieke typografie bij Hubot Sans en Inter."
+    ],
+    "donts": [
+      "Laat de gidsfiguren buiten deze website."
+    ]
+  }
+}

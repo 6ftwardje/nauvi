@@ -1,0 +1,49 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  --label: #545e70;
+}
+
+.frame {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  --blue-mist: var(--accent-tint);
+  --blue-bright: #d5e6fb;
+}
+
+.light {
+  position: absolute;
+  inset: -48px;
+  background-image: var(--gradient);
+  translate: 0 var(--gradient-drift, 0px);
+}
+
+.frame[data-gradient="hero"] {
+  --gradient:
+    radial-gradient(ellipse 43% 56% at 74% 36%, var(--blue-bright), transparent 73%),
+    radial-gradient(ellipse 65% 55% at 100% 76%, var(--blue-mist), transparent 84%);
+}
+
+.frame[data-gradient="contact"] {
+  --gradient:
+    radial-gradient(ellipse 65% 78% at 82% 53%, var(--blue-bright), transparent 83%),
+    linear-gradient(130deg, var(--white) 18%, var(--blue-mist) 72%);
+}
+
+@media (max-width: 760px) {
+  .frame[data-gradient="hero"] {
+    --gradient:
+      radial-gradient(ellipse 54% 35% at 53% 66%, var(--blue-bright), transparent 85%),
+      radial-gradient(ellipse 70% 48% at 94% 43%, var(--blue-mist), transparent 91%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light {
+    translate: none;
+    transform: none !important;
+  }
+}
