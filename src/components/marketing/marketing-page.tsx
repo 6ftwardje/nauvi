@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import { motion, useInView, useScroll, useSpring, useTransform, useVelocity, type MotionStyle } from "motion/react";
+import { easeInOut, motion, useInView, useMotionTemplate, useScroll, useSpring, useTransform, useVelocity, type MotionStyle } from "motion/react";
 import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Check, FileText, GitBranch, MessageSquare, Plus, RefreshCw, Search, Video, X } from "lucide-react";
 import { calendlyEmbedUrl, marketingConfig } from "./site-config";
 import HeroSection from "./hero-section";
@@ -132,6 +132,49 @@ function IntegrationExplorer() {
   </div>;
 }
 
+function AiAgentsSection() {
+  const section = useRef<HTMLElement>(null);
+  const photoNearViewport = useInView(section, { margin: "96px 0px" });
+  const { scrollYProgress } = useScroll({ target: section, offset: ["start end", "end start"] });
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 240,
+    damping: 24,
+    mass: .6,
+    restDelta: .001,
+    skipInitialAnimation: true,
+  });
+  const photoTravel = useTransform(progress, [0, 1], [-1, 1]);
+  const photoY = useMotionTemplate`calc(${photoTravel} * var(--control-photo-travel))`;
+  const photoOpacity = useTransform(progress, [0, .5, 1], [.09, .175, .11], { ease: easeInOut });
+  const ringsY = useTransform(progress, [0, 1], [-2, 2]);
+  const starY = useTransform(progress, [0, 1], [-4, 4]);
+
+  return (
+    <section ref={section} className={s.controlSection} id="ai-agents" aria-labelledby="agents-title">
+      <motion.img
+        className={s.controlPhoto}
+        src="/marketing/materials/office-workplace.webp"
+        alt=""
+        width={2240}
+        height={960}
+        loading="lazy"
+        decoding="async"
+        data-in-view={photoNearViewport || undefined}
+        style={{ y: photoY, opacity: photoOpacity }}
+      />
+      <motion.div className={s.controlMark} style={{ y: ringsY }} aria-hidden="true">
+        <motion.div className={s.controlStar} style={{ y: starY }}><NauviMark size={144} /></motion.div>
+        <span />
+      </motion.div>
+      <div>
+        <h2 id="agents-title">Ook AI moet weten hoe jouw bedrijf werkt.</h2>
+        <p>Een AI-agent is een digitale collega die taken uitvoert. Maar die kent jouw prijsafspraken en uitzonderingen niet vanzelf.</p>
+        <p>Je Company Brain geeft die kennis een vaste plek. Zo maken we je bedrijf klaar om werk aan agents toe te vertrouwen.</p>
+      </div>
+    </section>
+  );
+}
+
 export default function MarketingPage() {
   const [booking, setBooking] = useState(false);
   const [calendarVersion, setCalendarVersion] = useState(0);
@@ -162,14 +205,7 @@ export default function MarketingPage() {
     <main id="main">
       <HeroSection onStart={openBooking} />
 
-      <section className={s.controlSection} id="ai-agents" aria-labelledby="agents-title" data-reveal>
-        <div className={s.controlMark} aria-hidden="true"><NauviMark size={144} /><span /></div>
-        <div>
-          <h2 id="agents-title">Ook AI moet weten hoe jouw bedrijf werkt.</h2>
-          <p>Een AI-agent is een digitale collega die taken uitvoert. Maar die kent jouw prijsafspraken en uitzonderingen niet vanzelf.</p>
-          <p>Je Company Brain geeft die kennis een vaste plek. Zo maken we je bedrijf klaar om werk aan agents toe te vertrouwen.</p>
-        </div>
-      </section>
+      <AiAgentsSection />
 
       <WorkflowSection onBooking={openBooking} />
 
