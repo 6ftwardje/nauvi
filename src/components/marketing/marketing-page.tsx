@@ -30,17 +30,55 @@ const tools = [
   { id: "zapier", name: "Zapier", category: "Automatisering" },
 ];
 const faqs = [
-  { question: "Koop ik software of nemen jullie werk over?", answer: <><p>Wij nemen afgesproken taken over met agents. Nauvi is de software achter die dienstverlening: de plek waar je bedrijfskennis juist en actueel blijft.</p><p>Jij deelt hoe je bedrijf werkt. Wij bekijken welke taak geschikt is, bouwen de agent en spreken af hoe we het resultaat controleren. De aanpak en kost bepalen we samen per opdracht.</p></> },
-  { question: "Is dit iets voor ons?", answer: <><p>Nauvi is bedoeld voor kmo’s waar kennis verspreid zit over mensen, mails en documenten.</p><p>Je hoeft nog geen AI-agent te gebruiken. In een kennismaking bekijken we of Nauvi past bij jouw bedrijf.</p></> },
-  { question: "Moeten we alles omgooien?", answer: <><p>Je bestaande werkwijze is het vertrekpunt. Je legt vast hoe je bedrijf vandaag werkt.</p><p>Welke aanpassingen nodig zijn om met Nauvi en je agents te werken, bekijken we samen.</p></> },
-  { question: "Werkt het met onze tools?", answer: <><p>Onze ontwikkelaars bouwen koppelingen op maat.</p><p>Wat mogelijk is, hangt af van je tools en de taken die je agents moeten uitvoeren. Dat bekijken we voor jouw situatie.</p></> },
-  { question: "Wat met onze data?", answer: <><p>Je kunt de vastgelegde kennis controleren en exporteren.</p><p>Opslaglocatie, beveiliging en toegangsrechten: <strong>[IN TE VULLEN]</strong></p><p>Gebruikte AI-diensten en gebruik van gegevens voor modeltraining: <strong>[IN TE VULLEN]</strong></p><p>Bewaartermijnen en verwijdering: <strong>[IN TE VULLEN]</strong></p></> },
-  { question: "Hoe krijg ik toegang als testgebruiker?", answer: <p>Via ‘Inloggen’ open je de testomgeving. Je hebt een persoonlijke uitnodigingslink nodig. Heb je al een actieve sessie in deze browser, dan kun je daar verderwerken. Een kennismaking geeft niet automatisch toegang tot de app.</p> },
+  {
+    question: "Koop ik software of nemen jullie werk over?",
+    answer: <>
+      <p>We nemen afgesproken taken over met AI-agents. In Nauvi leggen we vast hoe je bedrijf werkt, zodat de agents jouw werkwijze kunnen volgen.</p>
+      <p>We kiezen samen een eerste taak en spreken af hoe we het resultaat controleren. De kostprijs bepalen we per opdracht.</p>
+    </>,
+  },
+  {
+    question: "Is dit iets voor ons?",
+    answer: <p>Nauvi is er voor kmo’s waar kennis verspreid zit over collega’s, mails en documenten. Je hebt geen ervaring met AI-agents nodig. In de kennismaking bekijken we welke taak je als eerste kunt uitbesteden.</p>,
+  },
+  {
+    question: "Moeten we alles omgooien?",
+    answer: <p>We vertrekken van hoe je team vandaag werkt. We beginnen met één taak en bekijken samen wat er voor die taak moet veranderen.</p>,
+  },
+  {
+    question: "Werkt het met onze tools?",
+    answer: <p>Onze ontwikkelaars bouwen koppelingen op maat. Welke koppelingen nodig en haalbaar zijn, hangt af van je tools en de taak die je wilt uitbesteden.</p>,
+  },
+  {
+    question: "Waar bewaren jullie onze gegevens?",
+    answer: <>
+      <p>Je klantomgeving draait bij Hetzner in Duitsland. We maken back-ups van de database, zodat we die bij een storing kunnen herstellen.</p>
+      <p>Voor de start spreken we af wie toegang krijgt en welke bronnen een agent mag gebruiken.</p>
+    </>,
+  },
+  {
+    question: "Welk AI-model gebruiken jullie?",
+    answer: <>
+      <p>We gebruiken momenteel Claude van Anthropic. Gegevens die we voor een taak aan Claude doorgeven, kunnen buiten de EU worden verwerkt en opgeslagen.</p>
+      <p>Anthropic gebruikt invoer en antwoorden uit zijn zakelijke diensten standaard niet voor modeltraining. We willen overstappen zodra een Europees model onze taken even betrouwbaar kan uitvoeren.</p>
+    </>,
+  },
+  {
+    question: "Hoelang bewaren jullie onze gegevens?",
+    answer: <>
+      <p>We verwijderen de klantgegevens die we zelf bewaren zodra we ze niet meer nodig hebben. Dat doen we uiterlijk 12 maanden na het einde van de samenwerking.</p>
+      <p>Je kunt je vastgelegde bedrijfskennis controleren en exporteren. Je kunt ons ook vragen om je gegevens eerder te verwijderen.</p>
+    </>,
+  },
+  {
+    question: "Hoe krijg ik toegang als testgebruiker?",
+    answer: <p>Open je persoonlijke uitnodigingslink om toegang te krijgen tot de testomgeving. Heb je in deze browser al een actieve sessie? Dan kun je via ‘Inloggen’ verderwerken.</p>,
+  },
 ];
 
 function Logo({ id, name, className = "" }: { id: string; name: string; className?: string }) { return <img className={className} src={`/marketing/logos/${id}.svg`} alt={name} width={30} height={30} />; }
 function Host({ small = false }: { small?: boolean }) { return <div className={`${s.host} ${small ? s.hostSmall : ""}`}>
-  {marketingConfig.hostPortrait ? <img src={marketingConfig.hostPortrait} alt={marketingConfig.hostName} width={small ? 56 : 96} height={small ? 56 : 96} decoding="async" /> : <span className={s.avatar} aria-label={`Profielfoto van ${marketingConfig.hostName} volgt`}>K</span>}
+  {marketingConfig.hostPortrait ? <img src={marketingConfig.hostPortrait} alt="" width={small ? 56 : 96} height={small ? 56 : 96} decoding="async" /> : <span className={s.avatar} aria-hidden="true">{marketingConfig.hostName.charAt(0)}</span>}
   <span><strong>{marketingConfig.hostName}</strong><span>Jouw eerste aanspreekpunt bij Nauvi</span></span>
 </div>; }
 
@@ -240,7 +278,17 @@ export default function MarketingPage() {
       <button className={s.closeDialog} aria-label="Afspraakvenster sluiten" onClick={closeBooking}><X size={21} /></button>
       <div className={s.bookingLayout}>
         <div className={s.bookingInfo}><NauviWordmark className={s.brand} /><Host /><h2 id="booking-title">Plan een kennismaking</h2><p>Vertel welke taak je uit handen wilt geven. Samen met {marketingConfig.hostName} bekijk je wat daarvoor nodig is en hoe we je kunnen helpen.</p><span className={s.callType}><Video size={17} /> Online kennismaking</span><p className={s.copyNote}>Duur: 30 minuten</p><div className={s.bookingAgenda}><span><Check size={15} /> Vertel welke taak je tijd kost</span><span><Check size={15} /> Bespreek je werkwijze en afspraken</span><span><Check size={15} /> Bekijk wat we kunnen overnemen</span></div></div>
-        <div className={s.calendarArea}>{booking && embed ? <><iframe key={calendarVersion} src={embed} title="Kies een moment voor je kennismaking bij Nauvi" width="100%" height="700" /><button type="button" className={s.calendarReload} onClick={() => setCalendarVersion(version => version + 1)}><RefreshCw size={14} aria-hidden="true" />Agenda opnieuw laden</button></> : <div className={s.calendarPending}><CalendarDays size={36} strokeWidth={1.3} /><h3>De agenda is nog niet beschikbaar.</h3><p>Boekingslink: <strong>[IN TE VULLEN]</strong></p><span>Er is nog geen afspraak ingepland.</span><button className={`${s.button} ${s.outline}`} onClick={() => { closeBooking(); document.getElementById("mogelijkheden")?.scrollIntoView({ behavior: "smooth" }); }}>Bekijk wat Nauvi doet <ArrowRight size={15} /></button></div>}</div>
+        <div className={s.calendarArea}>
+          {booking && (embed ? <>
+            <iframe key={calendarVersion} src={embed} title="Kies een moment voor je kennismaking bij Nauvi" width="100%" height="700" />
+            <button type="button" className={s.calendarReload} onClick={() => setCalendarVersion(version => version + 1)}><RefreshCw size={14} aria-hidden="true" />Agenda opnieuw laden</button>
+          </> : <div className={s.calendarPending}>
+            <CalendarDays size={36} strokeWidth={1.3} aria-hidden="true" />
+            <h3>Online boeken is momenteel niet beschikbaar.</h3>
+            <p>Probeer het later opnieuw.</p>
+            <button type="button" className={`${s.button} ${s.outline}`} onClick={() => { closeBooking(); document.getElementById("mogelijkheden")?.scrollIntoView({ behavior: "smooth" }); }}>Bekijk wat Nauvi doet <ArrowRight size={15} aria-hidden="true" /></button>
+          </div>)}
+        </div>
       </div>
     </dialog>
   </div>;

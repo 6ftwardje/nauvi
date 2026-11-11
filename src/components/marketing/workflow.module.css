@@ -18,27 +18,31 @@
 .cta svg { flex-shrink: 0; }
 .section .reassurance { margin: 17px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
 
-.videoPlaceholder {
+.section .demoLink {
   display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 10px;
-  width: 100%;
-  min-width: 0;
-  aspect-ratio: 16 / 9;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  padding: clamp(18px, 3vw, 32px);
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--linen);
   color: var(--muted);
   font-size: 14px;
+  line-height: 1.6;
 }
+.section .demoLink:hover { border-color: var(--border-strong); }
+.demoLink > svg { color: var(--accent); }
+.demoIcon { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 9px; background: var(--white); color: var(--ink); }
+.demoCopy { display: grid; gap: 4px; }
+.demoCopy strong { color: var(--ink); font-size: 16px; font-weight: 600; }
 
 @media (max-width: 1100px) {
   .section { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .copy { max-width: 660px; }
   .section .copy h2 { font-size: 44px; }
   .section .description { max-width: 54ch; font-size: 16px; }
-  .videoPlaceholder { max-width: 840px; }
+  .demoLink { max-width: 660px; }
 }
 @media (max-width: 760px) {
   .section { gap: 34px; }

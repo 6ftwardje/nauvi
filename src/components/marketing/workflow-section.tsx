@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Video } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Mail } from "lucide-react";
 import s from "./workflow.module.css";
 
 export default function WorkflowSection({ onBooking }: { onBooking: () => void }) {
@@ -12,9 +12,13 @@ export default function WorkflowSection({ onBooking }: { onBooking: () => void }
       <p className={s.reassurance}>Jij houdt de controle over elke stap.</p>
     </div>
 
-    <div className={s.videoPlaceholder} data-reveal>
-      <Video size={32} aria-hidden="true" />
-      <span>Video volgt</span>
-    </div>
+    <a className={s.demoLink} href="#mogelijkheden" data-reveal>
+      <span className={s.demoIcon}><Mail size={20} aria-hidden="true" /></span>
+      <span className={s.demoCopy}>
+        <strong>Bekijk de interactieve demo</strong>
+        <span>Van een klantvraag naar een antwoord dat je zelf kunt nakijken.</span>
+      </span>
+      <ArrowRight size={18} aria-hidden="true" />
+    </a>
   </section>;
 }

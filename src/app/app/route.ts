@@ -9,7 +9,7 @@ export function GET(request: Request) {
   const incoming = new URL(request.url);
 
   if (!target || !["http:", "https:"].includes(target.protocol) || target.username || target.password || target.origin === incoming.origin) {
-    return new Response("De Synaps-omgeving is hier nog niet gekoppeld.", {
+    return new Response("Inloggen is momenteel niet beschikbaar. Probeer het later opnieuw.", {
       status: 503,
       headers: { ...privateHeaders, "Content-Type": "text/plain; charset=utf-8" },
     });
