@@ -411,19 +411,29 @@
 }
 
 .controlRow h3 {
-  display: flex;
-  align-items: center;
-  gap: 11px;
+  --dash-width: 27px;
+  position: relative;
+  padding-inline-start: calc(var(--dash-width) + 11px);
   font-size: clamp(24px, 2.65vw, 41px);
 }
 
+.controlRow h3 span {
+  display: block;
+  transform: translateX(calc(-1 * var(--dash-width)));
+  transition: transform .3s ease;
+}
+
 .controlRow h3::before {
-  width: 0;
+  position: absolute;
+  inset: 50% auto auto 0;
+  width: var(--dash-width);
   height: 1px;
   background: currentColor;
   content: "";
   opacity: 0;
-  transition: width .3s ease, opacity .3s ease;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease, opacity .3s ease;
 }
 
 .controlRow:is(:hover, :focus-visible) {
@@ -431,8 +441,12 @@
 }
 
 .controlRow:is(:hover, :focus-visible) h3::before {
-  width: 27px;
   opacity: 1;
+  transform: scaleX(1);
+}
+
+.controlRow:is(:hover, :focus-visible) h3 span {
+  transform: none;
 }
 
 .controlArt {

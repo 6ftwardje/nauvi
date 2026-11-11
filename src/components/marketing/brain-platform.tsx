@@ -136,7 +136,7 @@ export function PlatformPage() {
         <ul>
           {controls.map(({ Icon, title, text, color }) => (
             <li key={title} className={s.controlRow} tabIndex={0}>
-              <h3>{title}</h3>
+              <h3><span>{title}</span></h3>
               <div className={s.controlArt} data-color={color} aria-hidden="true"><Icon size={36} /></div>
               <p>{text}</p>
             </li>
