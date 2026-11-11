@@ -145,7 +145,7 @@ function AiAgentsSection() {
   });
   const photoTravel = useTransform(progress, [0, 1], [-1, 1]);
   const photoY = useMotionTemplate`calc(${photoTravel} * var(--control-photo-travel))`;
-  const photoOpacity = useTransform(progress, [0, .5, 1], [.09, .175, .11], { ease: easeInOut });
+  const photoOpacity = useTransform(progress, [0, .5, 1], [.06, .12, .08], { ease: easeInOut });
   const ringsY = useTransform(progress, [0, 1], [-2, 2]);
   const starY = useTransform(progress, [0, 1], [-4, 4]);
 

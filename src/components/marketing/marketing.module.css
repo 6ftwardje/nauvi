@@ -182,7 +182,7 @@
   color: var(--ink);
 }
 .controlPhoto {
-  --control-photo-travel: 25px;
+  --control-photo-travel: 50px;
   --control-photo-bleed: calc(var(--control-photo-travel) + 3px);
   position: absolute;
   inset: calc(-1 * var(--control-photo-bleed)) 0 auto;
@@ -218,7 +218,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .controlPhoto, .controlMark, .controlStar { transform: none !important; }
-  .controlPhoto { opacity: .15 !important; }
+  .controlPhoto { opacity: .1 !important; }
 }
 
 .page .workflowSection { background: var(--white); gap: 100px; }
@@ -268,7 +268,7 @@
 @media (max-width: 760px) {
   .page { --section-gutter: 22px; --section-space: 56px; --navbar-height: 74px; }
   .page .controlSection { display: block; }
-  .controlPhoto { --control-photo-travel: 10px; object-position: 32% center; }
+  .controlPhoto { --control-photo-travel: 25px; object-position: 32% center; }
   .controlSection::after {
     background: linear-gradient(180deg,
       color-mix(in srgb, var(--linen) 14%, transparent) 20%,
