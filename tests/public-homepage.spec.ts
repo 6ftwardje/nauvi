@@ -26,3 +26,45 @@ test("login redirects to Synaps and forwards only invitation parameters", async 
     expect(direct.headers()["cache-control"]).toBe("no-store");
   }
 });
+
+test("desktop hover opens the full-width company menu and Escape dismisses it", async ({ page }) => {
+  await page.goto("/");
+  const header = page.getByRole("banner");
+  const trigger = header.getByRole("button", { name: "Meer over Nauvi" });
+  await header.getByRole("link", { name: "Over Nauvi", exact: true }).hover();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  const menu = header.locator("#nav-menu-over");
+  await expect(menu.getByRole("link", { name: /Werken bij Nauvi/ }).first()).toBeVisible();
+  const width = await menu.evaluate(element => element.getBoundingClientRect().width);
+  expect(width).toBe(await page.evaluate(() => document.documentElement.clientWidth));
+  await trigger.focus();
+  await page.keyboard.press("Escape");
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(trigger).toBeFocused();
+});
+
+test("Company Brain layers expose their descriptions with the keyboard", async ({ page }) => {
+  await page.goto("/platform");
+  const diagram = page.getByRole("group", { name: "Onderdelen van Company Brain" });
+  const control = diagram.getByRole("button", { name: "Toegang & controle" });
+  const review = diagram.getByRole("button", { name: "Nazicht" });
+  await expect(control).toHaveAttribute("aria-pressed", "true");
+  await control.focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(review).toHaveAttribute("aria-pressed", "true");
+  await expect(review).toBeFocused();
+  await expect(page.getByRole("heading", { name: "Nazicht", exact: true })).toBeVisible();
+});
+
+test("the mobile navigation opens the careers page and the vacancies section", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Menu openen" }).click();
+  const menu = page.getByRole("navigation", { name: "Mobiele hoofdnavigatie" });
+  await menu.getByRole("link", { name: "Werken bij Nauvi" }).click();
+  await expect(page).toHaveURL(/\/careers$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Werken bij Nauvi" })).toBeVisible();
+  await page.getByRole("link", { name: "Bekijk de vacatures" }).click();
+  await expect(page).toHaveURL(/#vacatures$/);
+  await expect(page.getByRole("heading", { name: "Vacatures", exact: true })).toBeInViewport();
+});

@@ -1,17 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import {
-  ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Boxes, FileText, GitBranch, Layers3,
-  Pause, Play, ScanLine, ShieldCheck, UsersRound, Workflow,
+  ArrowLeft, ArrowRight, ArrowUpRight, Pause, Play,
 } from "lucide-react";
-import { useInView, useReducedMotion } from "motion/react";
-import { NauviMark } from "./nauvi-brand";
+import { motion, useInView, useReducedMotion, useScroll, type MotionStyle } from "motion/react";
+import { BrainField } from "./brain-field";
 import { applicationCategories, applications, integrations, photos } from "./cinematic-content";
 import s from "./cinematic.module.css";
 
-const heroImages = [photos.hero, photos.office, photos.site];
+const heroImages = [
+  { image: photos.hero, duration: 3400, direction: 1 },
+  { image: photos.office, duration: 2800, direction: -1 },
+  { image: photos.site, duration: 3100, direction: 1 },
+  { image: photos.warehouse, duration: 2800, direction: -1 },
+  { image: photos.team, duration: 3300, direction: 1 },
+];
 const heroMotionQuery = "(prefers-reduced-motion: reduce)";
 
 export function Hero({ onBooking }: { onBooking: () => void }) {
@@ -40,14 +45,14 @@ export function Hero({ onBooking }: { onBooking: () => void }) {
     if (!animate) return;
     const timer = window.setTimeout(() => {
       setFrame(current => (current + 1) % heroImages.length);
-    }, 6300);
+    }, heroImages[frame].duration);
     return () => window.clearTimeout(timer);
   }, [frame, animate]);
 
   return (
-    <section className={s.hero} aria-labelledby="hero-title" ref={section}>
+    <section className={s.hero} aria-labelledby="hero-title" data-nav-tone="dark" ref={section}>
       <div className={s.heroMedia} aria-hidden="true" data-playing={animate}>
-        {heroImages.map((image, index) => (
+        {heroImages.map(({ image, duration, direction }, index) => (
           <img
             key={image}
             src={image}
@@ -55,6 +60,7 @@ export function Hero({ onBooking }: { onBooking: () => void }) {
             fetchPriority={index === 0 ? "high" : "low"}
             decoding="async"
             data-active={index === frame}
+            style={{ "--shot-duration": `${duration}ms`, "--shot-direction": direction } as CSSProperties}
           />
         ))}
       </div>
@@ -151,42 +157,36 @@ export function ApplicationCarousel() {
   );
 }
 
+const statement = "We brengen je bedrijfskennis samen en bouwen AI-agents die werken zoals jouw team.";
+const statementWords = statement.split(" ");
+
 export function Statement() {
+  const section = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: section, offset: ["start 76%", "end 75%"] });
   return (
-    <section className={s.statement}>
-      <h2 data-reveal>We brengen je bedrijfskennis samen en bouwen AI-agents die werken zoals jouw team.</h2>
+    <section className={s.statement} ref={section}>
+      <motion.h2 aria-label={statement} style={{ "--statement-progress": scrollYProgress } as MotionStyle}>
+        {statementWords.map((word, index) => (
+          <span
+            key={index}
+            aria-hidden="true"
+            className={s.statementWord}
+            style={{ "--word-index": index, "--word-count": statementWords.length } as CSSProperties}
+          >{word}{" "}</span>
+        ))}
+      </motion.h2>
     </section>
   );
 }
 
-const gridNodes = [
-  { row: 1, col: 5, Icon: Boxes, label: "Tools" },
-  { row: 2, col: 2, Icon: FileText, label: "Documenten" },
-  { row: 2, col: 8, Icon: UsersRound, label: "Je team" },
-  { row: 4, col: 1, Icon: BookOpen, label: "Afspraken" },
-  { row: 4, col: 9, Icon: Workflow, label: "AI-agents" },
-  { row: 6, col: 2, Icon: GitBranch, label: "Werkwijzen" },
-  { row: 6, col: 8, Icon: ShieldCheck, label: "Nazicht" },
-  { row: 7, col: 5, Icon: Layers3, label: "Bedrijfskennis" },
-];
-
 export function PlatformChapter() {
   return (
-    <section className={s.darkChapter} id="ai-agents" aria-labelledby="platform-heading">
-      <div className={s.platform}>
-        <div className={s.platformGrid} aria-hidden="true">
-          {gridNodes.map(({ row, col, Icon, label }) => (
-            <div className={s.gridNode} key={label} style={{ gridRow: row, gridColumn: col }}>
-              <Icon size={16} /><span>{label}</span>
-            </div>
-          ))}
-        </div>
-        <div className={s.platformCopy}>
-          <div className={s.platformMark}><NauviMark size={40} /></div>
-          <h2 id="platform-heading">Eén Company Brain<br />voor je hele bedrijf.</h2>
-          <Link className={s.lightButton} href="/platform">Ontdek het platform <ArrowRight size={15} aria-hidden="true" /></Link>
-        </div>
-      </div>
+    <section className={s.darkChapter} id="ai-agents" aria-labelledby="platform-heading" data-nav-tone="dark">
+      <BrainField mode="home">
+        <p className={s.platformLabel}>Nauvi Company Brain</p>
+        <h2 id="platform-heading">Eén Company Brain<br />voor je hele bedrijf.</h2>
+        <Link className={s.lightButton} href="/platform">Ontdek het platform <ArrowRight size={15} aria-hidden="true" /></Link>
+      </BrainField>
       <div className={s.featurePair} id="werkwijze">
         <article className={s.feature} id="mogelijkheden">
           <img src={photos.team} alt="" loading="lazy" decoding="async" />
@@ -197,7 +197,7 @@ export function PlatformChapter() {
           </div>
         </article>
         <article className={s.feature}>
-          <img src={photos.office} alt="" loading="lazy" decoding="async" />
+          <img src={photos.brainField} alt="" loading="lazy" decoding="async" />
           <div>
             <h3>Jij houdt de controle.</h3>
             <p>Jij bepaalt welke bronnen een agent gebruikt en welk werk eerst langs je team gaat.</p>
@@ -211,7 +211,6 @@ export function PlatformChapter() {
 
 export function ApplicationTabs() {
   const [selected, setSelected] = useState(0);
-  const application = applicationCategories[selected];
 
   function navigate(event: KeyboardEvent<HTMLButtonElement>, index: number) {
     const last = applicationCategories.length - 1;
@@ -245,41 +244,45 @@ export function ApplicationTabs() {
           >{label}</button>
         ))}
       </div>
-      {applicationCategories.map(({ label }, index) => (
-        <div
-          key={label}
-          className={s.applicationPanel}
-          id={`category-panel-${index}`}
-          role="tabpanel"
-          aria-labelledby={`category-tab-${index}`}
-          tabIndex={0}
-          hidden={index !== selected}
-        >
-          {index === selected && <>
+      <div className={s.applicationStage}>
+        {applicationCategories.map((application, index) => (
+          <div
+            key={application.id}
+            className={s.applicationPanel}
+            id={`category-panel-${index}`}
+            role="tabpanel"
+            aria-labelledby={`category-tab-${index}`}
+            aria-hidden={index !== selected}
+            tabIndex={index === selected ? 0 : -1}
+            inert={index !== selected}
+            data-active={index === selected}
+          >
             <img src={application.image} alt="" loading="lazy" decoding="async" />
             <h3>{application.label}</h3>
             <div>
               <p>{application.text}</p>
               <Link className={s.lightButton} href={`/toepassingen#${application.id}`}>Bekijk de voorbeelden <ArrowRight size={14} aria-hidden="true" /></Link>
             </div>
-          </>}
-        </div>
-      ))}
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
 
 export function AboutChapter() {
   return (
-    <section className={s.about} id="waarom-nu" aria-labelledby="about-heading">
+    <section className={s.about} id="waarom-nu" aria-labelledby="about-heading" data-nav-tone="dark">
       <img src={photos.handover} alt="" loading="lazy" decoding="async" />
-      <div className={s.aboutCopy}>
-        <h2 id="about-heading">Gebouwd voor teams die het werk kennen.</h2>
-        <p>We helpen kmo’s hun kennis vast te leggen en terugkerend werk uit handen te geven. We beginnen met één taak die je team vandaag tijd kost.</p>
-      </div>
-      <div className={s.aboutLinks}>
-        <Link href="/over-nauvi">Over Nauvi <ArrowUpRight size={18} aria-hidden="true" /></Link>
-        <Link href="/platform#mogelijkheden">Bekijk de demo <ScanLine size={18} aria-hidden="true" /></Link>
+      <div className={s.aboutInner}>
+        <div className={s.aboutCopy}>
+          <h2 id="about-heading">Gebouwd voor teams die het werk kennen.</h2>
+          <p>We helpen kmo’s hun kennis vast te leggen en terugkerend werk uit handen te geven. We beginnen met één taak die je team vandaag tijd kost.</p>
+        </div>
+        <div className={s.aboutLinks}>
+          <Link href="/over-nauvi">Over Nauvi <span><ArrowRight size={19} aria-hidden="true" /></span></Link>
+          <Link href="/careers">Werken bij Nauvi <span><ArrowRight size={19} aria-hidden="true" /></span></Link>
+        </div>
       </div>
     </section>
   );

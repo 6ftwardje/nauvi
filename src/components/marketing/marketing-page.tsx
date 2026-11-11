@@ -9,6 +9,7 @@ import { AboutChapter, ApplicationCarousel, ApplicationTabs, Hero, PlatformChapt
 import { CinematicFooter, CinematicNav } from "./cinematic-nav";
 import s from "./marketing.module.css";
 import cinematic from "./cinematic.module.css";
+import brain from "./brain-platform.module.css";
 
 const faqs = [
   {
@@ -68,7 +69,7 @@ function Host() {
   );
 }
 
-export function MarketingShell({ children }: { children?: ReactNode }) {
+export function MarketingShell({ children, darkHeader = false, closing = false }: { children?: ReactNode; darkHeader?: boolean; closing?: boolean }) {
   const [booking, setBooking] = useState(false);
   const [calendarVersion, setCalendarVersion] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -93,7 +94,7 @@ export function MarketingShell({ children }: { children?: ReactNode }) {
 
   return <div className={`${s.page} ${cinematic.site}`}>
     <a className={s.skip} href="#main">Naar de inhoud</a>
-    <CinematicNav home={home} onBooking={openBooking} />
+    <CinematicNav overlay={home || darkHeader} onBooking={openBooking} />
     <main id="main">
       {children ?? <>
         <Hero onBooking={openBooking} />
@@ -102,14 +103,18 @@ export function MarketingShell({ children }: { children?: ReactNode }) {
         <Statement />
         <PlatformChapter />
         <ApplicationTabs />
-        <AboutChapter />
         <section className={cinematic.faq} id="vragen" aria-labelledby="faq-title">
           <div><h2 id="faq-title">Veelgestelde vragen</h2><p>Meer weten? We nemen je vragen mee in de kennismaking.</p></div>
           <div className={cinematic.faqList}>{faqs.map(({ question, answer }) => (
             <details key={question}><summary>{question}<Plus size={19} aria-hidden="true" /></summary>{answer}</details>
           ))}</div>
         </section>
+        <AboutChapter />
       </>}
+      {closing && <section className={brain.closing} aria-labelledby="brain-closing-title" data-nav-tone="dark">
+        <h2 id="brain-closing-title">Welke taak wil jij uit handen geven?</h2>
+        <button className={cinematic.lightButton} type="button" onClick={openBooking}>Plan een kennismaking</button>
+      </section>}
     </main>
     <CinematicFooter onBooking={openBooking} />
     <dialog ref={dialog} className={s.bookingDialog} aria-labelledby="booking-title" onClose={() => setBooking(false)} onClick={e => { if (e.target === e.currentTarget) closeBooking(); }}>

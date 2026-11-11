@@ -1,0 +1,133 @@
+.hero {
+  padding: clamp(34px, 3.4vw, 56px) var(--edge) 0;
+}
+
+.intro,
+.statement,
+.openings {
+  display: grid;
+  grid-template-columns: minmax(0, 1.44fr) minmax(0, .9fr);
+  align-items: start;
+  gap: clamp(22px, 5vw, 82px);
+}
+
+.intro {
+  margin-bottom: clamp(28px, 3.15vw, 49px);
+}
+
+.hero .intro h1 {
+  font-size: clamp(47px, 5.3vw, 86px);
+}
+
+.intro p,
+.statement p,
+.openings p {
+  max-width: 48ch;
+  color: #383838;
+  font-size: clamp(15px, 1.33vw, 19px);
+}
+
+.intro a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.intro a:hover {
+  text-decoration: underline;
+}
+
+.heroImage {
+  overflow: clip;
+}
+
+.heroImage img {
+  display: block;
+  width: 100%;
+  height: clamp(330px, 47vw, 760px);
+  object-fit: cover;
+  object-position: center 66%;
+  animation: careers-enter 1s cubic-bezier(.23,.73,.23,1) both;
+}
+
+@keyframes careers-enter {
+  from { opacity: .75; transform: scale(1.035); }
+}
+
+.statement,
+.disciplines,
+.openings {
+  padding: clamp(65px, 9vw, 143px) var(--edge);
+}
+
+.statement h2,
+.disciplines h2,
+.openings h2 {
+  max-width: 20ch;
+  font-size: clamp(37px, 4.2vw, 65px);
+  text-wrap: initial;
+}
+
+.disciplines {
+  background: #0b0b0b;
+  color: white;
+}
+
+section.disciplines :is(h2, h3) {
+  color: white;
+}
+
+.disciplines ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 45px);
+  margin: 52px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.disciplines li {
+  display: grid;
+  align-content: start;
+  gap: 13px;
+  padding-top: 20px;
+  border-top: 1px solid #ffffff38;
+}
+
+.disciplines h3 {
+  font-size: clamp(26px, 3vw, 41px);
+}
+
+.disciplines p {
+  max-width: 35ch;
+  color: #c8c8c8;
+  font-size: 15px;
+}
+
+.openings > div {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+  padding-top: 12px;
+  border-top: 1px solid #dedede;
+}
+
+@media (max-width: 650px) {
+  .intro,
+  .statement,
+  .disciplines ul,
+  .openings {
+    grid-template-columns: 1fr;
+  }
+
+  .heroImage img {
+    height: 420px;
+  }
+
+  .disciplines ul {
+    margin-top: 31px;
+  }
+}

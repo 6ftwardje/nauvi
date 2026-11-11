@@ -2,11 +2,8 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { applicationCategories, applications, photos, processSteps } from "./cinematic-content";
 import { ApplicationCard } from "./cinematic-home";
-import { CompanyBrain } from "./company-brain";
-import { IntegrationExplorer } from "./integration-explorer";
 import { MarketingShell } from "./marketing-page";
 import { marketingConfig } from "./site-config";
-import WorkInAction from "./work-in-action";
 import s from "./cinematic.module.css";
 
 export function MarketingIntro({ title, description, image, back }: {
@@ -24,29 +21,6 @@ export function MarketingIntro({ title, description, image, back }: {
       </div>
       {image && <img className={s.subpagePhoto} src={image} alt="" fetchPriority="high" />}
     </>
-  );
-}
-
-export function PlatformPage() {
-  return (
-    <MarketingShell>
-      <MarketingIntro title="De kennis achter jouw werk." description="In je Company Brain leggen we je documenten, werkwijzen en afspraken vast. Zo kan een AI-agent een taak uitvoeren met de informatie die je team zelf gebruikt." />
-      <section className={s.brainSection} aria-labelledby="brain-heading">
-        <div>
-          <h2 id="brain-heading">Hoe jouw bedrijf werkt, op één plek.</h2>
-          <p>Een prijslijst vertelt wat iets kost. De afspraken en uitzonderingen van je team vertellen wanneer die prijs geldt. In Nauvi krijgen ze samen een plek.</p>
-        </div>
-        <CompanyBrain />
-      </section>
-      <WorkInAction />
-      <section className={s.detailSection} id="koppelingen" aria-labelledby="connect-heading">
-        <div>
-          <h2 id="connect-heading">Koppelingen met je eigen tools.</h2>
-          <p>We bekijken per taak welke bestanden en systemen nodig zijn. Onze ontwikkelaars bouwen de koppelingen op maat.</p>
-        </div>
-        <IntegrationExplorer />
-      </section>
-    </MarketingShell>
   );
 }
 

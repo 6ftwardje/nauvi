@@ -1,0 +1,573 @@
+.field {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: clamp(510px, 61vw, 875px);
+  place-items: center;
+  overflow: clip;
+  background: #0b0b0b;
+  color: white;
+}
+
+.field[data-mode="platform"] {
+  min-height: max(580px, calc(100svh - var(--strip-height)));
+  padding-bottom: 24px;
+}
+
+.fieldLight {
+  position: absolute;
+  z-index: -2;
+  inset: -7% -6% 0;
+  background:
+    linear-gradient(180deg, #14191f14 14%, #10121635 45%, #0b0b0b 100%),
+    url("/marketing/cinematic/brain-field.webp") center 28% / cover;
+  animation: light-drift 19s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+
+.field[data-running="true"] .fieldLight,
+.field[data-running="true"] .dot,
+.field[data-running="true"] .dotLabel {
+  animation-play-state: running;
+}
+
+@keyframes light-drift {
+  from { transform: translate3d(-2%, -2%, 0) scale(1); }
+  to { transform: translate3d(3%, 2%, 0) scale(1.085); }
+}
+
+.dots {
+  position: absolute;
+  z-index: -1;
+  inset: 10% max(7%, (100% - 1110px) / 2);
+  display: grid;
+  grid-template: repeat(9, 1fr) / repeat(9, 1fr);
+  place-items: center;
+  mask-image: radial-gradient(ellipse 72% 71%, black 45%, transparent 96%);
+}
+
+.dot {
+  position: relative;
+  display: grid;
+  width: 4px;
+  height: 4px;
+  place-items: center;
+  border-radius: 1px;
+  background: #cad6e28a;
+  animation: dot-enter .48s both var(--dot-delay);
+  animation-play-state: paused;
+}
+
+.dot[data-accent="true"] {
+  background: #6d9bff;
+  box-shadow: 0 0 9px #a1c2ff76;
+}
+
+@keyframes dot-enter {
+  from { opacity: 0; transform: translate(var(--dot-x), var(--dot-y)); }
+}
+
+.dotLabel {
+  position: absolute;
+  left: 10px;
+  padding: 2px 7px;
+  border: 1px solid #ffffff65;
+  border-radius: 2px;
+  background: #121720d9;
+  color: white;
+  font-size: 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+  opacity: 0;
+  animation: label-flash 12s ease-in-out var(--label-delay) infinite;
+  animation-play-state: paused;
+}
+
+@keyframes label-flash {
+  0%, 14%, 100% { opacity: 0; transform: translateX(-5px); }
+  3%, 10% { opacity: 1; transform: translateX(0); }
+}
+
+.fieldContent {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  width: 100%;
+  padding: 32px var(--edge);
+  text-align: center;
+  text-shadow: 0 2px 25px #06080e5e;
+}
+
+.field .fieldContent :is(h1, h2) {
+  max-width: 25ch;
+  color: white;
+  font-size: clamp(42px, 4.2vw, 75px);
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.field[data-mode="platform"] .fieldContent h1,
+.field[data-running="true"] .fieldContent h2 {
+  animation: field-enter .8s cubic-bezier(.21,.73,.25,1) both;
+}
+
+.field[data-mode="home"] .fieldContent h2 {
+  font-size: clamp(39px, 4vw, 65px);
+}
+
+.signature {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: clamp(16px, 1.65vw, 24px);
+  letter-spacing: -.045em;
+  animation: field-enter .65s ease-out both;
+}
+
+@keyframes field-enter {
+  from { opacity: 0; transform: translateY(17px); }
+}
+
+.dark {
+  background: #0b0b0b;
+  color: white;
+}
+
+.hero {
+  margin-top: calc(-1 * var(--nav-height));
+}
+
+.infrastructure,
+.chapters,
+.benefits,
+.controls {
+  padding-inline: var(--edge);
+}
+
+.infrastructure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.86fr);
+  align-items: center;
+  gap: clamp(30px, 4vw, 75px);
+  padding-block: clamp(46px, 6vw, 96px) clamp(65px, 8.5vw, 133px);
+}
+
+.dark :is(.infrastructure, .chapters, .benefits) :is(h2, h3) {
+  color: white;
+}
+
+.dark :is(.infrastructure, .chapters, .benefits) h2,
+.controls h2 {
+  font-size: clamp(34px, 4.25vw, 68px);
+  text-wrap: initial;
+}
+
+.layerCopy {
+  display: grid;
+  gap: clamp(32px, 5vw, 79px);
+}
+
+.dark .layerCopy h2 {
+  font-size: clamp(34px, 3.55vw, 57px);
+}
+
+.layerDescription {
+  min-height: 9em;
+}
+
+.layerText {
+  display: grid;
+  gap: 12px;
+  animation: field-enter .3s ease-out both;
+}
+
+.dark .layerText h3 {
+  font-size: clamp(25px, 2.9vw, 43px);
+}
+
+.layerText p,
+.benefits p {
+  max-width: 36ch;
+  color: #babdc5;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.45;
+}
+
+.diagramStage {
+  display: grid;
+  aspect-ratio: 1.36;
+  place-items: center;
+  padding: clamp(25px, 6.5vw, 114px);
+  border-radius: 7px;
+  background:
+    linear-gradient(140deg, #7d88b69e, #3565a674 49%, #8ac1f95e),
+    url("/marketing/cinematic/brain-field.webp") center 30% / cover,
+    #416195;
+}
+
+.diagram {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(5px, .62vw, 10px);
+  padding: clamp(19px, 3vw, 50px) clamp(13px, 2.25vw, 38px) clamp(13px, 2.25vw, 38px);
+  border: 1px solid #b5d4ff25;
+  border-radius: 11px;
+  background: #101722e8;
+  box-shadow: 0 16px 45px #0612206c;
+}
+
+.diagram .layer {
+  min-width: 0;
+  min-height: clamp(37px, 5vw, 78px);
+  padding: 6px;
+  border: 1px solid #aab7cb1f;
+  border-radius: 5px;
+  background: #10151db8;
+  color: #cbd0d9;
+  font-size: clamp(11px, 1.15vw, 16px);
+  line-height: 1.16;
+  transition: background .24s, color .24s, border-color .24s, box-shadow .24s;
+}
+
+.layer[data-wide="true"] {
+  grid-column: 1 / -1;
+}
+
+.diagram .layer[data-access="true"] {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  min-height: 35px;
+  padding-inline: 15px;
+  transform: translate(-50%, -50%);
+  border-radius: 50px;
+  background: #243953;
+  white-space: nowrap;
+}
+
+.diagram .layer:is(:hover, :focus-visible, [aria-pressed="true"]) {
+  border-color: #b6d2f180;
+  background: #2e4664;
+  color: white;
+  box-shadow: inset 0 0 22px #79a8ff32;
+}
+
+.chapters,
+.benefits {
+  padding-block: clamp(54px, 7.5vw, 125px);
+  border-top: 1px solid #ffffff18;
+}
+
+.chapterGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 34px;
+}
+
+.chapter {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: clamp(345px, 44vw, 710px);
+  grid-template-rows: 1fr auto 1fr;
+  justify-items: center;
+  gap: 22px;
+  overflow: clip;
+  padding: clamp(16px, 2.1vw, 32px);
+  border-radius: 7px;
+  background: #3b567c;
+  color: white;
+  text-align: center;
+}
+
+.chapterLight,
+.chapter::after {
+  position: absolute;
+  inset: 0;
+}
+
+.chapterLight {
+  z-index: -2;
+  background: url("/marketing/cinematic/brain-field.webp") center / cover;
+  transform: scale(1.14);
+  filter: blur(6px);
+  transition: transform .75s cubic-bezier(.22,.75,.2,1);
+}
+
+.chapter[data-tone="rust"] {
+  background: #8b452b;
+}
+
+.chapter[data-tone="rust"] .chapterLight {
+  mix-blend-mode: luminosity;
+  transform: scale(1.28) rotate(-12deg);
+  filter: blur(8px) brightness(1.35) contrast(1.12);
+}
+
+.chapter[data-tone="olive"] {
+  background: #777553;
+}
+
+.chapter[data-tone="olive"] .chapterLight {
+  mix-blend-mode: luminosity;
+  transform: scale(1.27) rotate(13deg);
+  filter: blur(9px) brightness(1.62);
+}
+
+.chapter[data-tone="blue"] .chapterLight {
+  mix-blend-mode: luminosity;
+  filter: blur(6px) brightness(1.7);
+}
+
+.chapter:is(:hover, :focus-within) .chapterLight {
+  scale: 1.065;
+}
+
+.chapter::after {
+  z-index: -1;
+  background: linear-gradient(180deg, #12161b04, #12161b32 42%, #12161b94);
+  content: "";
+}
+
+.dark .chapter h3 {
+  grid-row: 2;
+  font-size: clamp(27px, 3vw, 46px);
+  text-wrap: balance;
+}
+
+.chapter > div:last-child {
+  display: grid;
+  grid-row: 3;
+  align-self: end;
+  justify-items: center;
+  gap: 12px;
+}
+
+.chapter p {
+  max-width: 25ch;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.benefits ul,
+.controls ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefits ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 42px 38px;
+  margin-top: clamp(38px, 6vw, 80px);
+}
+
+.benefits li {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid #ffffff25;
+}
+
+.benefits svg {
+  margin-bottom: 10px;
+  color: #a4c6ff;
+}
+
+.dark .benefits h3 {
+  font-size: clamp(23px, 2.35vw, 36px);
+}
+
+.controls {
+  padding-block: clamp(65px, 10vw, 150px) 18px;
+}
+
+.controls h2 {
+  max-width: 22ch;
+  margin-bottom: clamp(48px, 7vw, 102px);
+}
+
+.controls h2 span {
+  color: #54565a;
+}
+
+.controlRow {
+  position: relative;
+  display: grid;
+  min-height: clamp(155px, 18vw, 254px);
+  grid-template-columns: 1.45fr .5fr .61fr;
+  align-items: center;
+  gap: clamp(18px, 4vw, 68px);
+  padding: 20px 14px;
+  border-top: 1px solid #e7e7e7;
+  transition: background .24s;
+}
+
+.controlRow h3 {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: clamp(24px, 2.65vw, 41px);
+}
+
+.controlRow h3::before {
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  content: "";
+  opacity: 0;
+  transition: width .3s ease, opacity .3s ease;
+}
+
+.controlRow:is(:hover, :focus-visible) {
+  background: #f3f3f4;
+}
+
+.controlRow:is(:hover, :focus-visible) h3::before {
+  width: 27px;
+  opacity: 1;
+}
+
+.controlArt {
+  display: grid;
+  min-height: 100px;
+  aspect-ratio: 1.55;
+  place-items: center;
+  transform: translateY(9px);
+  border-radius: 5px;
+  background:
+    radial-gradient(circle, #8ca6d057 1px, transparent 1.6px) center / 12px 12px,
+    radial-gradient(ellipse at center, #213958, #0c111a);
+  color: #d2e5ff;
+  opacity: 0;
+  transition: transform .32s, opacity .32s;
+}
+
+.controlArt[data-color="violet"] {
+  filter: hue-rotate(29deg);
+}
+
+.controlArt[data-color="ice"] {
+  filter: hue-rotate(-21deg) brightness(1.15);
+}
+
+.controlArt[data-color="steel"] {
+  filter: saturate(.4);
+}
+
+.controlRow:is(:hover, :focus-visible) .controlArt {
+  transform: none;
+  opacity: 1;
+}
+
+.controlRow p {
+  color: #515258;
+  font-size: clamp(13px, 1.2vw, 16px);
+  line-height: 1.45;
+}
+
+.closing {
+  display: grid;
+  min-height: clamp(360px, 42vw, 630px);
+  place-content: center;
+  justify-items: center;
+  gap: 20px;
+  padding: 38px var(--edge);
+  background:
+    linear-gradient(180deg, #172a4626, #0b0b0b 91%),
+    url("/marketing/cinematic/brain-field.webp") center 30% / cover,
+    #0b0b0b;
+  color: white;
+  text-align: center;
+}
+
+section.closing h2 {
+  max-width: 19ch;
+  color: white;
+  font-size: clamp(39px, 4.7vw, 71px);
+}
+
+@media (max-width: 760px) {
+  .field[data-mode="platform"] {
+    min-height: max(530px, calc(88svh - var(--strip-height)));
+  }
+
+  .dots {
+    inset-inline: 5%;
+  }
+
+  .dotLabel {
+    font-size: 8px;
+  }
+
+  .dot:nth-child(3n) {
+    visibility: hidden;
+  }
+
+  .desktopBreak {
+    display: none;
+  }
+
+  .infrastructure {
+    grid-template-columns: 1fr;
+  }
+
+  .layerCopy {
+    gap: 22px;
+  }
+
+  .layerDescription {
+    min-height: 6.75em;
+  }
+
+  .diagramStage {
+    aspect-ratio: 1.28;
+    padding: clamp(20px, 6vw, 46px);
+  }
+
+  .chapterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter {
+    min-height: 365px;
+  }
+
+  .benefits ul {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 15px;
+  }
+
+  .controlRow {
+    grid-template-columns: 1.15fr 1fr;
+    padding-inline: 0;
+  }
+
+  .controlArt {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .controlArt {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dotLabel {
+    display: none;
+  }
+
+  .controlRow:focus-visible .controlArt {
+    opacity: 1;
+  }
+}

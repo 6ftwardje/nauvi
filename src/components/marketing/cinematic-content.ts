@@ -7,6 +7,7 @@ export const photos = {
   survey: "/marketing/cinematic/survey.webp",
   handover: "/marketing/cinematic/handover.webp",
   intake: "/marketing/cinematic/intake.webp",
+  brainField: "/marketing/cinematic/brain-field.webp",
 };
 
 export const applications = [
