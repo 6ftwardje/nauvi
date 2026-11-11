@@ -13,7 +13,7 @@ export type BrainActivity = {
 };
 
 const settings = {
-  model: "/marketing/brain/company-brain.glb",
+  model: `${(process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "")}/marketing/brain/company-brain.glb`,
   neutral: { x: .23, y: -.28, z: .04 },
   hover: { x: MathUtils.degToRad(10), y: MathUtils.degToRad(18) },
   drag: { x: .46, y: .96 },

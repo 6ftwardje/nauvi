@@ -1,54 +1,55 @@
 .section {
   display: grid;
-  grid-template-columns: minmax(0, .84fr) minmax(0, 1.16fr);
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
   align-items: center;
-  gap: 56px;
+  gap: clamp(36px, 5vw, 80px);
   padding: var(--section-space) var(--section-inset);
   border-bottom: 1px solid var(--border);
-  background: var(--canvas);
+  background: var(--linen);
   color: var(--ink);
 }
 
-.copy { min-width: 0; }
+.figure {
+  margin: 0;
+  background: var(--white);
+}
 
-.section .copy h2 { margin: 0; font-size: clamp(34px, 3.2vw, 46px); line-height: 1.16; letter-spacing: -.035em; text-wrap: balance; }
-.section .description { max-width: 42ch; margin: 25px 0 29px; color: var(--ink); font-size: 17px; line-height: 1.8; }
-.section .cta { display: inline-flex; justify-content: center; align-items: center; gap: 18px; min-height: 54px; padding: 15px 22px; border: 0; border-radius: 9px; background: var(--espresso); color: var(--white); font-size: 14px; font-weight: 500; line-height: 1.5; cursor: pointer; transition: background-color .18s; }
-.section .cta:hover { background: var(--button-hover); }
-.cta svg { flex-shrink: 0; }
-.section .reassurance { margin: 17px 0 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 720px;
+  object-fit: contain;
+}
 
-.section .demoLink {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: clamp(12px, 2vw, 24px);
-  padding: clamp(18px, 3vw, 32px);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--linen);
+.copy { min-width: 0; max-width: 38rem; }
+
+.section .description {
+  max-width: 42ch;
+  margin: 22px 0 28px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.section .reassurance {
+  margin: 16px 0 0;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
 }
-.section .demoLink:hover { border-color: var(--border-strong); }
-.demoLink > svg { color: var(--accent); }
-.demoIcon { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--border); border-radius: 9px; background: var(--white); color: var(--ink); }
-.demoCopy { display: grid; gap: 4px; }
-.demoCopy strong { color: var(--ink); font-size: 16px; font-weight: 600; }
 
-@media (max-width: 1100px) {
-  .section { grid-template-columns: minmax(0, 1fr); gap: 40px; }
-  .copy { max-width: 660px; }
-  .section .copy h2 { font-size: 44px; }
-  .section .description { max-width: 54ch; font-size: 16px; }
-  .demoLink { max-width: 660px; }
+.demoLink {
+  display: inline-block;
+  margin-top: 18px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-@media (max-width: 760px) {
-  .section { gap: 34px; }
-  .section .copy h2 { font-size: clamp(32px, 6vw, 40px); }
-  .section .description { margin: 22px 0 25px; font-size: 15px; }
-}
-@media (max-width: 600px) {
-  .section .copy h2 { font-size: clamp(31px, 8.3vw, 38px); }
+
+@media (max-width: 900px) {
+  .section { grid-template-columns: 1fr; }
+  .figure img { max-height: 460px; }
 }

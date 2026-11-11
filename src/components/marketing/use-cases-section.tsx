@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { motion, useReducedMotion, useSpring } from "motion/react";
-import { NauviMark } from "./nauvi-brand";
+import { AccentLine, Kicker } from "./editorial";
 import s from "./use-cases.module.css";
 
 type Automation = {
@@ -139,7 +139,7 @@ function AutomationCard({ title, description, result, sourceIcon: SourceIcon, re
     <motion.article className={s.card} style={{ rotateX, rotateY, y }}>
       <div className={s.cardVisual} aria-hidden="true">
         <span className={s.sourcePlate}><SourceIcon size={22} strokeWidth={1.6} /></span>
-        <span className={s.connection}><NauviMark size={23} /></span>
+        <span className={s.connection} aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><rect x="1.25" y="1.25" width="11.5" height="11.5" fill="none" stroke="currentColor" strokeWidth="1.25" /><circle cx="7" cy="7" r="1.5" fill="currentColor" /></svg></span>
         <span className={s.resultPlate}><ResultIcon size={22} strokeWidth={1.6} /></span>
       </div>
       <div className={s.cardCopy}>
@@ -170,7 +170,11 @@ export default function UseCasesSection() {
 
   return <section className={s.section} id="dienstverlening" aria-labelledby="service-title">
     <div className={s.intro}>
-      <h2 id="service-title">Van Company Brain<br />{" "}naar automatisering.</h2>
+      <div>
+        <Kicker>Dienstverlening</Kicker>
+        <h2 id="service-title">Van Company Brain naar automatisering.</h2>
+        <AccentLine>Jouw werkwijze.</AccentLine>
+      </div>
       <p>Als je Company Brain staat, bouwen we automatiseringen die jouw werkwijze en afspraken volgen. Deze voorbeelden komen uit ons werk voor bouwbedrijven.</p>
     </div>
 

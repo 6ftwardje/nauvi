@@ -1,7 +1,10 @@
-export function NauviWordmark({ className }: { className?: string }) {
-  return <img className={className} src="/brand/nauvi-logo-primary.svg" width={112} height={39} alt="Nauvi" draggable={false} />;
-}
+import { publicPath } from "@/lib/public-path";
+import s from "./wordmark.module.css";
 
-export function NauviMark({ size }: { size: number }) {
-  return <img src="/brand/nauvi-star.svg" width={size} height={Math.round(size * 195 / 310)} alt="" draggable={false} />;
+/** Official wordmark. The ink file is for light surfaces, the white file for dark ones. */
+export function NauviWordmark({ className }: { className?: string }) {
+  return <span className={`${s.stack} ${className ?? ""}`}>
+    <img className={s.onLight} src={publicPath("/brand/logo.svg")} width={120} height={41} alt="" draggable={false} />
+    <img className={s.onDark} src={publicPath("/brand/logo-white.svg")} width={120} height={41} alt="" draggable={false} />
+  </span>;
 }

@@ -7,7 +7,7 @@ import {
   Pause, Pencil, RotateCcw, Workflow,
 } from "lucide-react";
 import { animate, motion } from "motion/react";
-import { NauviMark } from "./nauvi-brand";
+import { AccentLine, Kicker } from "./editorial";
 import { fluidDotsDurationMs, SiriFluidDots } from "@/components/ui/siri-fluid-dots";
 import s from "./work-in-action.module.css";
 
@@ -195,7 +195,7 @@ function DemoFrame({ area, title, description, looping, onPlayback, canReset = f
 }) {
   return <>
     <div className={s.chrome}>
-      <span className={s.chromeIcon}><NauviMark size={21} /></span>
+      <span className={s.chromeIcon}>nauvi</span>
       <span className={s.breadcrumb}><span>Nauvi</span> <ChevronRight size={11} aria-hidden="true" /> <strong>{area}</strong></span>
       <span className={s.demoLabel}>Voorbeeld</span>
       <button className={s.replay} data-replay-only={!canReset} type="button"
@@ -475,10 +475,14 @@ export default function WorkInAction() {
 
   return <section ref={ref} className={s.section} id="mogelijkheden" aria-labelledby="benefits-title" data-sticky-story={stickyStory || undefined}
     style={{ "--loader-duration": `${fluidDotsDurationMs}ms`, "--step-enter-duration": `${stepEnterMs}ms` } as CSSProperties}>
-    <h2 className={s.visuallyHidden} id="benefits-title">Van bedrijfskennis naar goedgekeurd werk</h2>
+    <header className={s.intro}>
+      <Kicker>Voorbeeld</Kicker>
+      <h2 id="benefits-title">Van bedrijfskennis naar goedgekeurd werk.</h2>
+      <AccentLine>Jij beslist.</AccentLine>
+    </header>
     {steps.map(({ title, description, Demo }, index) => <article className={s.step} data-step-reveal={stages[index]} key={title}>
       <div className={s.copy}>
-        <span>Stap {index + 1}</span>
+        <span>{String(index + 1).padStart(2, "0")}</span>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>

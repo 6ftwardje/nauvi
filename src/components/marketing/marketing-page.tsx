@@ -2,15 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import { easeInOut, motion, useInView, useMotionTemplate, useScroll, useSpring, useTransform, useVelocity, type MotionStyle } from "motion/react";
+import { useInView } from "motion/react";
 import { ArrowRight, ArrowUpRight, BookOpen, CalendarDays, Check, FileText, GitBranch, MessageSquare, Plus, RefreshCw, Search, Video, X } from "lucide-react";
+import { publicPath } from "@/lib/public-path";
 import { calendlyEmbedUrl, marketingConfig } from "./site-config";
 import HeroSection from "./hero-section";
 import MarketingNavbar from "./marketing-navbar";
-import { NauviMark, NauviWordmark } from "./nauvi-brand";
+import { NauviWordmark } from "./nauvi-brand";
+import { AccentLine, Kicker } from "./editorial";
 import WorkflowSection from "./workflow-section";
 import UseCasesSection from "./use-cases-section";
 import WorkInAction from "./work-in-action";
+import { CompanyBrain } from "./company-brain";
 import { GradientSection } from "./gradient-section";
 import s from "./marketing.module.css";
 
@@ -76,9 +79,9 @@ const faqs = [
   },
 ];
 
-function Logo({ id, name, className = "" }: { id: string; name: string; className?: string }) { return <img className={className} src={`/marketing/logos/${id}.svg`} alt={name} width={30} height={30} />; }
+function Logo({ id, name, className = "" }: { id: string; name: string; className?: string }) { return <img className={className} src={publicPath(`/marketing/logos/${id}.svg`)} alt={name} width={30} height={30} />; }
 function Host({ small = false }: { small?: boolean }) { return <div className={`${s.host} ${small ? s.hostSmall : ""}`}>
-  {marketingConfig.hostPortrait ? <img src={marketingConfig.hostPortrait} alt="" width={small ? 56 : 96} height={small ? 56 : 96} decoding="async" /> : <span className={s.avatar} aria-hidden="true">{marketingConfig.hostName.charAt(0)}</span>}
+  {marketingConfig.hostPortrait ? <img src={publicPath(marketingConfig.hostPortrait)} alt="" width={small ? 56 : 96} height={small ? 56 : 96} decoding="async" /> : <span className={s.avatar} aria-hidden="true">{marketingConfig.hostName.charAt(0)}</span>}
   <span><strong>{marketingConfig.hostName}</strong><span>Jouw eerste aanspreekpunt bij Nauvi</span></span>
 </div>; }
 
@@ -108,7 +111,7 @@ function BrainValueIllustration() {
     <div className={s.valuePanel} id="brain-value-panel" role="tabpanel" aria-labelledby={`brain-value-tab-${Number(expanded)}`} tabIndex={0} data-expanded={expanded}>
       <div className={s.valueDiagram}>
         <div className={s.valueBrain}>
-          <span className={s.valueMark} aria-hidden="true"><NauviMark size={76} /></span>
+          <span className={s.valueMark} aria-hidden="true"><img src={publicPath("/marketing/editorial/company-brain.webp")} alt="" width={112} height={148} /></span>
           <strong>Company Brain</strong>
           <span>Jouw bedrijfskennis</span>
           <div><span>Werkwijzen</span><span>Prijsafspraken</span><span>Uitzonderingen</span></div>
@@ -170,44 +173,27 @@ function IntegrationExplorer() {
   </div>;
 }
 
-function AiAgentsSection() {
-  const section = useRef<HTMLElement>(null);
-  const photoNearViewport = useInView(section, { margin: "96px 0px" });
-  const { scrollYProgress } = useScroll({ target: section, offset: ["start end", "end start"] });
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 240,
-    damping: 24,
-    mass: .6,
-    restDelta: .001,
-    skipInitialAnimation: true,
-  });
-  const photoTravel = useTransform(progress, [0, 1], [-1, 1]);
-  const photoY = useMotionTemplate`calc(${photoTravel} * var(--control-photo-travel))`;
-  const photoOpacity = useTransform(progress, [0, .5, 1], [.06, .12, .08], { ease: easeInOut });
-  const ringsY = useTransform(progress, [0, 1], [-2, 2]);
-  const starY = useTransform(progress, [0, 1], [-4, 4]);
+const coreRows = [
+  ["Company Brain", "Documenten, processen en afspraken op één plek."],
+  ["Agents", "Afgesproken taken, volgens jouw werkwijze."],
+  ["Controle", "Jij leest het voorstel en geeft zelf akkoord."],
+  ["Eerste stap", "Eén taak. De kostprijs bepalen we per opdracht."],
+] as const;
 
+function CoreSection() {
   return (
-    <section ref={section} className={s.controlSection} id="ai-agents" aria-labelledby="agents-title">
-      <motion.img
-        className={s.controlPhoto}
-        src="/marketing/materials/office-workplace.webp"
-        alt=""
-        width={2240}
-        height={960}
-        loading="lazy"
-        decoding="async"
-        data-in-view={photoNearViewport || undefined}
-        style={{ y: photoY, opacity: photoOpacity }}
-      />
-      <motion.div className={s.controlMark} style={{ y: ringsY }} aria-hidden="true">
-        <motion.div className={s.controlStar} style={{ y: starY }}><NauviMark size={144} /></motion.div>
-        <span />
-      </motion.div>
+    <section className={s.coreSection} id="ai-agents" aria-labelledby="agents-title">
+      <figure className={s.coreFigure}>
+        <img src={publicPath("/marketing/editorial/company-brain.webp")} alt="Teal metalen kubus met een wit brein: het beeld van Company Brain." width={933} height={1400} />
+      </figure>
       <div>
-        <h2 id="agents-title">Ook AI moet weten hoe jouw bedrijf werkt.</h2>
-        <p>Een AI-agent is een digitale collega die taken uitvoert. Maar die kent jouw prijsafspraken en uitzonderingen niet vanzelf.</p>
-        <p>Je Company Brain geeft die kennis een vaste plek. Zo maken we je bedrijf klaar om werk aan agents toe te vertrouwen.</p>
+        <Kicker>Company Brain / Het vertrekpunt</Kicker>
+        <h2 id="agents-title">De kern</h2>
+        <AccentLine>in het kort.</AccentLine>
+        <p className={s.coreLead}>Een AI-agent is een digitale collega die taken uitvoert. Die kent jouw prijsafspraken en uitzonderingen niet vanzelf. Je Company Brain geeft die kennis een vaste plek, zodat je werk aan agents kunt toevertrouwen.</p>
+        <dl className={s.coreRows}>
+          {coreRows.map(([label, answer]) => <div key={label}><dt>{label}</dt><dd>{answer}</dd></div>)}
+        </dl>
       </div>
     </section>
   );
@@ -217,15 +203,6 @@ export default function MarketingPage() {
   const [booking, setBooking] = useState(false);
   const [calendarVersion, setCalendarVersion] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
-  const cta = useRef<HTMLElement>(null);
-  const { scrollY, scrollYProgress } = useScroll({ target: cta, offset: ["start end", "end start"] });
-  const velocity = useVelocity(scrollY);
-  const ctaTravel = useTransform(() => {
-    const progress = scrollYProgress.get();
-    const momentum = Math.max(-9, Math.min(9, velocity.get() / 150));
-    return (progress - .5) * 26 + Math.sin(progress * Math.PI) * momentum;
-  });
-  const offset = useSpring(ctaTravel, { stiffness: 90, damping: 28, restDelta: .05 });
   const embed = calendlyEmbedUrl(marketingConfig.calendlyUrl);
   useEffect(() => {
     if (!booking) return;
@@ -243,7 +220,17 @@ export default function MarketingPage() {
     <main id="main">
       <HeroSection onStart={openBooking} />
 
-      <AiAgentsSection />
+      <CoreSection />
+
+      <section className={s.brainSection} aria-labelledby="brain-stage-title">
+        <div className={s.brainIntro}>
+          <Kicker>Voorbeeld</Kicker>
+          <h2 id="brain-stage-title">Zo komt kennis samen.</h2>
+          <AccentLine>Eén brein.</AccentLine>
+          <p>Een voorbeeld met fictieve bedrijfskennis. Bronnen die een team al gebruikt, verbonden met het Company Brain.</p>
+        </div>
+        <CompanyBrain />
+      </section>
 
       <WorkflowSection onBooking={openBooking} />
 
@@ -253,7 +240,9 @@ export default function MarketingPage() {
 
       <section className={s.valueSection} id="waarom-nu" aria-labelledby="why-title">
         <div className={s.valueCopy} data-reveal>
-          <h2 id="why-title">AI wordt beter.<br /><span>Jouw bedrijfskennis wordt waardevoller.</span></h2>
+          <Kicker>Waarom nu</Kicker>
+          <h2 id="why-title">AI wordt beter.</h2>
+          <AccentLine>Je kennis ook.</AccentLine>
           <p>Hoe meer agents kunnen, hoe meer taken ze met jouw kennis kunnen uitvoeren.</p>
           <p>Wat je vandaag juist vastlegt en blijft bijhouden, is de basis voor het werk dat je morgen kunt uitbesteden.</p>
           <span className={s.valueTakeaway}><BookOpen size={18} aria-hidden="true" /> Eén Company Brain. Steeds meer mogelijkheden.</span>
@@ -262,18 +251,17 @@ export default function MarketingPage() {
       </section>
 
       <section className={s.integrationSection} id="integraties" aria-labelledby="tools-title">
-        <div className={s.integrationIntro} data-reveal><h2 id="tools-title">Je tools blijven het vertrekpunt.</h2><p>Onze ontwikkelaars bouwen koppelingen op maat. Zo kunnen je agents kennis uit Nauvi gebruiken in de tools die je bedrijf al gebruikt.</p><div className={s.integrationNote}><GitBranch size={17} /><span>Welke koppelingen nodig en mogelijk zijn,<br />spreken we samen af.</span></div>{bookingButton(`${s.button} ${s.outline}`)}</div>
+        <div className={s.integrationIntro} data-reveal><Kicker>Je tools</Kicker><h2 id="tools-title">Je tools blijven het vertrekpunt.</h2><p>Onze ontwikkelaars bouwen koppelingen op maat. Zo kunnen je agents kennis uit Nauvi gebruiken in de tools die je bedrijf al gebruikt.</p><div className={s.integrationNote}><GitBranch size={17} /><span>Welke koppelingen nodig en mogelijk zijn, spreken we samen af.</span></div>{bookingButton(`${s.button} ${s.outline}`)}</div>
         <IntegrationExplorer />
       </section>
 
-      <section className={s.faqSection} id="vragen" aria-labelledby="faq-title"><div data-reveal><h2 id="faq-title">Even helder voor je begint.</h2><p>Staat jouw vraag er niet bij?<br />Stel ze tijdens de kennismaking.</p></div><div className={s.faqList}>{faqs.map(({ question, answer }) => <details key={question}><summary>{question}<Plus size={19} /></summary>{answer}</details>)}</div></section>
+      <section className={s.faqSection} id="vragen" aria-labelledby="faq-title"><div data-reveal><Kicker>Vragen</Kicker><h2 id="faq-title">Even helder.</h2><AccentLine>Voor je begint.</AccentLine><p>Staat jouw vraag er niet bij? Stel ze tijdens de kennismaking.</p></div><div className={s.faqList}>{faqs.map(({ question, answer }) => <details key={question}><summary>{question}<Plus size={19} /></summary>{answer}</details>)}</div></section>
 
-      <GradientSection gradient="contact" className={s.ctaSection} id="demo" aria-labelledby="cta-title" ref={cta}>
-        <div className={s.ctaInner} data-reveal><h2 id="cta-title">Welke taak wil jij uit handen geven?</h2><p>Vertel wat je team tijd kost. We bekijken samen welke kennis nodig is en hoe we het werk kunnen overnemen.</p>{bookingButton(`${s.button} ${s.ctaButton}`)}<p className={s.copyNote}>30 minuten · Online kennismaking</p><Host small /></div>
-        <motion.div className={s.ctaSymbol} style={{ "--cta-offset": offset } as MotionStyle} aria-hidden="true"><NauviMark size={600} /></motion.div>
+      <GradientSection gradient="contact" className={s.ctaSection} id="demo" aria-labelledby="cta-title" data-inverse>
+        <div className={s.ctaInner} data-reveal><Kicker>Kennismaking</Kicker><h2 id="cta-title">Welke taak wil jij uit handen geven?</h2><AccentLine>Samen bekijken.</AccentLine><p>Vertel wat je team tijd kost. We bekijken samen welke kennis nodig is en hoe we het werk kunnen overnemen.</p>{bookingButton(`${s.button} ${s.ctaButton}`)}<p className={s.copyNote}>30 minuten · Online kennismaking</p><Host small /></div>
       </GradientSection>
     </main>
-    <footer className={s.footer}><div className={s.footerMain}><div><a href="#main" aria-label="Nauvi startpagina"><NauviWordmark className={s.brand} /></a><p>Nauvi is het brein <br />van je bedrijf.</p></div><nav aria-label="Meer over Nauvi"><span>ONTDEK NAUVI</span><a href="#werkwijze">Zo werkt het</a><a href="#dienstverlening">Wat wij overnemen</a><a href="#integraties">Je tools</a></nav><nav aria-label="Toegang en contact"><span>AAN DE SLAG</span><button onClick={openBooking}>Plan een kennismaking <ArrowUpRight size={13} /></button><a href="/app">Login voor testgebruikers <ArrowUpRight size={13} /></a><a href="#vragen">Veelgestelde vragen</a></nav></div><div className={s.footerBottom}><span>© {new Date().getFullYear()} Nauvi</span><span>AI die je bedrijf echt kent.</span><span>De kennis achter jouw werk.</span></div></footer>
+    <footer className={s.footer}><div className={s.footerMain}><div><a href="#main" aria-label="Nauvi startpagina"><NauviWordmark className={s.brand} /></a><p>Een digitaal atelier, onder menselijke regie.</p></div><nav aria-label="Meer over Nauvi"><span>ONTDEK NAUVI</span><a href="#werkwijze">Zo werkt het</a><a href="#dienstverlening">Wat wij overnemen</a><a href="#integraties">Je tools</a></nav><nav aria-label="Toegang en contact"><span>AAN DE SLAG</span><button onClick={openBooking}>Plan een kennismaking <ArrowUpRight size={13} /></button><a href={publicPath("/app")}>Login voor testgebruikers <ArrowUpRight size={13} /></a><a href="#vragen">Veelgestelde vragen</a></nav></div><div className={s.footerBottom}><span>© {new Date().getFullYear()} Nauvi</span><span>Company Brain</span></div></footer>
     <dialog ref={dialog} className={s.bookingDialog} aria-labelledby="booking-title" onClose={() => setBooking(false)} onClick={e => { if (e.target === e.currentTarget) closeBooking(); }}>
       <button className={s.closeDialog} aria-label="Afspraakvenster sluiten" onClick={closeBooking}><X size={21} /></button>
       <div className={s.bookingLayout}>

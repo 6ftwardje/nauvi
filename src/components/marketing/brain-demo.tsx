@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowUp, ChevronRight, X } from "lucide-react";
-import { NauviMark } from "./nauvi-brand";
 import { brainQuestions, type BrainSourceId } from "./brain-content";
 import s from "./company-brain.module.css";
 
@@ -75,7 +74,6 @@ export function BrainDemo({ onSources }: { onSources: (sources: readonly BrainSo
     <div className={s.demoControls}>
       <form className={s.prompt} onSubmit={event => { event.preventDefault(); submit(query); }}>
         <label className={s.srOnly} htmlFor="hero-brain-question">Vraag aan je Company Brain</label>
-        <NauviMark size={23} />
         <input
           id="hero-brain-question"
           ref={input}

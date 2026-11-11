@@ -57,7 +57,7 @@ export function Navbar({ children, className }: NavbarProps) {
 
 export function NavBody({ children, className, visible }: NavBodyProps) {
   const reduceMotion = useReducedMotion();
-  return <motion.div layout={!reduceMotion} initial={false} animate={{ y: visible && !reduceMotion ? 8 : 0 }} transition={reduceMotion ? { duration: 0 } : spring} className={cn(s.navBody, className)} data-compact={visible}>
+  return <motion.div layout={!reduceMotion} initial={false} animate={{ y: 0 }} transition={reduceMotion ? { duration: 0 } : spring} className={cn(s.navBody, className)} data-compact={visible}>
     {children}
   </motion.div>;
 }
@@ -77,7 +77,7 @@ export function NavItems({ items, className, onItemClick }: NavItemsProps) {
 
 export function MobileNav({ children, className, visible }: NavBodyProps) {
   const reduceMotion = useReducedMotion();
-  return <motion.div layout={!reduceMotion} initial={false} animate={{ y: visible && !reduceMotion ? 7 : 0 }} transition={reduceMotion ? { duration: 0 } : spring} className={cn(s.mobileNav, className)} data-compact={visible}>
+  return <motion.div layout={!reduceMotion} initial={false} animate={{ y: 0 }} transition={reduceMotion ? { duration: 0 } : spring} className={cn(s.mobileNav, className)} data-compact={visible}>
     {children}
   </motion.div>;
 }
@@ -109,7 +109,7 @@ function MobileMenuPanel({ children, className, id, onClose }: Omit<MobileNavMen
     return () => { document.removeEventListener("pointerdown", outside); document.removeEventListener("keydown", escape); };
   }, [id, onClose, present]);
 
-  return <motion.nav ref={ref} id={id} className={cn(s.mobileMenu, className)} aria-label="Mobiele navigatie" aria-hidden={!present || undefined} inert={!present} initial={{ opacity: 0, y: reduceMotion ? 0 : -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduceMotion ? 0 : -4 }} transition={{ duration: reduceMotion ? 0 : .16 }}>
+  return <motion.nav ref={ref} id={id} className={cn(s.mobileMenu, className)} aria-label="Mobiele navigatie" aria-hidden={!present || undefined} inert={!present} initial={false} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduceMotion ? 0 : -4 }} transition={{ duration: reduceMotion ? 0 : .16 }}>
     {children}
   </motion.nav>;
 }

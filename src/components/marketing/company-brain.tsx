@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronDown, FileText, Users } from "lucide-react";
 import { motion, useScroll, useSpring, useTransform, type MotionStyle } from "motion/react";
-import { NauviMark } from "./nauvi-brand";
+import { publicPath } from "@/lib/public-path";
 import { BrainDemo } from "./brain-demo";
 import { brainSources, type BrainSource, type BrainSourceId } from "./brain-content";
 import type { BrainActivity } from "./brain-scene";
@@ -33,7 +33,7 @@ function KnowledgeSourceCard({ source, active, selected, onHover, onFocus, onSel
     onClick={() => onSelect(source.id)}
   >
     {source.logo
-      ? <img src={`/marketing/logos/${source.logo}.svg`} width="22" height="22" alt="" />
+      ? <img src={publicPath(`/marketing/logos/${source.logo}.svg`)} width="22" height="22" alt="" />
       : <Icon size={22} strokeWidth={1.6} aria-hidden="true" />}
     <span><strong>{source.label}</strong><strong className={s.shortLabel} aria-hidden="true">{source.short}</strong><small>{source.detail}</small></span>
   </button>;
@@ -123,11 +123,11 @@ export function CompanyBrain() {
         aria-keyshortcuts={scene === "ready" ? "ArrowUp ArrowDown ArrowLeft ArrowRight Escape" : undefined}
       >
         <motion.img className={s.poster} style={{ "--poster-lift": posterLift, "--poster-turn": posterTurn } as MotionStyle}
-          src="/marketing/brain/company-brain.webp" width="840" height="580" alt="" fetchPriority="high" />
+          src={publicPath("/marketing/brain/company-brain.webp")} width="840" height="580" alt="" fetchPriority="high" />
         <canvas ref={canvas} aria-hidden="true" />
       </div>
       <BrainConnections key={scene === "fallback" ? "fallback" : "live"} isActive={isActive} />
-      <div className={s.identity}><NauviMark size={26} /><strong>Company Brain</strong></div>
+      <div className={s.identity}><strong>Company Brain</strong></div>
       <div className={s.sources} role="group" aria-label="Kennisbronnen">
         {brainSources.slice(0, 4).map(renderSource)}
       </div>
@@ -135,7 +135,7 @@ export function CompanyBrain() {
     <div className={s.meta}>
       <span className={s.modelHelp} aria-hidden="true">{scene === "ready" ? "Sleep om te draaien" : "Bedrijfskennis op één plek"}</span>
       <span id="brain-model-instructions" className={s.srOnly}>Draai het model met de pijltjestoetsen. Druk op Escape om het terug te zetten.</span>
-      <a className={s.credit} href="/marketing/brain/attribution.txt" aria-label="Bron en licentie van het 3D-model">3D-model</a>
+      <a className={s.credit} href={publicPath("/marketing/brain/attribution.txt")} aria-label="Bron en licentie van het 3D-model">3D-model</a>
       <details className={s.more} onToggle={event => {
         if (event.currentTarget.open) return;
         setSelected(previous => previous === "crm" || previous === "colleagues" ||

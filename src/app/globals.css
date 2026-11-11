@@ -1,12 +1,42 @@
+@font-face {
+  font-family: "Hubot Sans";
+  src: url("../fonts/hubot.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  src: url("../fonts/inter.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("../fonts/instrument-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
-  --canvas: #fbf9f5;
-  --white: #fff;
-  --text: #1b1c1a;
-  --muted: #566064;
-  --petrol: #004042;
-  --petrol-light: #16585b;
-  --line-strong: #bfc8c8;
-  --success: #28634d;
+  --canvas: #ffffff;
+  --white: #ffffff;
+  --linen: #f7f7f5;
+  --text: #0d0d0d;
+  --ink: #0d0d0d;
+  --muted: #686663;
+  --label: #686663;
+  --blue: #1768e7;
+  --electric: #2f91ff;
+  --navy: #061747;
+  --ice: #c7deff;
+  --line: #deded9;
+  --petrol: #1768e7;
+  --petrol-light: #1768e7;
+  --line-strong: #deded9;
+  --success: #1768e7;
 }
 * {
   box-sizing: border-box;
@@ -18,13 +48,10 @@ body {
   background: var(--canvas);
   color: var(--text);
 }
+html { scroll-padding-top: 88px; }
 body {
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: Inter, sans-serif;
+  font-synthesis: none;
   font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -68,8 +95,8 @@ summary:focus-visible {
   outline: 2px solid var(--petrol-light);
 }
 ::selection {
-  background: #b1edf0;
-  color: #002021;
+  background: #c7deff;
+  color: #061747;
 }
 input,
 textarea {
@@ -93,8 +120,39 @@ p {
 h1,
 h2,
 h3 {
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-family: "Hubot Sans", Inter, sans-serif;
+  font-weight: 550;
+  letter-spacing: -0.045em;
+}
+
+/* Section rules often restyle every paragraph. These attributes keep the editorial lines intact. */
+p[data-kicker] {
+  margin: 0 0 14px !important;
+  color: #686663 !important;
+  font-family: Inter, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  letter-spacing: 0.18em !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important;
+}
+
+p[data-accent] {
+  margin: 8px 0 0 !important;
+  color: #0d0d0d !important;
+  font-family: "Instrument Serif", Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  font-size: clamp(34px, 4vw, 56px) !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.02 !important;
+  text-transform: none !important;
+}
+
+[data-inverse] p[data-kicker],
+[data-inverse] p[data-accent] {
+  color: #c7deff !important;
 }
 h1 {
   font-size: 26px;

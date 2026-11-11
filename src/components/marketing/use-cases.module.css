@@ -4,14 +4,14 @@
   --case-tint: var(--bone);
   padding: var(--section-space) var(--section-inset);
   border-bottom: 1px solid var(--border);
-  background: var(--accent-tint) url("/marketing/materials/blue-halftone.webp") right top / clamp(350px, 43vw, 640px) auto no-repeat;
+  background: var(--white);
   color: var(--ink);
 }
 
 .intro {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  align-items: end;
+  align-items: start;
   gap: 28px 56px;
   margin-bottom: 36px;
 }
@@ -99,7 +99,7 @@
   flex-direction: column;
   padding: clamp(16px, 1.8vw, 24px);
   border: 1px solid var(--case-border);
-  border-radius: 16px;
+  border-radius: 0;
   background: var(--case-surface);
   transform-style: preserve-3d;
   transition: box-shadow .25s ease-out;
@@ -112,8 +112,8 @@
   gap: clamp(8px, 1vw, 14px);
   min-height: 88px;
   padding: 13px 14px;
-  border-radius: 10px;
-  background: var(--case-tint);
+  border-radius: 0;
+  background: transparent;
   color: var(--ink);
   transform-style: preserve-3d;
 }
@@ -156,7 +156,7 @@
   content: "";
 }
 
-.connection img { flex-shrink: 0; }
+.connection svg { flex-shrink: 0; color: var(--accent); }
 
 .cardCopy {
   margin: 20px 0;

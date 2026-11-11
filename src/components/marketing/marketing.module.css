@@ -1,27 +1,22 @@
-@font-face {
-  font-family: "Hubot Sans";
-  src: url("/fonts/hubot-sans-regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
 .page {
-  --white: #fff;
-  --canvas: var(--white);
+  --white: #ffffff;
+  --canvas: #ffffff;
   --linen: #f7f7f5;
-  --bone: #edece7;
+  --bone: #f7f7f5;
   --ink: #0d0d0d;
-  --espresso: #160f0c;
-  --button-hover: #352923;
-  --muted: #444;
+  --espresso: #0d0d0d;
+  --button-hover: #1768e7;
+  --muted: #686663;
   --label: #686663;
   --accent: #1768e7;
-  --accent-tint: #edf5ff;
-  --border: #deddd6;
-  --border-strong: #b9b7af;
+  --accent-tint: #eef3ff;
+  --border: #deded9;
+  --border-strong: #deded9;
+  --navy: #061747;
+  --electric: #2f91ff;
+  --ice: #c7deff;
   --display-font: "Hubot Sans", Inter, sans-serif;
-  --navbar-height: 88px;
+  --navbar-height: 76px;
   background: var(--canvas);
   color: var(--ink);
   font-family: Inter, sans-serif;
@@ -178,7 +173,7 @@
   isolation: isolate;
   grid-template-columns: .65fr 1.35fr;
   gap: 80px;
-  background: var(--linen) url("/marketing/materials/paper-fibers.webp") repeat;
+  background: var(--linen);
   color: var(--ink);
 }
 .controlPhoto {
@@ -246,7 +241,7 @@
 .page .integrationSection { background: var(--white); }
 .page .integrationIntro h2 { margin-top: 0; }
 .page .toolsDisclaimer { font-size: 12px; }
-.page .faqSection { background: var(--linen) url("/marketing/materials/paper-fibers.webp") repeat; }
+.page .faqSection { background: var(--linen); }
 .page .faqSection h2 { margin-top: 0; }
 .page .faqList summary { font-size: 15px; min-height: 30px; }
 .page .faqList details p { font-size: 14px; }
@@ -375,4 +370,144 @@
   }
   .marqueeToggle[aria-pressed="true"] { font-weight: 600; }
   .ctaSymbol { opacity: .075;  }
+}
+
+.page :is(h1, h2, h3, h4) {
+  font-weight: 550;
+  letter-spacing: -0.045em;
+}
+
+.page [data-inverse] :is(h1, h2, h3, h4) { color: #fff; }
+.page [data-inverse] [data-accent] { color: #c7deff; }
+.page .valueCopy { display: block; max-width: 46rem; }
+
+.page .button {
+  border-radius: 0;
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff !important;
+}
+
+.page .button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: none;
+}
+
+.page .button.outline {
+  background: transparent;
+  color: var(--ink) !important;
+  border-color: var(--ink);
+}
+
+.page .button.outline:hover {
+  background: var(--linen);
+  color: var(--ink) !important;
+  border-color: var(--ink);
+}
+
+.page .filters button[aria-pressed="true"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: inset 0 -1px 0 var(--accent);
+}
+
+.coreSection,
+.brainSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: clamp(36px, 5vw, 80px);
+  align-items: center;
+  padding: var(--section-space) var(--section-inset);
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+
+.coreFigure,
+.coreFigure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+.coreLead {
+  max-width: 46ch;
+  margin-top: 22px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.coreRows { margin: 28px 0 0; }
+
+.coreRows > div {
+  display: grid;
+  gap: 4px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.coreRows dt {
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.coreRows dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.brainIntro { max-width: 36ch; }
+.brainIntro p:last-child {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.page .valueSection { background: var(--linen); }
+.page .valueMark {
+  width: 112px;
+  height: 148px;
+  border-radius: 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+}
+.page .valueMark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page .ctaSection { color: #fff; }
+.page .ctaSection :is(h2, p) { color: #fff; }
+.page .ctaSection .copyNote,
+.page .ctaSection .host span > span { color: #c7deff; }
+.page .ctaButton {
+  margin-top: 26px;
+  border-color: #fff !important;
+  background: #fff !important;
+  color: #061747 !important;
+}
+.page .ctaButton:hover {
+  border-color: #c7deff !important;
+  background: #c7deff !important;
+  color: #061747 !important;
+}
+
+.page .bookingDialog { border-radius: 0; }
+.page .closeDialog { border-radius: 0; background: var(--linen); }
+
+.page .footerMain > div > p { max-width: 28ch; }
+
+@media (max-width: 900px) {
+  .coreSection,
+  .brainSection { grid-template-columns: 1fr; }
+  .coreFigure { max-width: 420px; }
 }

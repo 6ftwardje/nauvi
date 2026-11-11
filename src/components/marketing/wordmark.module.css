@@ -1,0 +1,23 @@
+.stack {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.onLight,
+.onDark {
+  display: block;
+  width: 120px;
+  height: auto;
+}
+
+.onDark { display: none; }
+
+/* The header class is hashed, so key off the data attribute it already sets. */
+:global([data-scrolled="false"]) .onDark { display: block; }
+:global([data-scrolled="false"]) .onLight { display: none; }
+
+@media (max-width: 760px) {
+  .onLight,
+  .onDark { width: 104px; }
+}

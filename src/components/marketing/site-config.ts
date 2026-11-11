@@ -13,7 +13,7 @@ export function calendlyEmbedUrl(value: string): string | undefined {
     url.searchParams.set("hide_gdpr_banner", "1");
     url.searchParams.set("embed_type", "Inline");
     if (typeof window !== "undefined") url.searchParams.set("embed_domain", window.location.host);
-    url.searchParams.set("primary_color", "160f0c");
+    url.searchParams.set("primary_color", "1768e7");
     return url.toString();
   } catch { return; }
 }

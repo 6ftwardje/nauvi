@@ -27,10 +27,15 @@
     radial-gradient(ellipse 65% 55% at 100% 76%, var(--blue-mist), transparent 84%);
 }
 
+/* Stand-in for the missing blue mesh file. True blues only: #1768E7, #2F91FF, #061747, #C7DEFF. */
 .frame[data-gradient="contact"] {
+  background-color: #061747;
   --gradient:
-    radial-gradient(ellipse 65% 78% at 82% 53%, var(--blue-bright), transparent 83%),
-    linear-gradient(130deg, var(--white) 18%, var(--blue-mist) 72%);
+    radial-gradient(ellipse 52% 46% at 14% 16%, #2f91ff 0%, transparent 58%),
+    radial-gradient(ellipse 46% 52% at 86% 10%, #1768e7 0%, transparent 54%),
+    radial-gradient(ellipse 40% 42% at 74% 86%, #1768e7 0%, transparent 56%),
+    radial-gradient(ellipse 22% 18% at 88% 72%, #c7deff 0%, transparent 46%),
+    linear-gradient(165deg, #1768e7 0%, #061747 68%);
 }
 
 @media (max-width: 760px) {

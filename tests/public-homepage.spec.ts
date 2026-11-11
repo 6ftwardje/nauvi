@@ -4,7 +4,8 @@ test("Nauvi keeps its public homepage and separate login link", async ({ page })
   await page.goto("/");
   await expect(page).toHaveTitle(/^Nauvi/);
   await expect(page.getByRole("banner").getByRole("link", { name: "Nauvi startpagina" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Is jouw bedrijf klaar voor de toekomst van AI?");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Je bedrijfskennis.");
+  await expect(page.getByRole("heading", { name: "De kern" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Inloggen", exact: true })).toHaveAttribute("href", "/app");
   await expect(page.getByRole("button", { name: "Plan een kennismaking", exact: true }).first()).toBeVisible();
 });

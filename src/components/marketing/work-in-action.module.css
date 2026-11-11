@@ -37,12 +37,25 @@
   max-width: 480px;
 }
 
+.intro { max-width: 16em; font-size: clamp(36px, 4vw, 52px); }
+.intro h2 { max-width: 16ch; }
+
 .copy > span {
+  color: var(--accent);
+  font-family: Inter, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: none;
+}
+
+.chromeIcon {
   color: var(--ink);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+  font-family: "Hubot Sans", Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 550;
+  letter-spacing: -0.04em;
 }
 
 .section .copy h3 {
@@ -63,9 +76,9 @@
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 0;
   background: var(--white);
-  box-shadow: 0 16px 40px -24px rgb(22 15 12 / 20%);
+  box-shadow: none;
   color: var(--ink);
 }
 
@@ -83,12 +96,12 @@
 
 .chromeIcon {
   flex: none;
-  display: grid;
-  place-items: center;
-  width: 29px;
-  height: 29px;
-  border-radius: 7px;
-  background: var(--bone);
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
 }
 
 .breadcrumb {

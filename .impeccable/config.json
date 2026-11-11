@@ -7,7 +7,7 @@
         "rule": "overused-font",
         "value": "inter",
         "createdAt": "2026-11-10T11:01:01.840Z",
-        "reason": "Nauvi-merkboek (DESIGN.md): Inter is het vastgelegde lettertype voor tekst, navigatie en knoppen."
+        "reason": "Nauvi editorial stijl (DESIGN.md): Inter is het lettertype voor tekst, navigatie, knoppen en cijfers."
       },
       {
         "rule": "layout-transition",
