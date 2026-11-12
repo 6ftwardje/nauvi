@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, FileText, GitBranch, LockKeyhole, Network } from "lucide-react";
+import { ArrowRight, ClipboardCheck, FileOutput, LockKeyhole, Plug } from "lucide-react";
 import { BrainField } from "./brain-field";
 import { IntegrationExplorer } from "./integration-explorer";
 import { MarketingShell } from "./marketing-page";
@@ -18,18 +18,18 @@ const chapters = [
 ];
 
 const benefits = [
-  { art: "reuse", title: "Kennis hergebruiken", text: "Leg prijsafspraken en uitzonderingen één keer vast en gebruik ze ook voor andere taken." },
-  { art: "first-task", title: "Begin met één taak", text: "We kiezen samen een taak die tijd kost en testen de automatisering met voorbeelden uit je bedrijf." },
-  { art: "connect", title: "Je eigen tools koppelen", text: "We bouwen de koppelingen op maat voor de systemen die de taak nodig heeft." },
-  { art: "review", title: "Nazicht door je team", text: "Je spreekt vooraf af wat een collega controleert voor er iets wordt verstuurd of aangepast." },
-  { art: "archive", title: "Je kennis blijft beschikbaar", text: "Je kunt de vastgelegde kennis inzien, controleren en exporteren." },
+  { title: "Kennis hergebruiken", text: "Leg prijsafspraken en uitzonderingen één keer vast en gebruik ze ook voor andere taken." },
+  { title: "Begin met één taak", text: "We kiezen samen een taak die tijd kost en testen de automatisering met voorbeelden uit je bedrijf." },
+  { title: "Je eigen tools koppelen", text: "We bouwen de koppelingen op maat voor de systemen die de taak nodig heeft." },
+  { title: "Nazicht door je team", text: "Je spreekt vooraf af wat een collega controleert voor er iets wordt verstuurd of aangepast." },
+  { title: "Je kennis blijft beschikbaar", text: "Je kunt de vastgelegde kennis inzien, controleren en exporteren." },
 ];
 
 const controls = [
-  { Icon: Network, title: "Koppelingen per taak", text: "We beginnen met de bestanden en systemen die de eerste automatisering nodig heeft.", color: "blue" },
-  { Icon: LockKeyhole, title: "Toegang op afspraak", text: "Voor de start bepalen we samen wie toegang krijgt en welke bronnen een agent mag raadplegen.", color: "ice" },
-  { Icon: FileText, title: "Je kennis kunnen exporteren", text: "Je kunt de vastgelegde bedrijfskennis inzien, controleren en exporteren.", color: "violet" },
-  { Icon: GitBranch, title: "Goedkeuring door je team", text: "We leggen vast wanneer een voorstel eerst langs je team moet.", color: "steel" },
+  { Icon: Plug, title: "Koppelingen per taak", text: "We beginnen met de bestanden en systemen die de eerste automatisering nodig heeft." },
+  { Icon: LockKeyhole, title: "Toegang op afspraak", text: "Voor de start bepalen we samen wie toegang krijgt en welke bronnen een agent mag raadplegen." },
+  { Icon: FileOutput, title: "Je kennis kunnen exporteren", text: "Je kunt de vastgelegde bedrijfskennis inzien, controleren en exporteren." },
+  { Icon: ClipboardCheck, title: "Goedkeuring door je team", text: "We leggen vast wanneer een voorstel eerst langs je team moet." },
 ];
 
 export function PlatformPage() {
@@ -65,26 +65,28 @@ export function PlatformPage() {
           <p>De afspraken die je vastlegt voor je eerste automatisering, vormen de basis voor het werk dat je daarna aan je agents geeft.</p>
         </header>
         <ul>
-          {benefits.map(({ art, title, text }) => (
-            <li key={art}>
-              <img src={`/marketing/brain/benefits/${art}.webp`} alt="" width={176} height={176} loading="lazy" decoding="async" />
-              <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
+          {benefits.map(({ title, text }) => (
+            <li key={title}>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </li>
           ))}
         </ul>
       </section>
 
       <section className={s.controls} aria-labelledby="brain-controls-heading">
-        <h2 id="brain-controls-heading" data-reveal>Jij bepaalt hoe de agent werkt. <span>Van de bronnen die hij gebruikt tot het werk dat je team nakijkt.</span></h2>
+        <header data-reveal>
+          <h2 id="brain-controls-heading">Jij bepaalt hoe de agent werkt.</h2>
+          <p>Van de bronnen die hij gebruikt tot het werk dat je team nakijkt.</p>
+        </header>
         <ul>
-          {controls.map(({ Icon, title, text, color }) => (
-            <li key={title} className={s.controlRow} tabIndex={0}>
-              <h3><span>{title}</span></h3>
-              <div className={s.controlArt} data-color={color} aria-hidden="true"><Icon size={36} /></div>
-              <p>{text}</p>
+          {controls.map(({ Icon, title, text }) => (
+            <li key={title}>
+              <Icon size={30} strokeWidth={1.55} aria-hidden="true" />
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
             </li>
           ))}
         </ul>
