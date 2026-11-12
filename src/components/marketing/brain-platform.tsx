@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ClipboardCheck, FileOutput, LockKeyhole, Plug } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { BrainField } from "./brain-field";
 import { IntegrationExplorer } from "./integration-explorer";
 import { MarketingShell } from "./marketing-page";
@@ -26,10 +26,10 @@ const benefits = [
 ];
 
 const controls = [
-  { Icon: Plug, title: "Koppelingen per taak", text: "We beginnen met de bestanden en systemen die de eerste automatisering nodig heeft." },
-  { Icon: LockKeyhole, title: "Toegang op afspraak", text: "Voor de start bepalen we samen wie toegang krijgt en welke bronnen een agent mag raadplegen." },
-  { Icon: FileOutput, title: "Je kennis kunnen exporteren", text: "Je kunt de vastgelegde bedrijfskennis inzien, controleren en exporteren." },
-  { Icon: ClipboardCheck, title: "Goedkeuring door je team", text: "We leggen vast wanneer een voorstel eerst langs je team moet." },
+  { illustration: "connections", title: "Koppelingen per taak", text: "We beginnen met de bestanden en systemen die de eerste automatisering nodig heeft." },
+  { illustration: "access", title: "Toegang op afspraak", text: "Voor de start bepalen we samen wie toegang krijgt en welke bronnen een agent mag raadplegen." },
+  { illustration: "export", title: "Je kennis kunnen exporteren", text: "Je kunt de vastgelegde bedrijfskennis inzien, controleren en exporteren." },
+  { illustration: "approval", title: "Goedkeuring door je team", text: "We leggen vast wanneer een voorstel eerst langs je team moet." },
 ];
 
 export function PlatformPage() {
@@ -74,19 +74,17 @@ export function PlatformPage() {
         </ul>
       </section>
 
-      <section className={s.controls} aria-labelledby="brain-controls-heading">
+      <section className={s.controls} id="controle" aria-labelledby="brain-controls-heading">
         <header data-reveal>
           <h2 id="brain-controls-heading">Jij bepaalt hoe de agent werkt.</h2>
           <p>Van de bronnen die hij gebruikt tot het werk dat je team nakijkt.</p>
         </header>
         <ul>
-          {controls.map(({ Icon, title, text }) => (
-            <li key={title}>
-              <Icon size={30} strokeWidth={1.55} aria-hidden="true" />
-              <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
+          {controls.map(({ illustration, title, text }) => (
+            <li key={illustration} className={s.controlRow} tabIndex={0}>
+              <h3>{title}</h3>
+              <img className={s.controlArt} src={`/marketing/brain/controls/${illustration}.webp`} alt="" width={480} height={240} loading="lazy" decoding="async" />
+              <p>{text}</p>
             </li>
           ))}
         </ul>
