@@ -5,7 +5,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.86fr);
   align-items: center;
   gap: clamp(30px, 4vw, 75px);
-  padding: clamp(34px, 4.5vw, 78px) var(--edge) clamp(60px, 7.8vw, 125px);
+  padding: clamp(34px, 4.5vw, 78px) var(--edge) clamp(54px, 6vw, 100px);
   color: white;
 }
 
@@ -48,7 +48,7 @@
 .tabs {
   display: grid;
   max-width: 405px;
-  margin-top: clamp(17px, 2.45vw, 40px);
+  margin-top: clamp(27px, 3.3vw, 58px);
   border-top: 1px solid #afc2db29;
 }
 

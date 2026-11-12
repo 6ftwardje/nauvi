@@ -72,17 +72,13 @@ test("reduced motion leaves the hero poster in place without loading video", asy
   await expect(page.getByRole("heading", { level: 1 }).locator("span").first()).toHaveCSS("opacity", "1");
 });
 
-test("Company Brain layers expose their descriptions with the keyboard", async ({ page }) => {
+test("the walkthrough replaces the old layers and leads into the product benefits", async ({ page }) => {
   await page.goto("/platform");
-  const diagram = page.getByRole("group", { name: "Onderdelen van Company Brain" });
-  const control = diagram.getByRole("button", { name: "Toegang & controle" });
-  const review = diagram.getByRole("button", { name: "Nazicht" });
-  await expect(control).toHaveAttribute("aria-pressed", "true");
-  await control.focus();
-  await page.keyboard.press("ArrowDown");
-  await expect(review).toHaveAttribute("aria-pressed", "true");
-  await expect(review).toBeFocused();
-  await expect(page.getByRole("heading", { name: "Nazicht", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "De lagen van Company Brain." })).toHaveCount(0);
+  await expect(page.locator("#mogelijkheden + section")).toHaveAccessibleName("Zo werkt Company Brain.");
+  const benefits = page.getByRole("region", { name: "Wat één gedeelde kennisbasis oplevert." });
+  await expect(benefits.getByRole("listitem")).toHaveCount(5);
+  await expect(benefits.getByRole("heading", { name: "Kennis hergebruiken" })).toBeVisible();
 });
 
 test("the mobile navigation opens the careers page and the vacancies section", async ({ page }) => {
