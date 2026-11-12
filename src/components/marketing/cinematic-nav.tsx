@@ -248,11 +248,14 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
           aria-hidden={expanded !== item.id}
         >
           <div className={s.dropdownLinks}>
-            {item.links.map((link, index) => (
-              <Link key={link.href} href={link.href} onClick={closeMenus} style={{ "--menu-delay": `${index * 48}ms` } as CSSProperties}>
-                <span>{link.label}<small>{link.description}</small></span><ArrowUpRight size={15} aria-hidden="true" />
-              </Link>
-            ))}
+            {item.links.map((link, index) => {
+              const MenuLink = link.href.includes("#") ? "a" : Link;
+              return (
+                <MenuLink key={link.href} href={link.href} onClick={closeMenus} style={{ "--menu-delay": `${index * 48}ms` } as CSSProperties}>
+                  <span>{link.label}<small>{link.description}</small></span><ArrowUpRight size={15} aria-hidden="true" />
+                </MenuLink>
+              );
+            })}
           </div>
           <div className={s.dropdownFeatures} data-count={item.features.length}>
             {item.features.map(({ image, title, href }) => (
@@ -287,7 +290,7 @@ export function CinematicFooter({ onBooking }: { onBooking: () => void }) {
         <nav aria-label="Platform">
           <strong>Platform</strong>
           <Link href="/platform">Company Brain</Link>
-          <Link href="/platform#mogelijkheden">AI-agents</Link>
+          <a href="/platform#mogelijkheden">AI-agents</a>
           <Link href="/platform#koppelingen">Koppelingen op maat</Link>
           <Link href="/werkwijze">Werkwijze</Link>
         </nav>

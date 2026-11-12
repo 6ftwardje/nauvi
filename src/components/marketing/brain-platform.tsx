@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState, type KeyboardEvent } from "react";
 import { ArrowRight, BookOpen, CheckCheck, FileText, GitBranch, Layers3, LockKeyhole, Network, Workflow } from "lucide-react";
 import { BrainField } from "./brain-field";
-import { CompanyBrain } from "./company-brain";
 import { IntegrationExplorer } from "./integration-explorer";
 import { MarketingShell } from "./marketing-page";
 import { NauviMark } from "./nauvi-brand";
@@ -66,7 +65,7 @@ function LayerDiagram() {
   return (
     <section className={s.infrastructure} aria-labelledby="infrastructure-heading">
       <div className={s.layerCopy}>
-        <h2 id="infrastructure-heading">Van kennis naar<br />uitgevoerd werk.</h2>
+        <h2 id="infrastructure-heading">De lagen van<br />Company Brain.</h2>
         <div id="brain-layer-description" className={s.layerDescription} aria-live="polite">
           <div key={active} className={s.layerText}>
             <h3>{layers[active].label}</h3>
@@ -107,6 +106,7 @@ export function PlatformPage() {
           </BrainField>
         </section>
 
+        <WorkInAction />
         <LayerDiagram />
 
         <section className={s.chapters} aria-labelledby="brain-chapters-heading">
@@ -145,14 +145,6 @@ export function PlatformPage() {
         </ul>
       </section>
 
-      <section className={shared.brainSection} id="bedrijfskennis" aria-labelledby="brain-heading">
-        <div>
-          <h2 id="brain-heading">Welke kennis gebruikt een agent?</h2>
-          <p>Een prijslijst vertelt wat iets kost. De afspraken en uitzonderingen van je team vertellen wanneer die prijs geldt. Open een bron in het model om te zien welke kennis ze toevoegt.</p>
-        </div>
-        <CompanyBrain />
-      </section>
-      <WorkInAction />
       <section className={shared.detailSection} id="koppelingen" aria-labelledby="connect-heading">
         <div>
           <h2 id="connect-heading">Koppelingen met je eigen tools.</h2>

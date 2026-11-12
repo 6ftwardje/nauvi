@@ -187,6 +187,9 @@
 }
 
 .dark {
+  --brain-stage-background: linear-gradient(140deg, #7d88b69e, #3565a674 49%, #8ac1f95e),
+    url("/marketing/cinematic/brain-field.webp") center 30% / cover,
+    #416195;
   background: #0b0b0b;
   color: white;
 }
@@ -257,10 +260,7 @@
   place-items: center;
   padding: clamp(25px, 6.5vw, 114px);
   border-radius: 7px;
-  background:
-    linear-gradient(140deg, #7d88b69e, #3565a674 49%, #8ac1f95e),
-    url("/marketing/cinematic/brain-field.webp") center 30% / cover,
-    #416195;
+  background: var(--brain-stage-background);
 }
 
 .diagram {

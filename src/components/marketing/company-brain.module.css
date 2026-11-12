@@ -281,6 +281,80 @@
 @keyframes submit { 45% { transform: translateY(-5px); opacity: .45; } }
 @keyframes replyEnter { from { opacity: .4; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
+.visual[data-appearance="stage"] {
+  max-width: none;
+}
+
+.visual[data-appearance="stage"] .ground {
+  background:
+    radial-gradient(ellipse 26% 5% at 50% 86%, #060a1290, transparent 94%),
+    radial-gradient(ellipse 47% 49% at 50% 45%, #2c466b8f, transparent 94%);
+}
+
+.visual[data-appearance="stage"] .poster {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .4s cubic-bezier(.19, 1, .32, 1), visibility 0s linear .4s;
+}
+
+.visual[data-appearance="stage"] .viewport canvas {
+  transition: opacity .4s cubic-bezier(.19, 1, .32, 1);
+}
+
+.visual[data-appearance="stage"] .stage[data-scene="ready"] .poster {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.visual[data-appearance="stage"] button.source:is([data-active="true"], [aria-pressed="true"], [data-flowing]) {
+  background: #273e5d;
+  border-color: #87aede;
+}
+
+.visual[data-appearance="stage"] .more > summary,
+.visual[data-appearance="stage"] .questions button {
+  transition: color .2s ease;
+}
+
+.visual[data-appearance="stage"] .more > summary:hover,
+.visual[data-appearance="stage"] .questions button:hover {
+  color: #fff;
+}
+
+.visual[data-appearance="stage"] .demo {
+  position: relative;
+}
+
+.visual[data-appearance="stage"] .demo:is([data-status="answered"], [data-status="unmatched"]) { z-index: 6; }
+
+.visual[data-appearance="stage"] .replySlot {
+  position: absolute;
+  grid-area: auto;
+  inset: auto 0 calc(100% + 8px);
+  padding: 0;
+}
+
+.visual[data-appearance="stage"] .reply:not(.replySizer):has(> :not(.srOnly)) {
+  padding: 6px 13px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--linen);
+  box-shadow: 0 14px 34px #080f1a70;
+}
+
+.visual[data-appearance="stage"] .replySizer {
+  display: none;
+}
+
+@media (min-width: 601px) {
+  .visual[data-appearance="stage"] .stage {
+    height: clamp(195px, 15.5vw, 285px);
+    aspect-ratio: auto;
+  }
+
+  .visual[data-appearance="stage"] .poster { object-fit: contain; }
+}
+
 @media (min-width: 921px) and (max-width: 1130px) {
   .visual button.source { gap: 6px; padding-inline: 6px; }
   .source > :is(img, svg) { flex-basis: 18px; width: 18px; height: 18px; }

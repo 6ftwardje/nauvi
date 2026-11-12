@@ -97,3 +97,51 @@ test("the mobile navigation opens the careers page and the vacancies section", a
   await expect(page).toHaveURL(/#vacatures$/);
   await expect(page.getByRole("heading", { name: "Vacatures", exact: true })).toBeInViewport();
 });
+
+test("the product walkthrough follows the hero and preserves edited approvals when switching demos", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/platform");
+  const demo = page.getByRole("region", { name: "Van kennis naar uitgevoerd werk." });
+  const tabs = demo.getByRole("tablist");
+  const knowledge = tabs.getByRole("tab", { name: "Kennis vastleggen" });
+  const review = tabs.getByRole("tab", { name: "Werk goedkeuren" });
+  await expect(page.locator('section[aria-labelledby="company-brain-heading"] + section')).toHaveAttribute("id", "mogelijkheden");
+  await expect(knowledge).toHaveAttribute("aria-selected", "true");
+  await expect(demo.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "92");
+
+  await knowledge.focus();
+  await page.keyboard.press("End");
+  await expect(review).toBeFocused();
+  const panel = demo.getByRole("tabpanel", { name: "Werk goedkeuren" });
+  await panel.getByRole("button", { name: "Aanpassen" }).click();
+  await panel.getByRole("textbox", { name: "Antwoord op een klantvraag" }).fill("We sturen je vrijdag een voorstel.");
+  await panel.getByRole("button", { name: "Opslaan" }).click();
+  await knowledge.click();
+  await review.click();
+  await expect(panel.getByText("We sturen je vrijdag een voorstel.")).toBeVisible();
+  await panel.getByRole("button", { name: "Goedkeuren", exact: true }).click();
+  await expect(panel.getByRole("heading", { name: "Jouw akkoord is vastgelegd" })).toBeVisible();
+});
+
+test("existing product fragments open the matching demo", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/platform#bedrijfskennis");
+  const demo = page.getByRole("region", { name: "Van kennis naar uitgevoerd werk." });
+  await expect(demo.getByRole("tab", { name: "Bronnen verkennen" })).toHaveAttribute("aria-selected", "true");
+  await demo.getByRole("button", { name: "Hoe maken we een offerte?" }).click();
+  await expect(demo.getByText(/Volgens jullie werkwijze begint een offerte/).filter({ visible: true })).toBeVisible();
+  await page.getByRole("contentinfo").getByRole("link", { name: "AI-agents" }).click();
+  await expect(demo.getByRole("tab", { name: "Agents aan het werk" })).toHaveAttribute("aria-selected", "true");
+});
+
+test("the knowledge demo can be paused and replayed to completion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/platform");
+  const demo = page.getByRole("region", { name: "Van kennis naar uitgevoerd werk." });
+  await demo.scrollIntoViewIfNeeded();
+  await demo.getByRole("button", { name: "Pauzeer voorbeeld Company Brain" }).click();
+  const replay = demo.getByRole("button", { name: "Speel voorbeeld Company Brain opnieuw af" });
+  await replay.click();
+  await expect(demo.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "92", { timeout: 7000 });
+  await expect(replay).toBeVisible();
+});

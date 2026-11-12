@@ -138,6 +138,9 @@ export async function mountBrainScene({
   const mobileScroll = window.matchMedia("(max-width: 760px)");
   const coarse = window.matchMedia("(pointer: coarse)");
   const compact = coarse.matches || mobileLayout.matches;
+  const embedded = stage.closest('[data-appearance="stage"]') !== null;
+  const signalTravel = embedded ? 1.15 : 1.85;
+  const stageActive = () => stage.dataset.sceneActive !== "false";
   const context = canvas.getContext("webgl2", {
     alpha: true, antialias: window.devicePixelRatio < 1.6, powerPreference: "low-power",
   });
@@ -238,10 +241,10 @@ export async function mountBrainScene({
       flowStart = clock;
       nextIdle = clock + 8;
     }
-    const progress = still ? 1 : Math.min(1, (clock - flowStart) / 1.85);
+    const progress = still ? 1 : Math.min(1, (clock - flowStart) / signalTravel);
     const region = anchors.get(emphasized[0] ?? flow[0]);
     if (region) pivot.localToWorld(hotspot.position.copy(region)).z += .27;
-    const arrival = !still && region ? Math.max(0, 1 - Math.abs(clock - flowStart - 1.85) * 1.65) : 0;
+    const arrival = !still && region ? Math.max(0, 1 - Math.abs(clock - flowStart - signalTravel) * 1.65) : 0;
     hotspot.intensity = (emphasized.length ? .26 : 0) + arrival * .65;
 
     if (!mobileLayout.matches) {
@@ -249,14 +252,14 @@ export async function mountBrainScene({
         const projected = points.get(id);
         if (projected) projected.copy(pivot.localToWorld(point.copy(anchor))).project(camera);
       }
-      links.draw(points, flow, progress);
+      links.draw(points, flow, embedded ? 1 - (1 - progress) ** 1.35 : progress);
     }
     renderer.render(scene, camera);
   }
 
   function loop(now: number) {
     frame = 0;
-    if (stopped || !ready || !visible || document.hidden) return;
+    if (stopped || !ready || !visible || !stageActive() || document.hidden) return;
     if (!reduced.matches && compact && lastFrame && now - lastFrame < 31) {
       frame = requestAnimationFrame(loop);
       return;
@@ -267,14 +270,14 @@ export async function mountBrainScene({
   }
 
   function wake() {
-    if (!frame && ready && visible && !document.hidden && !stopped) {
+    if (!frame && ready && visible && stageActive() && !document.hidden && !stopped) {
       lastFrame = 0;
       frame = requestAnimationFrame(loop);
     }
   }
 
   function visibility() {
-    if (!visible || document.hidden) {
+    if (!visible || !stageActive() || document.hidden) {
       cancelAnimationFrame(frame);
       frame = 0;
     } else wake();
@@ -377,7 +380,7 @@ export async function mountBrainScene({
   document.addEventListener("visibilitychange", visibility, listeners);
   // The HTML and canvas have separate lifecycles. The HTML wakes an otherwise
   // static reduced-motion canvas when a source changes.
-  stage.addEventListener("brain-activity", wake, listeners);
+  stage.addEventListener("brain-activity", visibility, listeners);
 
   const intersection = new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;

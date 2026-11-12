@@ -1,19 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 import {
-  Check, ChevronRight, Circle, Clock3, FileText, Globe, Layers3, MessageSquare,
-  Pause, Pencil, RotateCcw, Workflow,
+  ArrowRight, Box, Check, ChevronRight, Circle, Clock3, FileText, Globe, Layers3, MessageSquare,
+  Pause, Pencil, RotateCcw, ShieldCheck, Workflow,
 } from "lucide-react";
-import { animate, motion } from "motion/react";
+import { animate, useInView } from "motion/react";
+import { CompanyBrain } from "./company-brain";
 import { NauviMark } from "./nauvi-brand";
-import { fluidDotsDurationMs, SiriFluidDots } from "@/components/ui/siri-fluid-dots";
 import s from "./work-in-action.module.css";
 
-const endHoldMs = 3200;
-const stepEnterMs = 480;
-const approvalCues = [0, fluidDotsDurationMs];
+const processingMs = 720;
+const approvalCues = [0, 640];
 
 const sources = [
   { label: "Je website", Icon: Globe },
@@ -35,134 +34,108 @@ const tasks = [
 ];
 const response = "Bedankt voor je bericht. We bekijken je aanvraag en laten je weten welke planning mogelijk is.";
 
-const sourceCues = [0, ...sources.map((_, index) => (index + 1) * fluidDotsDurationMs)];
+const sourceCues = [0, ...sources.map((_, index) => (index + 1) * processingMs)];
 const taskCues = taskTimeline(tasks.length, 480, 250);
 const reviewCues = taskTimeline(tasks.length - 1, 540, 310);
 
 function taskTimeline(count: number, delay: number, gap: number) {
   const cues = [0];
   for (let index = 0; index < count; index++) {
-    const start = delay + index * (fluidDotsDurationMs + gap);
-    cues.push(start, start + fluidDotsDurationMs);
+    const start = delay + index * (processingMs + gap);
+    cues.push(start, start + processingMs);
   }
   return cues;
 }
 
 type Phase = "waiting" | "busy" | "done";
 
-function useDemoTimeline(cues: readonly number[], revealed: boolean) {
+function useDemoTimeline(cues: readonly number[], active: boolean) {
   const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: .35 });
   const [frame, setFrame] = useState(-1);
-  const [auto, setAuto] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [reduced, setReduced] = useState(false);
-  const autoplay = useRef(true);
-  const visible = useRef(false);
+  const hasPlayed = useRef(false);
   const timer = useRef<number | undefined>(undefined);
   const finish = useRef<(() => void) | null>(null);
-  const clear = useCallback(() => {
+
+  const stop = useCallback(() => {
     window.clearTimeout(timer.current);
     timer.current = undefined;
     finish.current = null;
+    setPlaying(false);
   }, []);
+
   const settle = useCallback(() => {
     if (finish.current) finish.current();
-    else clear();
-  }, [clear]);
+    else stop();
+  }, [stop]);
 
   const play = useCallback((sequence = cues, first = 0) => {
-    clear();
+    stop();
+    hasPlayed.current = true;
     const last = sequence.length - 1;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) {
-      setFrame(first + last);
-      return;
-    }
-    const finishCycle = () => {
-      clear();
+    const complete = () => {
+      stop();
       setFrame(first + last);
     };
-    const advance = (index: number) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.hidden) {
+      complete();
+      return;
+    }
+
+    function advance(index: number) {
       timer.current = window.setTimeout(() => {
-        if (index < last) {
+        if (index === last) complete();
+        else {
           setFrame(first + index);
           advance(index + 1);
-        } else {
-          finishCycle();
-          if (autoplay.current && visible.current) {
-            timer.current = window.setTimeout(start, endHoldMs);
-          }
         }
       }, sequence[index] - sequence[index - 1]);
-    };
-    const start = () => {
-      finish.current = finishCycle;
+    }
+
+    finish.current = complete;
+    setPlaying(true);
+    if (first === 0) setFrame(-1);
+    timer.current = window.setTimeout(() => {
       setFrame(first);
       advance(1);
-    };
-    start();
-  }, [clear, cues]);
+    }, first === 0 ? 210 : 0);
+  }, [cues, stop]);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node || !revealed) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!("IntersectionObserver" in window)) {
-      setFrame(cues.length - 1);
-      return;
-    }
-    const observer = new IntersectionObserver(([entry]) => {
-      const inView = entry.intersectionRatio >= 0.4;
-      const entered = inView && !visible.current;
-      visible.current = inView;
-      if (!entry.isIntersecting || (!inView && autoplay.current)) settle();
-      if (entered && autoplay.current && !preference.matches && !document.hidden) play();
-    }, { threshold: [0, 0.4] });
-    const visibility = () => {
-      if (document.hidden) settle();
-      else if (visible.current && autoplay.current && !preference.matches) play();
-    };
-    const motionChange = () => {
+    const update = () => {
       setReduced(preference.matches);
       if (preference.matches) {
-        settle();
-        if (autoplay.current) setFrame(cues.length - 1);
-      } else if (visible.current && autoplay.current && !document.hidden) {
-        play();
+        if (finish.current) settle();
+        else if (!hasPlayed.current) {
+          hasPlayed.current = true;
+          setFrame(cues.length - 1);
+        }
       }
     };
-    motionChange();
-    observer.observe(node);
+    const visibility = () => { if (document.hidden && finish.current) settle(); };
+    update();
+    preference.addEventListener("change", update);
     document.addEventListener("visibilitychange", visibility);
-    preference.addEventListener("change", motionChange);
     return () => {
-      observer.disconnect();
+      preference.removeEventListener("change", update);
       document.removeEventListener("visibilitychange", visibility);
-      preference.removeEventListener("change", motionChange);
-      visible.current = false;
-      clear();
+      window.clearTimeout(timer.current);
     };
-  }, [clear, cues, play, revealed, settle]);
+  }, [cues, settle]);
 
-  function pause() {
-    autoplay.current = false;
-    setAuto(false);
-    settle();
-    setFrame(current => Math.max(current, cues.length - 1));
-  }
+  useEffect(() => {
+    if (!active || !inView) {
+      if (finish.current) settle();
+    } else if (!hasPlayed.current) {
+      play();
+    }
+  }, [active, inView, play, settle]);
 
-  function resume() {
-    autoplay.current = true;
-    setAuto(true);
-    play();
-  }
-
-  function playOnce(sequence: readonly number[], first: number) {
-    autoplay.current = false;
-    setAuto(false);
-    play(sequence, first);
-  }
-
-  const looping = auto && !reduced;
-  return { ref, frame, reduced, looping, pause, resume, playOnce, toggle: looping ? pause : resume };
+  const replay = () => play();
+  return { ref, frame, reduced, playing, pause: settle, replay, playOnce: play, toggle: playing ? stop : replay };
 }
 
 function Status({ phase, done, waiting = "Wacht", processing = "Bezig", iconOnly = false }: {
@@ -175,7 +148,7 @@ function Status({ phase, done, waiting = "Wacht", processing = "Bezig", iconOnly
   return <span className={s.status} data-phase={phase}>
     <span className={s.statusIcon} aria-hidden="true">
       <Clock3 className={s.waitingIcon} size={13} />
-      <span className={s.loader}><SiriFluidDots playing={phase === "busy"} /></span>
+      <span className={s.loader}><i /><i /><i /></span>
       <span className={s.successIcon}><Check size={12} strokeWidth={2.5} /></span>
     </span>
     <span className={iconOnly ? s.visuallyHidden : undefined}>
@@ -184,11 +157,11 @@ function Status({ phase, done, waiting = "Wacht", processing = "Bezig", iconOnly
   </span>;
 }
 
-function DemoFrame({ area, title, description, looping, onPlayback, canReset = false, children }: {
+function DemoFrame({ area, title, description, playing, onPlayback, canReset = false, children }: {
   area: string;
   title: string;
   description: string;
-  looping: boolean;
+  playing: boolean;
   onPlayback: () => void;
   canReset?: boolean;
   children: ReactNode;
@@ -199,22 +172,22 @@ function DemoFrame({ area, title, description, looping, onPlayback, canReset = f
       <span className={s.breadcrumb}><span>Nauvi</span> <ChevronRight size={11} aria-hidden="true" /> <strong>{area}</strong></span>
       <span className={s.demoLabel}>Voorbeeld</span>
       <button className={s.replay} data-replay-only={!canReset} type="button"
-        title={looping ? "Pauzeren" : "Opnieuw afspelen"}
-        aria-label={looping ? `Pauzeer voorbeeld ${area}` : `Speel voorbeeld ${area} opnieuw af`}
+        title={playing ? "Pauzeren" : "Opnieuw afspelen"}
+        aria-label={playing ? `Pauzeer voorbeeld ${area}` : `Speel voorbeeld ${area} opnieuw af`}
         onClick={onPlayback}>
-        {looping ? <Pause size={15} aria-hidden="true" /> : <RotateCcw size={15} aria-hidden="true" />}
+        {playing ? <Pause size={15} aria-hidden="true" /> : <RotateCcw size={15} aria-hidden="true" />}
       </button>
     </div>
     <div className={s.sceneBody}>
-      <h4>{title}</h4>
+      <h3>{title}</h3>
       <p className={s.sceneIntro}>{description}</p>
       {children}
     </div>
   </>;
 }
 
-function BrainDemo({ revealed }: { revealed: boolean }) {
-  const { ref, frame, reduced, looping, toggle } = useDemoTimeline(sourceCues, revealed);
+function KnowledgeDemo({ active }: { active: boolean }) {
+  const { ref, frame, reduced, playing, toggle } = useDemoTimeline(sourceCues, active);
   const progress = Math.round(Math.max(0, frame) / sources.length * 92);
   const percent = useRef<HTMLElement>(null);
 
@@ -228,15 +201,15 @@ function BrainDemo({ revealed }: { revealed: boolean }) {
     const from = Number.parseInt(label.textContent ?? "", 10);
     if (from === progress) return;
     const animation = animate(from, progress, {
-      duration: 0.43,
-      ease: [0.2, 0.75, 0.25, 1],
+      duration: .47,
+      ease: [.19, 1, .32, 1],
       onUpdate: value => { label.textContent = `${Math.round(value)}%`; },
     });
     return () => animation.stop();
   }, [progress, reduced]);
 
   return <div ref={ref} className={s.scene}>
-    <DemoFrame area="Company Brain" title="Je bedrijfsbrein" description="Bronnen worden bruikbare bedrijfskennis." looping={looping} onPlayback={toggle}>
+    <DemoFrame area="Company Brain" title="Je bedrijfsbrein" description="Bronnen worden bruikbare bedrijfskennis." playing={playing} onPlayback={toggle}>
       <div className={s.brainGrid}>
         <ul className={s.sourceList} aria-label="Bronnen">
           {sources.map(({ label, Icon }, index) => {
@@ -279,18 +252,18 @@ function TaskList({ frame, review = false }: { frame: number; review?: boolean }
   </ul>;
 }
 
-function AgentDemo({ revealed }: { revealed: boolean }) {
-  const { ref, frame, looping, toggle } = useDemoTimeline(taskCues, revealed);
+function AgentDemo({ active }: { active: boolean }) {
+  const { ref, frame, playing, toggle } = useDemoTimeline(taskCues, active);
 
   return <div ref={ref} className={s.scene}>
-    <DemoFrame area="Agents" title="Je agents aan het werk" description="Elke taak vertrekt van jouw afspraken." looping={looping} onPlayback={toggle}>
+    <DemoFrame area="Agents" title="Je agents aan het werk" description="Elke taak vertrekt van jouw afspraken." playing={playing} onPlayback={toggle}>
       <TaskList frame={frame} />
     </DemoFrame>
   </div>;
 }
 
-function ApprovalDemo({ revealed }: { revealed: boolean }) {
-  const { ref, frame, looping, pause, resume, playOnce } = useDemoTimeline(reviewCues, revealed);
+function ApprovalDemo({ active }: { active: boolean }) {
+  const { ref, frame, playing, pause, replay, playOnce } = useDemoTimeline(reviewCues, active);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(response);
   const [saved, setSaved] = useState(response);
@@ -316,7 +289,7 @@ function ApprovalDemo({ revealed }: { revealed: boolean }) {
   }
 
   function togglePlayback() {
-    if (looping) {
+    if (playing) {
       pause();
       return;
     }
@@ -324,24 +297,27 @@ function ApprovalDemo({ revealed }: { revealed: boolean }) {
     setSaved(response);
     setDraft(response);
     setManual(false);
-    resume();
+    replay();
   }
 
   return <div ref={ref} className={s.scene}>
-    <DemoFrame area="Goedkeuringen" title={finished ? "Jouw akkoord is vastgelegd" : "Wacht op jouw akkoord"} description="Bekijk wat er klaarstaat voor je beslist." canReset looping={looping} onPlayback={togglePlayback}>
+    <DemoFrame area="Goedkeuringen" title={finished ? "Jouw akkoord is vastgelegd" : "Wacht op jouw akkoord"} description="Bekijk wat er klaarstaat voor je beslist." canReset playing={playing} onPlayback={togglePlayback}>
       <TaskList frame={frame} review />
-      <div className={s.reviewActions} hidden={editing}>
-        <button ref={editButton} type="button" className={s.editAction} aria-disabled={locked} onClick={() => {
-          if (locked) return;
-          pause();
-          setDraft(saved);
-          setEditing(true);
-        }}><Pencil size={14} aria-hidden="true" /> Aanpassen</button>
-        <button type="button" className={s.approveAction} aria-disabled={locked} onClick={() => {
-          if (locked) return;
-          setManual(true);
-          playOnce(approvalCues, 5);
-        }}><Check size={16} aria-hidden="true" /> {finished ? "Goedgekeurd" : "Goedkeuren"}</button>
+      <div hidden={editing}>
+        <p className={s.reviewPreview}>{saved}</p>
+        <div className={s.reviewActions}>
+          <button ref={editButton} type="button" className={s.editAction} aria-disabled={locked} onClick={() => {
+            if (locked) return;
+            pause();
+            setDraft(saved);
+            setEditing(true);
+          }}><Pencil size={14} aria-hidden="true" /> Aanpassen</button>
+          <button type="button" className={s.approveAction} aria-disabled={locked} onClick={() => {
+            if (locked) return;
+            setManual(true);
+            playOnce(approvalCues, 5);
+          }}><Check size={16} aria-hidden="true" /> {finished ? "Goedgekeurd" : "Goedkeuren"}</button>
+        </div>
       </div>
       {editing && <form className={s.editor} onSubmit={event => {
         event.preventDefault();
@@ -369,127 +345,112 @@ function ApprovalDemo({ revealed }: { revealed: boolean }) {
 }
 
 const steps = [
-  {
-    title: "Eén keer je bedrijf vastleggen",
-    description: "Breng je website, documenten en werkwijzen samen in je Company Brain. Jij vult aan wat nog ontbreekt. Zo vertrekken je team en je agents van dezelfde bedrijfskennis.",
-    Demo: BrainDemo,
-  },
-  {
-    title: "Je agents plannen en bereiden voor",
-    description: "Je agents gebruiken je bedrijfskennis om afgesproken taken uit te werken. Denk aan een week aan posts, een offerte volgens jouw prijsafspraken of een antwoord in je eigen toon.",
-    Demo: AgentDemo,
-  },
-  {
-    title: "Jij beslist wat naar buiten gaat",
-    description: "Lees het voorstel, pas aan waar nodig en geef zelf je akkoord. Zo bepaal jij welke offerte wordt verstuurd, welke post wordt ingepland en welk antwoord naar de klant gaat.",
-    Demo: ApprovalDemo,
-  },
-];
+  { id: "knowledge", label: "Kennis vastleggen", Icon: Layers3, description: "Breng je website, documenten en werkwijzen samen in je Company Brain. Jij vult aan wat nog ontbreekt.", Demo: KnowledgeDemo },
+  { id: "sources", label: "Bronnen verkennen", Icon: Box, description: "Verken het 3D-model of stel een voorbeeldvraag. Je ziet welke bronnen het Company Brain gebruikt.", Demo: ModelDemo },
+  { id: "agents", label: "Agents aan het werk", Icon: Workflow, description: "Volg hoe een agent met jouw afspraken een offerte voorbereidt, posts uitwerkt of een klantvraag beantwoordt.", Demo: AgentDemo },
+  { id: "review", label: "Werk goedkeuren", Icon: ShieldCheck, description: "Lees het voorstel, pas het aan en geef zelf je akkoord. Je bepaalt welk werk naar buiten gaat.", Demo: ApprovalDemo },
+] as const;
 
-type RevealStage = "idle" | "pending" | "entering" | "shown";
-
-function useStepReveal() {
-  const ref = useRef<HTMLElement>(null);
-  const [stages, setStages] = useState<RevealStage[]>(() => steps.map(() => "idle"));
-
-  useEffect(() => {
-    const section = ref.current;
-    if (!section) return;
-    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const showAll = () => setStages(steps.map(() => "shown"));
-    if (preference.matches || !("IntersectionObserver" in window)) {
-      showAll();
-      return;
-    }
-
-    const rows = [...section.querySelectorAll<HTMLElement>(":scope > article")];
-    const pending = new Set(rows);
-    const inView = new Set<Element>();
-    let timer: number | undefined;
-    const setStage = (index: number, stage: RevealStage) =>
-      setStages(current => current.map((value, i) => i === index ? stage : value));
-
-    function revealNext() {
-      if (timer !== undefined) return;
-      const index = rows.findIndex(row => pending.has(row) && inView.has(row));
-      if (index === -1) return;
-      const row = rows[index];
-      pending.delete(row);
-      observer.unobserve(row);
-      setStage(index, "entering");
-      timer = window.setTimeout(() => {
-        timer = undefined;
-        setStage(index, "shown");
-        revealNext();
-      }, stepEnterMs);
-    }
-
-    const observer = new IntersectionObserver(entries => {
-      for (const { target, isIntersecting } of entries) {
-        if (isIntersecting) inView.add(target);
-        else inView.delete(target);
-      }
-      revealNext();
-    }, { rootMargin: "-72px 0px -90px" });
-    const focus = (event: FocusEvent) => {
-      const target = event.target;
-      if (!(target instanceof Node)) return;
-      const row = rows.find(candidate => candidate.contains(target));
-      if (!row || !pending.delete(row)) return;
-      observer.unobserve(row);
-      setStage(rows.indexOf(row), "shown");
-    };
-    const reduce = () => {
-      if (!preference.matches) return;
-      window.clearTimeout(timer);
-      pending.clear();
-      observer.disconnect();
-      showAll();
-    };
-    setStages(steps.map(() => "pending"));
-    rows.forEach(row => observer.observe(row));
-    section.addEventListener("focusin", focus);
-    preference.addEventListener("change", reduce);
-    return () => {
-      window.clearTimeout(timer);
-      observer.disconnect();
-      section.removeEventListener("focusin", focus);
-      preference.removeEventListener("change", reduce);
-    };
-  }, []);
-
-  return { ref, stages };
+function ModelDemo({ active }: { active: boolean }) {
+  return <div className={`${s.scene} ${s.modelScene}`}><CompanyBrain appearance="stage" active={active} /></div>;
 }
 
 export default function WorkInAction() {
-  const { ref, stages } = useStepReveal();
-  const [stickyStory, setStickyStory] = useState(false);
+  const [selected, setSelected] = useState(0);
+  const [modelVisited, setModelVisited] = useState(false);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function select(index: number) {
+    setSelected(index);
+    if (steps[index].id === "sources") setModelVisited(true);
+  }
+
+  function selectFromControl(index: number) {
+    select(index);
+    const { hash, pathname, search } = window.location;
+    if ((hash === "#bedrijfskennis" && index !== 1) || (hash === "#mogelijkheden" && index !== 2)) {
+      window.history.replaceState(window.history.state, "", pathname + search);
+    }
+  }
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 365px) and (max-width: 760px) and (min-height: 730px) and (prefers-reduced-motion: no-preference)");
-    const update = () => setStickyStory(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    const selectFromLink = () => {
+      if (window.location.hash === "#bedrijfskennis") select(1);
+      if (window.location.hash === "#mogelijkheden") select(2);
+    };
+    selectFromLink();
+    window.addEventListener("hashchange", selectFromLink);
+    return () => window.removeEventListener("hashchange", selectFromLink);
   }, []);
 
-  return <section ref={ref} className={s.section} id="mogelijkheden" aria-labelledby="benefits-title" data-sticky-story={stickyStory || undefined}
-    style={{ "--loader-duration": `${fluidDotsDurationMs}ms`, "--step-enter-duration": `${stepEnterMs}ms` } as CSSProperties}>
-    <h2 className={s.visuallyHidden} id="benefits-title">Van bedrijfskennis naar goedgekeurd werk</h2>
-    {steps.map(({ title, description, Demo }, index) => <article className={s.step} data-step-reveal={stages[index]} key={title}>
+  function move(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    const last = steps.length - 1;
+    const next = {
+      ArrowRight: index === last ? 0 : index + 1,
+      ArrowDown: index === last ? 0 : index + 1,
+      ArrowLeft: index === 0 ? last : index - 1,
+      ArrowUp: index === 0 ? last : index - 1,
+      Home: 0,
+      End: last,
+    }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    selectFromControl(next);
+    tabs.current[next]?.focus();
+  }
+
+  return (
+    <section className={s.showcase} id="mogelijkheden" aria-labelledby="work-showcase-heading">
+      <span className={s.hashAnchor} id="bedrijfskennis" />
       <div className={s.copy}>
-        <span>Stap {index + 1}</span>
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <h2 id="work-showcase-heading">Van kennis naar<br /> uitgevoerd werk.</h2>
+        <div className={s.descriptions}>
+          {steps.map(({ id, description }, index) => (
+            <p key={id} id={`showcase-description-${id}`} data-current={selected === index} aria-hidden={selected !== index}>
+              {description}
+            </p>
+          ))}
+        </div>
+        <div className={s.tabs} role="tablist" aria-label="Company Brain in actie">
+          {steps.map(({ id, label, Icon }, index) => (
+            <button
+              type="button"
+              key={id}
+              ref={element => { tabs.current[index] = element; }}
+              role="tab"
+              id={`showcase-tab-${id}`}
+              aria-controls={`showcase-panel-${id}`}
+              aria-selected={selected === index}
+              tabIndex={selected === index ? 0 : -1}
+              onClick={() => selectFromControl(index)}
+              onKeyDown={event => move(event, index)}
+            ><Icon size={17} aria-hidden="true" /><span>{label}</span><ArrowRight size={16} aria-hidden="true" /></button>
+          ))}
+        </div>
       </div>
-      <motion.div className={s.demoStage}
-        initial={false}
-        animate={stickyStory ? { opacity: 0, y: 10 } : undefined}
-        whileInView={stickyStory ? { opacity: 1, y: 0 } : undefined}
-        viewport={{ once: true, amount: .25, margin: "-75px 0px -35px 0px" }}
-        transition={{ duration: .34, ease: [.16, 1, .3, 1] }}>
-        <Demo revealed={stages[index] === "shown"} />
-      </motion.div>
-    </article>)}
-  </section>;
+      <div className={s.showcaseStage}>
+        <div className={s.scenes}>
+          {steps.map(({ id, Demo }, index) => {
+            const active = selected === index;
+            return (
+              <div
+                key={id}
+                className={s.showcasePanel}
+                id={`showcase-panel-${id}`}
+                role="tabpanel"
+                aria-labelledby={`showcase-tab-${id}`}
+                aria-describedby={`showcase-description-${id}`}
+                aria-hidden={!active}
+                inert={!active}
+                tabIndex={active ? 0 : -1}
+                data-current={active}
+              >
+                {(id !== "sources" || modelVisited) && <Demo active={active} />}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }

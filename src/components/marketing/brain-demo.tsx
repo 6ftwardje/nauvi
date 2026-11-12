@@ -79,7 +79,7 @@ export function BrainDemo({ onSources }: { onSources: (sources: readonly BrainSo
         <input
           id="hero-brain-question"
           ref={input}
-          placeholder="Vraag aan je Company Brain..."
+          placeholder="Stel een vraag…"
           value={query}
           aria-describedby="brain-demo-description"
           autoComplete="off"
@@ -109,10 +109,9 @@ export function BrainDemo({ onSources }: { onSources: (sources: readonly BrainSo
       </div>)}
       <div id="hero-demo-answer" className={s.reply} role="status" aria-atomic="true">
         {status === "sending" && <p className={s.srOnly}>Voorbeeldantwoord wordt geopend.</p>}
-        {status === "unmatched" && <p>Kies een van de drie voorbeeldvragen om de demo te proberen.</p>}
-        {status === "answered" && result && <>
+        {(status === "answered" || status === "unmatched") && <>
           <div className={s.replyHeading}><strong>Demo · fictieve bedrijfskennis</strong><button type="button" aria-label="Voorbeeldantwoord sluiten" onClick={reset}><X size={17} aria-hidden="true" /></button></div>
-          <AnswerDetails {...result} />
+          {result ? <AnswerDetails {...result} /> : <p>Kies een van de drie voorbeeldvragen om de demo te proberen.</p>}
         </>}
       </div>
     </div>

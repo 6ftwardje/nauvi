@@ -58,7 +58,7 @@ function BrainConnections({ isActive }: { isActive: (source: BrainSourceId) => b
   </svg>;
 }
 
-export function CompanyBrain() {
+export function CompanyBrain({ appearance = "default", active: viewActive = true }: { appearance?: "default" | "stage"; active?: boolean }) {
   const [hovered, setHovered] = useState<BrainSourceId | null>(null);
   const [focused, setFocused] = useState<BrainSourceId | null>(null);
   const [selected, setSelected] = useState<BrainSourceId | null>(null);
@@ -77,7 +77,7 @@ export function CompanyBrain() {
   useEffect(() => {
     activity.current = { hovered, focused, selected, demo };
     stage.current?.dispatchEvent(new Event("brain-activity"));
-  }, [hovered, focused, selected, demo]);
+  }, [hovered, focused, selected, demo, viewActive]);
 
   useEffect(() => {
     const area = stage.current;
@@ -110,8 +110,8 @@ export function CompanyBrain() {
     onHover={setHovered} onFocus={setFocused} onSelect={id => setSelected(previous => previous === id ? null : id)}
   />;
 
-  return <div className={s.visual} role="group" aria-label="Interactief voorbeeld van het Company Brain">
-    <div className={s.stage} ref={stage} data-scene={scene} data-engaged={Boolean(active || demo.length)}>
+  return <div className={s.visual} data-appearance={appearance} role="group" aria-label="Interactief voorbeeld van het Company Brain">
+    <div className={s.stage} ref={stage} data-scene={scene} data-scene-active={viewActive} data-engaged={Boolean(active || demo.length)}>
       <div className={s.ground} aria-hidden="true" />
       <div
         className={s.viewport}
@@ -123,7 +123,7 @@ export function CompanyBrain() {
         aria-keyshortcuts={scene === "ready" ? "ArrowUp ArrowDown ArrowLeft ArrowRight Escape" : undefined}
       >
         <motion.img className={s.poster} style={{ "--poster-lift": posterLift, "--poster-turn": posterTurn } as MotionStyle}
-          src="/marketing/brain/company-brain.webp" width="840" height="580" alt="" fetchPriority="high" />
+          src="/marketing/brain/company-brain.webp" width="840" height="580" alt="" fetchPriority={appearance === "stage" ? "auto" : "high"} />
         <canvas ref={canvas} aria-hidden="true" />
       </div>
       <BrainConnections key={scene === "fallback" ? "fallback" : "live"} isActive={isActive} />
