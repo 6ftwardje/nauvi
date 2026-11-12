@@ -1,15 +1,20 @@
 .field {
   position: relative;
   isolation: isolate;
-  display: grid;
-  min-height: clamp(510px, 61vw, 875px);
-  place-items: center;
   overflow: clip;
   background: #0b0b0b;
   color: white;
 }
 
-.field[data-mode="platform"] {
+.fieldIntro {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: clamp(510px, 61vw, 875px);
+  place-items: center;
+}
+
+.field[data-mode="platform"] .fieldIntro {
   min-height: max(580px, calc(100svh - var(--strip-height)));
   padding-bottom: 24px;
 }
@@ -21,13 +26,17 @@
   background:
     linear-gradient(180deg, #14191f14 14%, #10121635 45%, #0b0b0b 100%),
     url("/marketing/cinematic/brain-field.webp") center 28% / cover;
-  animation: light-drift 19s ease-in-out infinite alternate;
-  animation-play-state: paused;
+  animation: light-drift 19s ease-in-out infinite alternate paused;
 }
 
-.field[data-running="true"] .fieldLight,
-.field[data-running="true"] .dot,
-.field[data-running="true"] .dotLabel {
+.field[data-mode="home"] .fieldLight {
+  background:
+    linear-gradient(180deg, #14191f14 16%, #0b0b0b66 50%, #0b0b0b 98%),
+    url("/marketing/cinematic/brain-field.webp") center top / cover;
+}
+
+.field[data-running="true"] :is(.fieldLight, .dotLabel, .labelStrip, .labelText),
+.field[data-started="true"] .dot {
   animation-play-state: running;
 }
 
@@ -43,7 +52,6 @@
   display: grid;
   grid-template: repeat(9, 1fr) / repeat(9, 1fr);
   place-items: center;
-  mask-image: radial-gradient(ellipse 72% 71%, black 45%, transparent 96%);
 }
 
 .dot {
@@ -54,8 +62,7 @@
   place-items: center;
   border-radius: 1px;
   background: #cad6e28a;
-  animation: dot-enter .48s both var(--dot-delay);
-  animation-play-state: paused;
+  animation: dot-enter .38s both var(--dot-delay) paused;
 }
 
 .dot[data-accent="true"] {
@@ -64,28 +71,80 @@
 }
 
 @keyframes dot-enter {
-  from { opacity: 0; transform: translate(var(--dot-x), var(--dot-y)); }
+  from { opacity: 0; transform: scale(.4); }
 }
 
 .dotLabel {
+  --strip-closed: 0 100% 0 0;
   position: absolute;
-  left: 10px;
-  padding: 2px 7px;
-  border: 1px solid #ffffff65;
-  border-radius: 2px;
-  background: #121720d9;
-  color: white;
-  font-size: 10px;
-  line-height: 1.5;
-  white-space: nowrap;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  transform: translate(-9px, -50%);
   opacity: 0;
-  animation: label-flash 12s ease-in-out var(--label-delay) infinite;
-  animation-play-state: paused;
+  animation: label-presence var(--label-cycle) linear var(--label-delay) infinite paused;
 }
 
-@keyframes label-flash {
-  0%, 14%, 100% { opacity: 0; transform: translateX(-5px); }
-  3%, 10% { opacity: 1; transform: translateX(0); }
+.dotLabel[data-side="left"] {
+  --strip-closed: 0 0 0 100%;
+  right: 50%;
+  left: auto;
+  flex-direction: row-reverse;
+  transform: translate(9px, -50%);
+}
+
+.labelChip {
+  display: grid;
+  flex: 0 0 18px;
+  place-items: center;
+  min-height: 18px;
+  background: #0b0b0b;
+}
+
+.labelChip::after {
+  width: 4px;
+  height: 4px;
+  background: #edf5ff;
+  content: "";
+}
+
+.labelStrip {
+  display: grid;
+  align-items: center;
+  padding-inline: 5px;
+  background: #f8f8f8;
+  color: #131820;
+  clip-path: inset(var(--strip-closed));
+  animation: label-strip var(--label-cycle) linear var(--label-delay) infinite paused;
+}
+
+.labelText {
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+  animation: label-type var(--label-cycle) linear var(--label-delay) infinite paused;
+}
+
+@keyframes label-presence {
+  0%, 14.3%, 100% { opacity: 0; }
+  .5%, 13.6% { opacity: 1; }
+}
+
+@keyframes label-strip {
+  0%, .9%, 13.5%, 100% { clip-path: inset(var(--strip-closed)); }
+  2.3%, 12% { clip-path: inset(0); }
+}
+
+@keyframes label-type {
+  0%, 1.8% { clip-path: inset(0 100% 0 0); }
+  1.8%, 9.4% { animation-timing-function: steps(var(--label-length), end); }
+  4.6%, 9.4% { clip-path: inset(0); }
+  12%, 100% { clip-path: inset(0 100% 0 0); }
 }
 
 .fieldContent {
@@ -106,13 +165,12 @@
   text-wrap: balance;
 }
 
-.field[data-mode="platform"] .fieldContent h1,
-.field[data-running="true"] .fieldContent h2 {
-  animation: field-enter .8s cubic-bezier(.21,.73,.25,1) both;
-}
-
 .field[data-mode="home"] .fieldContent h2 {
   font-size: clamp(39px, 4vw, 65px);
+}
+
+.field[data-mode="platform"] .fieldContent h1 {
+  --reveal-offset: 90ms;
 }
 
 .signature {
@@ -121,11 +179,11 @@
   gap: 9px;
   font-size: clamp(16px, 1.65vw, 24px);
   letter-spacing: -.045em;
-  animation: field-enter .65s ease-out both;
+  animation: field-enter .35s ease-out both;
 }
 
 @keyframes field-enter {
-  from { opacity: 0; transform: translateY(17px); }
+  from { opacity: 0; transform: translateY(9px); }
 }
 
 .dark {
@@ -295,7 +353,6 @@
   background: url("/marketing/cinematic/brain-field.webp") center / cover;
   transform: scale(1.14);
   filter: blur(6px);
-  transition: transform .75s cubic-bezier(.22,.75,.2,1);
 }
 
 .chapter[data-tone="rust"] {
@@ -321,10 +378,6 @@
 .chapter[data-tone="blue"] .chapterLight {
   mix-blend-mode: luminosity;
   filter: blur(6px) brightness(1.7);
-}
-
-.chapter:is(:hover, :focus-within) .chapterLight {
-  scale: 1.065;
 }
 
 .chapter::after {
@@ -509,7 +562,7 @@ section.closing h2 {
 }
 
 @media (max-width: 760px) {
-  .field[data-mode="platform"] {
+  .field[data-mode="platform"] .fieldIntro {
     min-height: max(530px, calc(88svh - var(--strip-height)));
   }
 
@@ -517,8 +570,12 @@ section.closing h2 {
     inset-inline: 5%;
   }
 
-  .dotLabel {
+  .labelText {
     font-size: 8px;
+  }
+
+  .dotLabel[data-side="left"] {
+    right: 50%;
   }
 
   .dot:nth-child(3n) {

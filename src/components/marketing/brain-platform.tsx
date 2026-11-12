@@ -8,6 +8,7 @@ import { CompanyBrain } from "./company-brain";
 import { IntegrationExplorer } from "./integration-explorer";
 import { MarketingShell } from "./marketing-page";
 import { NauviMark } from "./nauvi-brand";
+import { RevealHeading } from "./reveal-heading";
 import WorkInAction from "./work-in-action";
 import s from "./brain-platform.module.css";
 import shared from "./cinematic.module.css";
@@ -99,10 +100,10 @@ export function PlatformPage() {
   return (
     <MarketingShell darkHeader closing>
       <div data-nav-tone="dark" className={s.dark}>
-        <section className={s.hero} aria-labelledby="company-brain-heading">
+        <section className={s.hero} aria-labelledby="company-brain-heading" data-nav-tone="overlay">
           <BrainField mode="platform">
             <p className={s.signature}><NauviMark size={25} /> Nauvi Company Brain</p>
-            <h1 id="company-brain-heading">Eén plek voor de kennis van<br className={s.desktopBreak} /> je team en je AI-agents.</h1>
+            <RevealHeading as="h1" id="company-brain-heading" lines={["Eén plek voor de kennis van", "je team en je AI-agents."]} when="load" breakClassName={s.desktopBreak} />
           </BrainField>
         </section>
 
@@ -112,7 +113,7 @@ export function PlatformPage() {
           <h2 id="brain-chapters-heading" data-reveal>Zo werkt Company Brain.</h2>
           <div className={s.chapterGrid}>
             {chapters.map(({ title, text, href, tone }) => (
-              <article key={title} className={s.chapter} data-tone={tone} data-reveal>
+              <article key={title} className={s.chapter} data-tone={tone}>
                 <div className={s.chapterLight} aria-hidden="true" />
                 <h3>{title}</h3>
                 <div><p>{text}</p><a className={shared.lightButton} href={href}>Ontdek {title.toLowerCase()} <ArrowRight size={13} aria-hidden="true" /></a></div>
@@ -122,10 +123,10 @@ export function PlatformPage() {
         </section>
 
         <section className={s.benefits} aria-labelledby="brain-benefits-heading">
-          <h2 id="brain-benefits-heading" data-reveal>Wat één gedeelde kennisbasis oplevert.</h2>
+          <h2 id="brain-benefits-heading">Wat één gedeelde kennisbasis oplevert.</h2>
           <ul>
             {benefits.map(({ Icon, title, text }) => (
-              <li key={title} data-reveal><Icon size={21} aria-hidden="true" /><h3>{title}</h3><p>{text}</p></li>
+              <li key={title}><Icon size={21} aria-hidden="true" /><h3>{title}</h3><p>{text}</p></li>
             ))}
           </ul>
         </section>

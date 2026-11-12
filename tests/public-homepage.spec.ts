@@ -31,8 +31,12 @@ test("desktop hover opens the full-width company menu and Escape dismisses it", 
   await page.goto("/");
   const header = page.getByRole("banner");
   const trigger = header.getByRole("button", { name: "Meer over Nauvi" });
+  const platform = header.getByRole("button", { name: "Meer over platform" });
+  await header.getByRole("link", { name: "Platform", exact: true }).hover();
+  await expect(platform).toHaveAttribute("aria-expanded", "true");
   await header.getByRole("link", { name: "Over Nauvi", exact: true }).hover();
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(platform).toHaveAttribute("aria-expanded", "false");
   const menu = header.locator("#nav-menu-over");
   await expect(menu.getByRole("link", { name: /Werken bij Nauvi/ }).first()).toBeVisible();
   const width = await menu.evaluate(element => element.getBoundingClientRect().width);
@@ -41,6 +45,31 @@ test("desktop hover opens the full-width company menu and Escape dismisses it", 
   await page.keyboard.press("Escape");
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
   await expect(trigger).toBeFocused();
+});
+
+test("application tabs keep their selection until a click or key activates another", async ({ page }) => {
+  await page.goto("/");
+  const tabs = page.getByRole("tablist", { name: "Toepassingen" });
+  const first = tabs.getByRole("tab", { name: "Aanvragen & offertes" });
+  const second = tabs.getByRole("tab", { name: "Werf & planning" });
+  await second.hover();
+  await expect(first).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel", { name: "Aanvragen & offertes" })).toBeVisible();
+  await second.click();
+  await expect(second).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel", { name: "Werf & planning" })).toBeVisible();
+  await second.press("ArrowLeft");
+  await expect(first).toBeFocused();
+  await expect(first).toHaveAttribute("aria-selected", "true");
+});
+
+test("reduced motion leaves the hero poster in place without loading video", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const video = page.locator("main video");
+  await expect(page.getByRole("button", { name: "Beeldwissel afspelen" })).toBeVisible();
+  await expect(video).not.toHaveAttribute("src", /./);
+  await expect(page.getByRole("heading", { level: 1 }).locator("span").first()).toHaveCSS("opacity", "1");
 });
 
 test("Company Brain layers expose their descriptions with the keyboard", async ({ page }) => {

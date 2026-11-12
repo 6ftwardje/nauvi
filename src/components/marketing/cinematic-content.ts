@@ -1,5 +1,5 @@
 export const photos = {
-  hero: "/marketing/cinematic/workshop.webp",
+  hero: "/marketing/cinematic/hero-poster.webp",
   office: "/marketing/cinematic/office.webp",
   site: "/marketing/cinematic/site.webp",
   team: "/marketing/cinematic/team.webp",

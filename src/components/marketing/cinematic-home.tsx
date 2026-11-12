@@ -7,25 +7,21 @@ import {
 } from "lucide-react";
 import { motion, useInView, useReducedMotion, useScroll, type MotionStyle } from "motion/react";
 import { BrainField } from "./brain-field";
+import { RevealHeading } from "./reveal-heading";
 import { applicationCategories, applications, integrations, photos } from "./cinematic-content";
 import s from "./cinematic.module.css";
 
-const heroImages = [
-  { image: photos.hero, duration: 3400, direction: 1 },
-  { image: photos.office, duration: 2800, direction: -1 },
-  { image: photos.site, duration: 3100, direction: 1 },
-  { image: photos.warehouse, duration: 2800, direction: -1 },
-  { image: photos.team, duration: 3300, direction: 1 },
-];
 const heroMotionQuery = "(prefers-reduced-motion: reduce)";
 
 export function Hero({ onBooking }: { onBooking: () => void }) {
   const section = useRef<HTMLElement>(null);
+  const video = useRef<HTMLVideoElement>(null);
   const inView = useInView(section);
-  const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [requested, setRequested] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
-  const animate = playing && pageVisible && inView;
+  const [unavailable, setUnavailable] = useState(false);
+  const active = playing && pageVisible && inView;
 
   useEffect(() => {
     const preference = window.matchMedia(heroMotionQuery);
@@ -42,30 +38,39 @@ export function Hero({ onBooking }: { onBooking: () => void }) {
   }, []);
 
   useEffect(() => {
-    if (!animate) return;
-    const timer = window.setTimeout(() => {
-      setFrame(current => (current + 1) % heroImages.length);
-    }, heroImages[frame].duration);
-    return () => window.clearTimeout(timer);
-  }, [frame, animate]);
+    if (active) setRequested(true);
+  }, [active]);
+
+  useEffect(() => {
+    const player = video.current;
+    if (!player || !requested) return;
+    if (!active) {
+      player.pause();
+      return;
+    }
+    void player.play().catch((error: DOMException) => {
+      if (error.name === "NotAllowedError") setPlaying(false);
+    });
+  }, [active, requested]);
 
   return (
-    <section className={s.hero} aria-labelledby="hero-title" data-nav-tone="dark" ref={section}>
-      <div className={s.heroMedia} aria-hidden="true" data-playing={animate}>
-        {heroImages.map(({ image, duration, direction }, index) => (
-          <img
-            key={image}
-            src={image}
-            alt=""
-            fetchPriority={index === 0 ? "high" : "low"}
-            decoding="async"
-            data-active={index === frame}
-            style={{ "--shot-duration": `${duration}ms`, "--shot-direction": direction } as CSSProperties}
-          />
-        ))}
+    <section className={s.hero} aria-labelledby="hero-title" data-nav-tone="overlay" ref={section}>
+      <div className={s.heroMedia} aria-hidden="true">
+        <img src={photos.hero} alt="" fetchPriority="high" decoding="async" />
+        {!unavailable && <video
+          ref={video}
+          src={requested ? "/marketing/cinematic/hero-montage.mp4" : undefined}
+          poster={photos.hero}
+          muted
+          loop
+          playsInline
+          preload="none"
+          tabIndex={-1}
+          onError={() => { setUnavailable(true); setPlaying(false); }}
+        />}
       </div>
       <div className={s.heroContent}>
-        <h1 id="hero-title">Geef het werk<br />{" "}dat blijft liggen<br />{" "}uit handen.</h1>
+        <RevealHeading as="h1" id="hero-title" lines={["Geef het werk", "dat blijft liggen", "uit handen."]} when="load" />
         <div className={s.heroAside}>
           <p>Nauvi legt vast hoe je bedrijf werkt en bouwt AI-agents die taken voor je uitvoeren.</p>
           <div className={s.actions}>
@@ -74,14 +79,14 @@ export function Hero({ onBooking }: { onBooking: () => void }) {
           </div>
         </div>
       </div>
-      <button
+      {!unavailable && <button
         className={s.mediaControl}
         type="button"
         onClick={() => setPlaying(current => !current)}
         aria-label={playing ? "Beeldwissel pauzeren" : "Beeldwissel afspelen"}
       >
         {playing ? <Pause size={15} aria-hidden="true" /> : <Play size={15} aria-hidden="true" />}
-      </button>
+      </button>}
     </section>
   );
 }
@@ -144,7 +149,7 @@ export function ApplicationCarousel() {
   return (
     <section className={s.carouselSection} id="dienstverlening" aria-labelledby="carousel-heading">
       <div className={s.carouselHeader}>
-        <h2 id="carousel-heading">Welk werk kan Nauvi overnemen?</h2>
+        <RevealHeading id="carousel-heading" lines={["Welk werk kan Nauvi overnemen?"]} />
         <div className={s.carouselControls}>
           <button type="button" onClick={() => move(-1)} disabled={bounds.start} aria-label="Vorige toepassing" aria-controls="application-carousel"><ArrowLeft size={19} aria-hidden="true" /></button>
           <button type="button" onClick={() => move(1)} disabled={bounds.end} aria-label="Volgende toepassing" aria-controls="application-carousel"><ArrowRight size={19} aria-hidden="true" /></button>
@@ -182,29 +187,30 @@ export function Statement() {
 export function PlatformChapter() {
   return (
     <section className={s.darkChapter} id="ai-agents" aria-labelledby="platform-heading" data-nav-tone="dark">
-      <BrainField mode="home">
+      <BrainField mode="home" after={
+        <div className={s.featurePair} id="werkwijze">
+          <article className={s.feature} id="mogelijkheden">
+            <img src={photos.team} alt="" loading="lazy" decoding="async" />
+            <div>
+              <h3>We bouwen het samen.</h3>
+              <p>Jij toont hoe je team werkt. Wij bouwen de eerste automatisering en testen ze samen met jou.</p>
+              <Link className={s.lightButton} href="/werkwijze">Bekijk de werkwijze</Link>
+            </div>
+          </article>
+          <article className={s.feature}>
+            <img src={photos.brainField} alt="" loading="lazy" decoding="async" />
+            <div>
+              <h3>Jij houdt de controle.</h3>
+              <p>Jij bepaalt welke bronnen een agent gebruikt en welk werk eerst langs je team gaat.</p>
+              <Link className={s.lightButton} href="/platform#mogelijkheden">Probeer de interactieve demo</Link>
+            </div>
+          </article>
+        </div>
+      }>
         <p className={s.platformLabel}>Nauvi Company Brain</p>
         <h2 id="platform-heading">Eén Company Brain<br />voor je hele bedrijf.</h2>
         <Link className={s.lightButton} href="/platform">Ontdek het platform <ArrowRight size={15} aria-hidden="true" /></Link>
       </BrainField>
-      <div className={s.featurePair} id="werkwijze">
-        <article className={s.feature} id="mogelijkheden">
-          <img src={photos.team} alt="" loading="lazy" decoding="async" />
-          <div>
-            <h3>We bouwen het samen.</h3>
-            <p>Jij toont hoe je team werkt. Wij bouwen de eerste automatisering en testen ze samen met jou.</p>
-            <Link className={s.lightButton} href="/werkwijze">Bekijk de werkwijze</Link>
-          </div>
-        </article>
-        <article className={s.feature}>
-          <img src={photos.brainField} alt="" loading="lazy" decoding="async" />
-          <div>
-            <h3>Jij houdt de controle.</h3>
-            <p>Jij bepaalt welke bronnen een agent gebruikt en welk werk eerst langs je team gaat.</p>
-            <Link className={s.lightButton} href="/platform#mogelijkheden">Probeer de interactieve demo</Link>
-          </div>
-        </article>
-      </div>
     </section>
   );
 }
@@ -257,7 +263,7 @@ export function ApplicationTabs() {
             inert={index !== selected}
             data-active={index === selected}
           >
-            <img src={application.image} alt="" loading="lazy" decoding="async" />
+            <img src={application.image} alt="" fetchPriority="low" decoding="async" />
             <h3>{application.label}</h3>
             <div>
               <p>{application.text}</p>
@@ -276,7 +282,7 @@ export function AboutChapter() {
       <img src={photos.handover} alt="" loading="lazy" decoding="async" />
       <div className={s.aboutInner}>
         <div className={s.aboutCopy}>
-          <h2 id="about-heading">Gebouwd voor teams die het werk kennen.</h2>
+          <RevealHeading id="about-heading" lines={["Gebouwd voor teams die het werk kennen."]} />
           <p>We helpen kmo’s hun kennis vast te leggen en terugkerend werk uit handen te geven. We beginnen met één taak die je team vandaag tijd kost.</p>
         </div>
         <div className={s.aboutLinks}>
