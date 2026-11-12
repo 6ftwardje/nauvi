@@ -5,18 +5,26 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { NauviWordmark } from "./nauvi-brand";
-import { applicationCategories, photos } from "./cinematic-content";
+import { agentPhotos, applicationCategories, photos } from "./cinematic-content";
 import s from "./cinematic.module.css";
+
+const solutions = [
+  { label: "Company Brain", href: "/platform", description: "De kennis van je bedrijf op één plek" },
+  { label: "Nauvi Agents", href: "/agents", description: "AI-agents voor kantoor en werf" },
+];
 
 const navigation = [
   {
-    id: "platform", label: "Platform", href: "/platform",
+    id: "oplossingen", label: "Oplossingen", href: null,
     links: [
-      { label: "Company Brain", href: "/platform", description: "De kennis van je bedrijf op één plek" },
+      ...solutions,
       { label: "Interactieve demo", href: "/platform#mogelijkheden", description: "Van bedrijfskennis naar uitgevoerd werk" },
       { label: "Koppelingen", href: "/platform#koppelingen", description: "Aansluiten op de tools van je team" },
     ],
-    features: [{ image: photos.office, title: "Bekijk Company Brain", href: "/platform" }],
+    features: [
+      { image: photos.office, title: "Bekijk Company Brain", href: "/platform" },
+      { image: agentPhotos.estimation, title: "Bekijk Nauvi Agents", href: "/agents" },
+    ],
   },
   {
     id: "toepassingen", label: "Toepassingen", href: "/toepassingen",
@@ -197,12 +205,12 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
             <div className={s.navTrigger} key={item.id} onPointerEnter={event => {
               if (event.pointerType === "mouse") queueMenu(item.links ? item.id : null, 70);
             }}>
-              <Link href={item.href} onClick={closeMenus}>{item.label}</Link>
+              {item.href && <Link href={item.href} onClick={closeMenus}>{item.label}</Link>}
               {item.links && <button
                 id={`nav-trigger-${item.id}`}
-                className={s.navChevron}
+                className={`${s.navChevron}${item.href ? "" : ` ${s.navLabelButton}`}`}
                 type="button"
-                aria-label={item.id === "over" ? "Meer over Nauvi" : `Meer over ${item.label.toLowerCase()}`}
+                aria-label={item.href ? (item.id === "over" ? "Meer over Nauvi" : `Meer over ${item.label.toLowerCase()}`) : undefined}
                 aria-expanded={expanded === item.id}
                 aria-controls={`nav-menu-${item.id}`}
                 onClick={() => {
@@ -220,7 +228,7 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
                     setExpanded(item.id);
                   }
                 }}
-              ><ChevronDown size={15} aria-hidden="true" /></button>}
+              >{!item.href && item.label}<ChevronDown size={15} aria-hidden="true" /></button>}
             </div>
           ))}
         </nav>
@@ -251,7 +259,7 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
             {item.links.map((link, index) => {
               const MenuLink = link.href.includes("#") ? "a" : Link;
               return (
-                <MenuLink key={link.href} href={link.href} onClick={closeMenus} style={{ "--menu-delay": `${index * 48}ms` } as CSSProperties}>
+                <MenuLink key={link.href} href={link.href} onClick={closeMenus} aria-current={pathname === link.href ? "page" : undefined} style={{ "--menu-delay": `${index * 48}ms` } as CSSProperties}>
                   <span>{link.label}<small>{link.description}</small></span><ArrowUpRight size={15} aria-hidden="true" />
                 </MenuLink>
               );
@@ -268,7 +276,16 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
         </div>)}
       </div>
       <nav className={s.mobileMenu} id="nauvi-mobile-menu" aria-label="Mobiele hoofdnavigatie" hidden={!mobileOpen}>
-        {navigation.map(item => <Link href={item.href} key={item.href} onClick={closeMenus}>{item.label}<ArrowUpRight size={19} aria-hidden="true" /></Link>)}
+        {navigation.map(item => item.href ? (
+          <Link href={item.href} key={item.id} onClick={closeMenus}>{item.label}<ArrowUpRight size={19} aria-hidden="true" /></Link>
+        ) : (
+          <div className={s.mobileSolutions} role="group" aria-labelledby="mobile-solutions-label" key={item.id}>
+            <span id="mobile-solutions-label">{item.label}</span>
+            {solutions.map(({ label, href }) => (
+              <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={closeMenus}>{label}<ArrowUpRight size={19} aria-hidden="true" /></Link>
+            ))}
+          </div>
+        ))}
         <Link href="/careers" onClick={closeMenus}>Werken bij Nauvi <ArrowUpRight size={19} aria-hidden="true" /></Link>
         <a href="/app" onClick={closeMenus}>Inloggen <ArrowUpRight size={19} aria-hidden="true" /></a>
         <button type="button" className={s.darkButton} onClick={book}>Plan een kennismaking</button>
@@ -287,10 +304,9 @@ export function CinematicFooter({ onBooking }: { onBooking: () => void }) {
           <button className={s.lightButton} type="button" onClick={onBooking}>Plan een kennismaking <ArrowUpRight size={14} aria-hidden="true" /></button>
           <small>© {new Date().getFullYear()} Nauvi</small>
         </div>
-        <nav aria-label="Platform">
-          <strong>Platform</strong>
-          <Link href="/platform">Company Brain</Link>
-          <a href="/platform#mogelijkheden">AI-agents</a>
+        <nav aria-label="Oplossingen">
+          <strong>Oplossingen</strong>
+          {solutions.map(({ label, href }) => <Link key={href} href={href}>{label}</Link>)}
           <Link href="/platform#koppelingen">Koppelingen op maat</Link>
           <Link href="/werkwijze">Werkwijze</Link>
         </nav>

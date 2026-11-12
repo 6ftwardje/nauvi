@@ -10,6 +10,13 @@ export const photos = {
   brainField: "/marketing/cinematic/brain-field.webp",
 };
 
+export const agentPhotos = {
+  hero: "/marketing/agents/hero.webp",
+  estimation: "/marketing/agents/estimation.webp",
+  site: "/marketing/agents/site.webp",
+  materials: "/marketing/agents/materials.webp",
+};
+
 export const applications = [
   {
     slug: "offertes-voorbereiden",

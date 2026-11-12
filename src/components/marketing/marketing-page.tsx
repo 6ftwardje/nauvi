@@ -69,7 +69,13 @@ function Host() {
   );
 }
 
-export function MarketingShell({ children, darkHeader = false, closing = false }: { children?: ReactNode; darkHeader?: boolean; closing?: boolean }) {
+export function MarketingShell({ children, className, darkHeader = false, closing = false, closingTitle = "Welke taak wil jij uit handen geven?" }: {
+  children?: ReactNode;
+  className?: string;
+  darkHeader?: boolean;
+  closing?: boolean;
+  closingTitle?: string;
+}) {
   const [booking, setBooking] = useState(false);
   const [calendarVersion, setCalendarVersion] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -92,7 +98,7 @@ export function MarketingShell({ children, darkHeader = false, closing = false }
     dialog.current?.close();
   }
 
-  return <div className={`${s.page} ${cinematic.site}`}>
+  return <div className={`${s.page} ${cinematic.site}${className ? ` ${className}` : ""}`}>
     <a className={s.skip} href="#main">Naar de inhoud</a>
     <CinematicNav overlay={home || darkHeader} onBooking={openBooking} />
     <main id="main">
@@ -112,7 +118,7 @@ export function MarketingShell({ children, darkHeader = false, closing = false }
         <AboutChapter />
       </>}
       {closing && <section className={brain.closing} aria-labelledby="brain-closing-title" data-nav-tone="dark">
-        <h2 id="brain-closing-title">Welke taak wil jij uit handen geven?</h2>
+        <h2 id="brain-closing-title">{closingTitle}</h2>
         <button className={cinematic.lightButton} type="button" onClick={openBooking}>Plan een kennismaking</button>
       </section>}
     </main>

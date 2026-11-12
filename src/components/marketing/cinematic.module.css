@@ -179,6 +179,16 @@
   transform: rotate(180deg);
 }
 
+.navLabelButton {
+  display: inline-flex;
+  gap: 4px;
+  padding-inline: 0;
+}
+
+.navLabelButton:hover {
+  text-decoration: underline;
+}
+
 .navSurface {
   position: absolute;
   z-index: 1;
@@ -1232,6 +1242,8 @@
     background: white;
     box-shadow: 0 8px 14px #0001;
     color: #111;
+    max-height: calc(100dvh - var(--nav-height) - var(--strip-height));
+    overflow-y: auto;
   }
 
   .mobileMenu a {
@@ -1241,11 +1253,18 @@
     gap: 10px;
     padding: 11px 0;
     border-bottom: 1px solid #eee;
-    font-size: 17px;
+    font-size: var(--mobile-menu-link-size, 17px);
   }
 
   .mobileMenu button {
     margin-top: 17px;
+  }
+
+  .mobileSolutions > span {
+    display: block;
+    padding-top: 11px;
+    color: #555;
+    font-size: 13px;
   }
 
   .heroContent {
@@ -1283,7 +1302,7 @@
 
 @media (max-width: 580px) {
   .announcement {
-    font-size: 11px;
+    font-size: var(--mobile-announcement-size, 11px);
   }
 
   .announcement a {

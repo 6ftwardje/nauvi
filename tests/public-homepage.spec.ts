@@ -27,16 +27,17 @@ test("login redirects to Synaps and forwards only invitation parameters", async 
   }
 });
 
-test("desktop hover opens the full-width company menu and Escape dismisses it", async ({ page }) => {
+test("desktop hover switches between the solutions and company menus, and Escape dismisses the menu", async ({ page }) => {
   await page.goto("/");
   const header = page.getByRole("banner");
   const trigger = header.getByRole("button", { name: "Meer over Nauvi" });
-  const platform = header.getByRole("button", { name: "Meer over platform" });
-  await header.getByRole("link", { name: "Platform", exact: true }).hover();
-  await expect(platform).toHaveAttribute("aria-expanded", "true");
+  const solutions = header.getByRole("button", { name: "Oplossingen", exact: true });
+  await solutions.hover();
+  await expect(solutions).toHaveAttribute("aria-expanded", "true");
+  await expect(header.getByRole("link", { name: /^Nauvi Agents/ })).toHaveAttribute("href", "/agents");
   await header.getByRole("link", { name: "Over Nauvi", exact: true }).hover();
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
-  await expect(platform).toHaveAttribute("aria-expanded", "false");
+  await expect(solutions).toHaveAttribute("aria-expanded", "false");
   const menu = header.locator("#nav-menu-over");
   await expect(menu.getByRole("link", { name: /Werken bij Nauvi/ }).first()).toBeVisible();
   const width = await menu.evaluate(element => element.getBoundingClientRect().width);
@@ -126,7 +127,9 @@ test("existing product fragments open the matching demo", async ({ page }) => {
   await expect(demo.getByRole("tab", { name: "Bronnen verkennen" })).toHaveAttribute("aria-selected", "true");
   await demo.getByRole("button", { name: "Hoe maken we een offerte?" }).click();
   await expect(demo.getByText(/Volgens jullie werkwijze begint een offerte/).filter({ visible: true })).toBeVisible();
-  await page.getByRole("contentinfo").getByRole("link", { name: "AI-agents" }).click();
+  await page.getByRole("contentinfo").getByRole("link", { name: "Nauvi Agents" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "AI-agents voor kantoor en werf." })).toBeVisible();
+  await page.getByRole("link", { name: "Probeer de interactieve demo" }).click();
   await expect(demo.getByRole("tab", { name: "Agents aan het werk" })).toHaveAttribute("aria-selected", "true");
 });
 
