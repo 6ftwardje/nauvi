@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { faqJsonLd, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/json-ld";
 import { redirect } from "next/navigation";
 import MarketingPage from "@/components/marketing/marketing-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/",
   title: "Nauvi — Je bedrijf klaar voor AI-agents",
   description: "Jij deelt hoe je bedrijf werkt. Wij brengen je kennis samen in je Company Brain en bouwen agents die taken overnemen. Plan een kennismaking.",
-};
+});
 
 export default async function Home({ searchParams }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -20,5 +23,8 @@ export default async function Home({ searchParams }: {
     }
     redirect(`/app?${invitation.toString()}`);
   }
-  return <MarketingPage />;
+  return <>
+    <JsonLd data={faqJsonLd()} />
+    <MarketingPage />
+  </>;
 }

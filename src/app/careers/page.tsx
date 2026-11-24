@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
@@ -6,10 +7,11 @@ import { MarketingShell } from "@/components/marketing/marketing-page";
 import shared from "@/components/marketing/cinematic.module.css";
 import s from "./careers.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/careers",
   title: "Werken bij Nauvi",
   description: "Leer het werk achter Nauvi kennen en bekijk onze vacatures.",
-};
+});
 
 const work = [
   { title: "Engineering", text: "Bouw Company Brain en de koppelingen waarmee AI-agents in de tools van een klant kunnen werken." },

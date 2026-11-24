@@ -1,0 +1,57 @@
+# Redirects only. Build settings stay in the Netlify UI; do not add [build] or [[plugins]] here.
+#
+# Old or planned paths that were 404 on nauvi.ai on 24 Nov 2026 (SPEC §4.5). Only confirmed paths are listed;
+# do not add guesses such as /login, /blog or /cookieverklaring.
+# /app is not redirected: it keeps its own 503 / 307 behaviour (src/app/app/route.ts).
+# www.nauvi.ai -> nauvi.ai is already handled by the domain settings.
+
+[[redirects]]
+  from = "/modules"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/modules/"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/bedrijfsbrein"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/bedrijfsbrein/"
+  to = "/platform"
+  status = 301
+  force = true
+
+# STRUCTURE v4 plans to rename /platform -> /company-brain and /over-nauvi -> /over-ons.
+# When that rename ships, invert the rules below (old live path -> new path) instead of keeping them.
+
+[[redirects]]
+  from = "/company-brain"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/company-brain/"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/over-ons"
+  to = "/over-nauvi"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/over-ons/"
+  to = "/over-nauvi"
+  status = 301
+  force = true

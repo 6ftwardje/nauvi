@@ -233,7 +233,6 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
           ))}
         </nav>
         <div className={s.headerActions}>
-          <a href="/app">Inloggen</a>
           <button type="button" className={s.headerButton} onClick={book}>Plan een kennismaking</button>
         </div>
         <button
@@ -287,7 +286,6 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
           </div>
         ))}
         <Link href="/careers" onClick={closeMenus}>Werken bij Nauvi <ArrowUpRight size={19} aria-hidden="true" /></Link>
-        <a href="/app" onClick={closeMenus}>Inloggen <ArrowUpRight size={19} aria-hidden="true" /></a>
         <button type="button" className={s.darkButton} onClick={book}>Plan een kennismaking</button>
       </nav>
     </header>
@@ -319,7 +317,8 @@ export function CinematicFooter({ onBooking }: { onBooking: () => void }) {
           <Link href="/over-nauvi">Over ons</Link>
           <Link href="/careers">Werken bij Nauvi</Link>
           <Link href="/#vragen">Veelgestelde vragen</Link>
-          <a href="/app">Login voor testgebruikers <ArrowUpRight size={13} aria-hidden="true" /></a>
+          <Link href="/contact">Contact</Link>
+          <Link href="/privacy">Privacy</Link>
         </nav>
       </div>
       <div className={s.footerWordmark} aria-hidden="true"><NauviWordmark /></div>
