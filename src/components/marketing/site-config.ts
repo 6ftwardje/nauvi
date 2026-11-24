@@ -1,8 +1,9 @@
-/** Public marketing configuration for the appointment area. */
+/** Public marketing configuration. */
 export const marketingConfig = {
   calendlyUrl: "https://calendly.com/ward-janssen2020/30min?hide_event_type_details=1&hide_gdpr_banner=1",
   hostName: "Kjartan",
   hostPortrait: "/marketing/portraits/kjartan.webp",
+  careersEmail: "maxim@nauvi.ai",
 };
 
 export function calendlyEmbedUrl(value: string): string | undefined {

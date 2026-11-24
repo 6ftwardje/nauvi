@@ -30,13 +30,13 @@ export default function MarketingNavbar({ onBooking }: { onBooking: () => void }
     <NavBody>
       <NavbarLogo aria-label="Nauvi startpagina"><NauviWordmark /></NavbarLogo>
       <NavItems items={items} />
-      <NavbarActions><NavbarButton href="/app" variant="secondary">Inloggen <ArrowUpRight size={14} aria-hidden="true" /></NavbarButton><NavbarButton as="button" onClick={book}>Plan een kennismaking <ArrowUpRight size={16} aria-hidden="true" /></NavbarButton></NavbarActions>
+      <NavbarActions><NavbarButton as="button" onClick={book}>Plan een kennismaking <ArrowUpRight size={16} aria-hidden="true" /></NavbarButton></NavbarActions>
     </NavBody>
     <MobileNav>
       <MobileNavHeader><NavbarLogo aria-label="Nauvi startpagina" onClick={close}><NauviWordmark /></NavbarLogo><MobileNavToggle isOpen={open} onClick={() => setOpen(current => !current)} controls="marketing-menu" /></MobileNavHeader>
       <MobileNavMenu id="marketing-menu" isOpen={open} onClose={close}>
         {items.map(item => <a key={item.link} href={item.link} onClick={close}>{item.name}<ArrowRight size={16} aria-hidden="true" /></a>)}
-        <NavbarActions><NavbarButton href="/app" variant="secondary" onClick={close}>Inloggen <ArrowUpRight size={15} aria-hidden="true" /></NavbarButton><NavbarButton as="button" onClick={book}>Plan een kennismaking <ArrowUpRight size={16} aria-hidden="true" /></NavbarButton></NavbarActions>
+        <NavbarActions><NavbarButton as="button" onClick={book}>Plan een kennismaking <ArrowUpRight size={16} aria-hidden="true" /></NavbarButton></NavbarActions>
       </MobileNavMenu>
     </MobileNav>
   </Navbar>;

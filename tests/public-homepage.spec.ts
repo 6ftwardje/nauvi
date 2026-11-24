@@ -47,6 +47,7 @@ test("Nauvi keeps its public homepage without public login links", async ({ page
   const footer = page.getByRole("contentinfo");
   await expect(footer.getByRole("link", { name: "Privacy", exact: true })).toHaveAttribute("href", "/privacy");
   await expect(footer.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("href", "/contact");
+  await expect(page.locator('a[href="/app"]')).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Plan een kennismaking", exact: true }).first()).toBeVisible();
 });
 
@@ -246,12 +247,20 @@ test("the mobile navigation opens the careers page and the vacancies section", a
   await page.goto("/");
   await page.getByRole("button", { name: "Menu openen" }).click();
   const menu = page.getByRole("navigation", { name: "Mobiele hoofdnavigatie" });
+  await expect(menu.getByRole("link", { name: /inloggen|login/i })).toHaveCount(0);
   await menu.getByRole("link", { name: "Werken bij Nauvi" }).click();
   await expect(page).toHaveURL(/\/careers$/);
   await expect(page.getByRole("heading", { level: 1, name: "Werken bij Nauvi" })).toBeVisible();
   await page.getByRole("link", { name: "Bekijk de vacatures" }).click();
   await expect(page).toHaveURL(/#vacatures$/);
   await expect(page.getByRole("heading", { name: "Vacatures", exact: true })).toBeInViewport();
+  const openings = page.getByRole("region", { name: "Vacatures", exact: true });
+  await expect(openings.getByRole("heading", { name: "Sales", exact: true })).toBeVisible();
+  await expect(openings.getByRole("heading", { name: "Forward Deployed Engineer", exact: true })).toBeVisible();
+  await expect(openings.getByRole("link", { name: "Solliciteer voor Sales" }))
+    .toHaveAttribute("href", "mailto:careers@example.test?subject=Sollicitatie%20voor%20Sales%20bij%20Nauvi");
+  await expect(openings.getByRole("link", { name: "Solliciteer voor Forward Deployed Engineer" }))
+    .toHaveAttribute("href", "mailto:careers@example.test?subject=Sollicitatie%20voor%20Forward%20Deployed%20Engineer%20bij%20Nauvi");
 });
 
 test("the product walkthrough follows the hero and preserves edited approvals when switching demos", async ({ page }) => {
