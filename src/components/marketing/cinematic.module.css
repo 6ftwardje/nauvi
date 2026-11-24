@@ -605,7 +605,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   grid-template-rows: 1fr auto;
   align-items: start;
   gap: 16px;
@@ -629,7 +629,10 @@
   grid-column: 1 / -1;
   align-self: end;
   justify-self: end;
-  font-size: clamp(12px, 1vw, 15px);
+  max-width: 100%;
+  font-size: clamp(13px, 1vw, 15px);
+  overflow-wrap: anywhere;
+  text-align: end;
 }
 
 .applicationCard img,
@@ -655,7 +658,7 @@
 }
 
 .applicationCard::after {
-  background: linear-gradient(180deg, #101010ab, #10101003 55%, #101010ad);
+  background: linear-gradient(180deg, #101010d9, #1010109c 32%, #10101003 57%, #101010d9);
 }
 
 .statement {
@@ -1372,8 +1375,8 @@
   }
 
   .carouselTrack {
-    grid-auto-columns: 79vw;
-    gap: 10px;
+    grid-auto-columns: 100%;
+    gap: var(--edge);
   }
 
   .featurePair,
