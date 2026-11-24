@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { pageMetadata } from "@/lib/seo";
 import { applications } from "@/components/marketing/cinematic-content";
 import { ApplicationDetail } from "@/components/marketing/cinematic-subpage";
 
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: ApplicationProps): Promise<Me
   const { slug } = await params;
   const application = applications.find(item => item.slug === slug);
   if (!application) notFound();
-  return { title: `${application.title} | Nauvi`, description: application.description };
+  return pageMetadata({ path: `/toepassingen/${slug}`, title: `${application.title} | Nauvi`, description: application.description });
 }
 
 export default async function ApplicationPage({ params }: ApplicationProps) {

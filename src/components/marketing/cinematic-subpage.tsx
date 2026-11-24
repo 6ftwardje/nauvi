@@ -84,7 +84,7 @@ export function AboutPage() {
         <div><h2 id="meet-heading">Maak kennis met Nauvi.</h2></div>
         <div>
           <p>Tijdens de kennismaking bespreek je met {marketingConfig.hostName} welke taak je uit handen wilt geven en welke afspraken daarvoor belangrijk zijn.</p>
-          <Link className={s.darkButton} href="#demo">Naar contact <ArrowUpRight size={15} aria-hidden="true" /></Link>
+          <Link className={s.darkButton} href="/contact">Naar contact <ArrowUpRight size={15} aria-hidden="true" /></Link>
         </div>
       </section>
     </MarketingShell>

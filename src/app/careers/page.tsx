@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
 import { MarketingShell } from "@/components/marketing/marketing-page";
@@ -6,10 +7,11 @@ import { marketingConfig } from "@/components/marketing/site-config";
 import shared from "@/components/marketing/cinematic.module.css";
 import s from "./careers.module.css";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/careers",
   title: "Werken bij Nauvi",
   description: "Bekijk de vacatures Sales en Forward Deployed Engineer bij Nauvi. Help kmo’s terugkerend werk uit handen geven met AI-agents.",
-};
+});
 
 const work = [
   { title: "Engineering", text: "Bouw Company Brain en de koppelingen waarmee AI-agents in de tools van een klant kunnen werken." },

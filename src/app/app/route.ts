@@ -1,6 +1,8 @@
 const privateHeaders = {
   "Cache-Control": "no-store",
   "Referrer-Policy": "no-referrer",
+  // Login is never a search result, whether it answers 503 or 307.
+  "X-Robots-Tag": "noindex, nofollow",
 };
 
 export function GET(request: Request) {

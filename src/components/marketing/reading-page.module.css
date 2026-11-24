@@ -1,0 +1,123 @@
+/* Calm reading column for /privacy and /contact: rows and rules, no cards. Lives inside MarketingShell (.page .site). */
+
+.page {
+  max-width: calc(68ch + var(--edge) * 2);
+  margin: 0 auto;
+  padding: clamp(56px, 9vw, 128px) var(--edge) clamp(72px, 9vw, 136px);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.intro {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+  padding-bottom: clamp(36px, 5vw, 56px);
+}
+
+.page .intro h1 {
+  font-size: clamp(47px, 6.4vw, 96px);
+}
+
+.page .intro p {
+  color: #464646;
+  font-size: clamp(16px, 1.5vw, 19px);
+}
+
+.intro button {
+  margin-top: 6px;
+}
+
+.section {
+  padding: clamp(28px, 4vw, 40px) 0;
+  border-top: 1px solid #e1e1e1;
+}
+
+.page .section h2 {
+  font-size: clamp(26px, 2.6vw, 34px);
+  letter-spacing: -.04em;
+}
+
+.page .section p,
+.page .section li {
+  color: #383838;
+}
+
+.page .section > * + * {
+  margin-top: 14px;
+}
+
+.rows {
+  margin: 18px 0 0;
+}
+
+.rows > div {
+  display: grid;
+  grid-template-columns: minmax(0, 17ch) minmax(0, 1fr);
+  gap: 4px 24px;
+  padding: 13px 0;
+  border-bottom: 1px solid #ececec;
+}
+
+.rows > div:first-child {
+  border-top: 1px solid #ececec;
+}
+
+.rows dt {
+  color: #686663;
+  font-size: 14px;
+}
+
+.rows dd {
+  margin: 0;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 0;
+  padding-inline-start: 20px;
+}
+
+.quote {
+  margin-inline: 0;
+  padding-inline-start: 18px;
+  border-inline-start: 2px solid #d6d6d6;
+}
+
+.page .quote > * + * {
+  margin-top: 10px;
+}
+
+.source {
+  color: #686663;
+  font-size: 13px;
+  letter-spacing: .01em;
+}
+
+/* Unlocked facts. Visible on purpose: this page must not reach production while any remain. */
+.placeholder {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #fff1cc;
+  color: #5c4100;
+  font-size: .94em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.page a.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.page a.link:hover {
+  text-decoration-thickness: 2px;
+}
+
+@media (max-width: 560px) {
+  .rows > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

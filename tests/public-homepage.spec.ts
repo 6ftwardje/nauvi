@@ -1,18 +1,61 @@
+import { readFileSync } from "node:fs";
 import { test, expect } from "@playwright/test";
 
-test("Nauvi keeps its public homepage free of login links", async ({ page }) => {
+const indexableRoutes = [
+  "/",
+  "/platform",
+  "/agents",
+  "/werkwijze",
+  "/toepassingen",
+  "/toepassingen/offertes-voorbereiden",
+  "/toepassingen/werfverslagen-maken",
+  "/toepassingen/leveranciers-vergelijken",
+  "/toepassingen/aanvragen-verwerken",
+  "/toepassingen/leverbonnen-verwerken",
+  "/toepassingen/facturen-opvolgen",
+  "/toepassingen/offertes-opvolgen",
+  "/toepassingen/meerwerken-signaleren",
+  "/toepassingen/werfplanning-ondersteunen",
+  "/toepassingen/werfmarges-bewaken",
+  "/over-nauvi",
+  "/careers",
+  "/privacy",
+  "/contact",
+];
+
+const canonicalFor = (path: string) => path === "/" ? "https://nauvi.ai" : `https://nauvi.ai${path}`;
+
+function jsonLd(html: string) {
+  return [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap(([, body]) => {
+    const data = JSON.parse(body);
+    return data["@graph"] ?? [data];
+  });
+}
+
+function meta(html: string, key: string) {
+  return html.match(new RegExp(`<meta (?:property|name)="${key}" content="([^"]*)"`))?.[1];
+}
+
+test("Nauvi keeps its public homepage without public login links", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/^Nauvi/);
   await expect(page.getByRole("banner").getByRole("link", { name: "Nauvi startpagina" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName("Geef het werk dat blijft liggen uit handen.");
+  // Hidden menus count too: the login links must not exist at all while /app has no approved target.
+  await expect(page.locator("header a, footer a").filter({ hasText: /Inloggen|Login voor testgebruikers/ })).toHaveCount(0);
+  await expect(page.locator('header a[href="/app"], footer a[href="/app"]')).toHaveCount(0);
+  const footer = page.getByRole("contentinfo");
+  await expect(footer.getByRole("link", { name: "Privacy", exact: true })).toHaveAttribute("href", "/privacy");
+  await expect(footer.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("href", "/contact");
   await expect(page.locator('a[href="/app"]')).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Plan een kennismaking", exact: true }).first()).toBeVisible();
 });
 
-test("login redirects to Synaps and forwards only invitation parameters", async ({ request }) => {
+test("login redirects to Synaps, forwards only invitation parameters and is never indexed", async ({ request }) => {
   const login = await request.get("/app", { maxRedirects: 0 });
   expect(login.status()).toBe(307);
   expect(login.headers().location).toBe("https://synaps.example.test/app");
+  expect(login.headers()["x-robots-tag"]).toContain("noindex");
 
   for (const key of ["invite", "token"]) {
     const incoming = `/?${key}=fictional%2Broute%2Fcheck&campaign=nauvi`;
@@ -24,7 +67,124 @@ test("login redirects to Synaps and forwards only invitation parameters", async 
     expect(direct.status()).toBe(307);
     expect(direct.headers().location).toBe(`https://synaps.example.test/app?${key}=fictional%2Broute%2Fcheck`);
     expect(direct.headers()["cache-control"]).toBe("no-store");
+    expect(direct.headers()["x-robots-tag"]).toContain("noindex");
   }
+});
+
+test("robots.txt allows the site, keeps crawlers out of /app and points at the sitemap", async ({ request }) => {
+  const robots = await request.get("/robots.txt");
+  expect(robots.status()).toBe(200);
+  const text = await robots.text();
+  expect(text).toContain("Allow: /\n");
+  expect(text).toContain("Disallow: /app");
+  expect(text).not.toMatch(/Disallow: \/\s*$/m);
+  expect(text).toContain("Sitemap: https://nauvi.ai/sitemap.xml");
+});
+
+test("the sitemap lists exactly the indexable routes on nauvi.ai", async ({ request }) => {
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.status()).toBe(200);
+  expect(sitemap.headers()["content-type"]).toContain("xml");
+  const urls = [...(await sitemap.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(([, url]) => url);
+  expect(urls).toEqual(indexableRoutes.map(path => path === "/" ? "https://nauvi.ai/" : `https://nauvi.ai${path}`));
+});
+
+test("netlify.toml holds only the confirmed 301s", () => {
+  const toml = readFileSync(new URL("../netlify.toml", import.meta.url), "utf8");
+  const rules = [...toml.matchAll(/\[\[redirects\]\]\s+from = "([^"]+)"\s+to = "([^"]+)"\s+status = (\d+)\s+force = (\w+)/g)]
+    .map(([, from, to, status, force]) => ({ from, to, status, force }));
+  const expected = { "/modules": "/", "/bedrijfsbrein": "/platform", "/company-brain": "/platform", "/over-ons": "/over-nauvi" };
+  expect(rules).toEqual(Object.entries(expected).flatMap(([from, to]) => [from, `${from}/`].map(path => ({ from: path, to, status: "301", force: "true" }))));
+  expect((toml.match(/\[\[redirects\]\]/g) ?? []).length).toBe(rules.length);
+});
+
+for (const path of indexableRoutes) {
+  test(`${path} has a production canonical, share tags and site schema`, async ({ request }) => {
+    const response = await request.get(path, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    // Local and Preview hosts are never indexable.
+    expect(response.headers()["x-robots-tag"]).toContain("noindex");
+    const html = await response.text();
+    expect(html).toContain('<html lang="nl-BE"');
+    expect(html).toContain(`<link rel="canonical" href="${canonicalFor(path)}"/>`);
+    expect(meta(html, "og:url")).toBe(canonicalFor(path));
+    expect(meta(html, "og:type")).toBe("website");
+    expect(meta(html, "og:locale")).toBe("nl_BE");
+    expect(meta(html, "og:site_name")).toBe("Nauvi");
+    expect(meta(html, "og:title")).toBe(html.match(/<title>([^<]*)<\/title>/)?.[1]);
+    expect(meta(html, "og:description")).toBe(meta(html, "description"));
+    expect(meta(html, "og:image")).toMatch(/^https:\/\/nauvi\.ai\/marketing\/.+\.webp$/);
+    expect(meta(html, "twitter:card")).toBe("summary_large_image");
+    expect(html).not.toMatch(/twitter:(site|creator)/);
+
+    const image = await request.get(new URL(meta(html, "og:image")!).pathname);
+    expect(image.status()).toBe(200);
+
+    const types = jsonLd(html).map(item => item["@type"]);
+    expect(types).toEqual(expect.arrayContaining(["WebSite", "Organization"]));
+    expect(types.includes("FAQPage")).toBe(path === "/");
+    const organization = jsonLd(html).find(item => item["@type"] === "Organization");
+    expect(Object.keys(organization).sort()).toEqual(["@id", "@type", "logo", "name", "url"]);
+  });
+}
+
+test("the homepage FAQ schema matches the visible questions and answers", async ({ page, request }) => {
+  const html = await (await request.get("/")).text();
+  const faq = jsonLd(html).find(item => item["@type"] === "FAQPage");
+  await page.goto("/");
+  const visible = await page.locator("#vragen details").evaluateAll(items => items.map(item => ({
+    question: item.querySelector("summary")?.textContent?.trim(),
+    answer: [...item.querySelectorAll("p")].map(paragraph => paragraph.textContent?.trim()).join(" "),
+  })));
+  expect(visible).toHaveLength(8);
+  expect(faq.mainEntity.map((item: { name: string; acceptedAnswer: { text: string } }) => ({ question: item.name, answer: item.acceptedAnswer.text }))).toEqual(visible);
+  expect(visible.at(-1)?.answer).toBe("Open je persoonlijke uitnodigingslink om toegang te krijgen tot de testomgeving.");
+});
+
+test("the production host is not marked noindex", async ({ request }) => {
+  const response = await request.get("/", { headers: { host: "nauvi.ai" } });
+  expect(response.status()).toBe(200);
+  expect(response.headers()["x-robots-tag"]).toBeUndefined();
+});
+
+test("unknown paths still answer 404", async ({ request }) => {
+  expect((await request.get("/niet-bestaand-pad-xyz", { maxRedirects: 0 })).status()).toBe(404);
+});
+
+test("the privacy page shows its open facts and restates only the homepage FAQ", async ({ page }) => {
+  await page.goto("/privacy");
+  await expect(page).toHaveTitle("Privacy | Nauvi");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 1, name: "Privacy" })).toBeVisible();
+  await expect(main.getByRole("heading", { level: 2 })).toHaveText(["Wie we zijn", "Welke gegevens we verwerken", "Waar gegevens staan", "Hoe lang we gegevens bewaren", "Cookies", "Contact over privacy"]);
+  for (const fact of ["wettelijke naam", "ondernemingsnummer", "BTW-nummer", "adres", "welke gegevens, voor welke doelen", "overige verwerkers", "welke cookies, waarvoor, hoe je ze weigert", "privacy-e-mail of ander contactpunt"]) {
+    await expect(main.getByText(`[TE BEVESTIGEN: ${fact}]`, { exact: true })).toBeVisible();
+  }
+  await expect(main.getByText(/Hetzner in Duitsland/)).toBeVisible();
+  await expect(main.getByText(/uiterlijk 12 maanden na het einde van de samenwerking/)).toBeVisible();
+  await expect(main.getByRole("link", { name: "contactpagina" })).toHaveAttribute("href", "/contact");
+  await expect(main.locator("form")).toHaveCount(0);
+});
+
+test("the contact page opens the existing booking dialog and shows its open facts", async ({ page }) => {
+  await page.route("https://calendly.com/**", route => route.abort());
+  await page.goto("/contact");
+  await expect(page).toHaveTitle("Contact | Nauvi");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 1, name: "Contact" })).toBeVisible();
+  for (const fact of ["e-mail", "telefoon", "adres", "ondernemingsnummer / BTW"]) {
+    await expect(main.getByText(`[TE BEVESTIGEN: ${fact}]`, { exact: true })).toBeVisible();
+  }
+  await expect(main.getByRole("link", { name: "privacypagina" })).toHaveAttribute("href", "/privacy");
+  await expect(main.locator("form")).toHaveCount(0);
+  await expect(main.getByRole("button")).toHaveCount(1);
+  await main.getByRole("button", { name: "Plan een kennismaking", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Plan een kennismaking" })).toBeVisible();
+});
+
+test("the about page sends contact to /contact", async ({ page }) => {
+  await page.goto("/over-nauvi");
+  await expect(page.getByRole("link", { name: "Naar contact" })).toHaveAttribute("href", "/contact");
 });
 
 test("desktop hover switches between the solutions and company menus, and Escape dismisses the menu", async ({ page }) => {

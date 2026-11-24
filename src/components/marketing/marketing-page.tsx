@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, CalendarDays, Check, Plus, RefreshCw, Video, X } from "lucide-react";
+import { homeFaq } from "@/lib/seo";
 import { calendlyEmbedUrl, marketingConfig } from "./site-config";
 import { NauviWordmark } from "./nauvi-brand";
 import { AboutChapter, ApplicationCarousel, ApplicationTabs, Hero, PlatformChapter, Statement, ToolLogos } from "./cinematic-home";
@@ -11,52 +12,19 @@ import s from "./marketing.module.css";
 import cinematic from "./cinematic.module.css";
 import brain from "./brain-platform.module.css";
 
-const faqs = [
-  {
-    question: "Koop ik software of nemen jullie werk over?",
-    answer: <>
-      <p>We nemen afgesproken taken over met AI-agents. In Nauvi leggen we vast hoe je bedrijf werkt, zodat de agents jouw werkwijze kunnen volgen.</p>
-      <p>We kiezen samen een eerste taak en spreken af hoe we het resultaat controleren. De kostprijs bepalen we per opdracht.</p>
-    </>,
-  },
-  {
-    question: "Is dit iets voor ons?",
-    answer: <p>Nauvi is er voor kmo’s waar kennis verspreid zit over collega’s, mails en documenten. Je hebt geen ervaring met AI-agents nodig. In de kennismaking bekijken we welke taak je als eerste kunt uitbesteden.</p>,
-  },
-  {
-    question: "Moeten we alles omgooien?",
-    answer: <p>We vertrekken van hoe je team vandaag werkt. We beginnen met één taak en bekijken samen wat er voor die taak moet veranderen.</p>,
-  },
-  {
-    question: "Werkt het met onze tools?",
-    answer: <p>Onze ontwikkelaars bouwen koppelingen op maat. Welke koppelingen nodig en haalbaar zijn, hangt af van je tools en de taak die je wilt uitbesteden.</p>,
-  },
-  {
-    question: "Waar bewaren jullie onze gegevens?",
-    answer: <>
-      <p>Je klantomgeving draait bij Hetzner in Duitsland. We maken back-ups van de database, zodat we die bij een storing kunnen herstellen.</p>
-      <p>Voor de start spreken we af wie toegang krijgt en welke bronnen een agent mag gebruiken.</p>
-    </>,
-  },
-  {
-    question: "Welk AI-model gebruiken jullie?",
-    answer: <>
-      <p>We gebruiken momenteel Claude van Anthropic. Gegevens die we voor een taak aan Claude doorgeven, kunnen buiten de EU worden verwerkt en opgeslagen.</p>
-      <p>Anthropic gebruikt invoer en antwoorden uit zijn zakelijke diensten standaard niet voor modeltraining. We willen overstappen zodra een Europees model onze taken even betrouwbaar kan uitvoeren.</p>
-    </>,
-  },
-  {
-    question: "Hoelang bewaren jullie onze gegevens?",
-    answer: <>
-      <p>We verwijderen de klantgegevens die we zelf bewaren zodra we ze niet meer nodig hebben. Dat doen we uiterlijk 12 maanden na het einde van de samenwerking.</p>
-      <p>Je kunt je vastgelegde bedrijfskennis controleren en exporteren. Je kunt ons ook vragen om je gegevens eerder te verwijderen.</p>
-    </>,
-  },
-  {
-    question: "Hoe krijg ik toegang als testgebruiker?",
-    answer: <p>Open je persoonlijke uitnodigingslink om toegang te krijgen tot de testomgeving.</p>,
-  },
-];
+// The answers live in @/lib/seo so the FAQPage schema always matches the visible text.
+const faqs = homeFaq.map(({ question, answer }) => ({
+  question,
+  answer: answer.map(paragraph => <p key={paragraph}>{paragraph}</p>),
+}));
+
+/** Opens the shell's existing "Plan een kennismaking" dialog from page content. */
+const BookingContext = createContext<(() => void) | null>(null);
+
+export function BookingButton({ className, children }: { className?: string; children: ReactNode }) {
+  const openBooking = useContext(BookingContext);
+  return <button type="button" className={className} onClick={() => openBooking?.()}>{children}</button>;
+}
 
 function Host() {
   return (
@@ -98,7 +66,7 @@ export function MarketingShell({ children, className, darkHeader = false, closin
     dialog.current?.close();
   }
 
-  return <div className={`${s.page} ${cinematic.site}${className ? ` ${className}` : ""}`}>
+  return <BookingContext.Provider value={openBooking}><div className={`${s.page} ${cinematic.site}${className ? ` ${className}` : ""}`}>
     <a className={s.skip} href="#main">Naar de inhoud</a>
     <CinematicNav overlay={home || darkHeader} onBooking={openBooking} />
     <main id="main">
@@ -152,7 +120,7 @@ export function MarketingShell({ children, className, darkHeader = false, closin
         </div>
       </div>
     </dialog>
-  </div>;
+  </div></BookingContext.Provider>;
 }
 
 export default function MarketingPage() {

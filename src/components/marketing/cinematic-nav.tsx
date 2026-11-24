@@ -317,6 +317,8 @@ export function CinematicFooter({ onBooking }: { onBooking: () => void }) {
           <Link href="/over-nauvi">Over ons</Link>
           <Link href="/careers">Werken bij Nauvi</Link>
           <Link href="/#vragen">Veelgestelde vragen</Link>
+          <Link href="/contact">Contact</Link>
+          <Link href="/privacy">Privacy</Link>
         </nav>
       </div>
       <div className={s.footerWordmark} aria-hidden="true"><NauviWordmark /></div>
