@@ -107,12 +107,28 @@ section.disciplines :is(h2, h3) {
   font-size: 15px;
 }
 
-.openings > div {
+.openings ul {
+  display: grid;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.openings li {
   display: grid;
   justify-items: start;
-  gap: 22px;
-  padding-top: 12px;
+  gap: 12px;
+  padding-top: 20px;
   border-top: 1px solid #dedede;
+}
+
+.openings h3 {
+  font-size: clamp(26px, 3vw, 41px);
+}
+
+.openings li a {
+  margin-top: 6px;
 }
 
 @media (max-width: 650px) {

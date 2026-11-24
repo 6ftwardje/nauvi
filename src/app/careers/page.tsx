@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
 import { MarketingShell } from "@/components/marketing/marketing-page";
@@ -8,7 +7,7 @@ import s from "./careers.module.css";
 
 export const metadata: Metadata = {
   title: "Werken bij Nauvi",
-  description: "Leer het werk achter Nauvi kennen en bekijk onze vacatures.",
+  description: "Bekijk de vacatures Sales en Forward Deployed Engineer bij Nauvi. Help kmo’s terugkerend werk uit handen geven met AI-agents.",
 };
 
 const work = [
@@ -17,11 +16,20 @@ const work = [
   { title: "Product & ontwerp", text: "Maak het voor teams eenvoudig om kennis vast te leggen en te zien welk werk hun aandacht nodig heeft." },
 ];
 
+const openings = [
+  {
+    title: "Sales",
+    text: "Je gaat in gesprek met zaakvoerders en teams bij bouwbedrijven. Je ontdekt waar ze tijd verliezen, laat zien wat Nauvi kan overnemen en begeleidt hen van het eerste gesprek tot een voorstel voor een eerste toepassing.",
+  },
+  {
+    title: "Forward Deployed Engineer",
+    text: "Je werkt rechtstreeks met klanten. Je brengt hun werkwijze in kaart, bouwt AI-agents en koppelt die aan hun bestaande tools. Met het team van de klant test je of de agent het werk goed uitvoert en stuur je bij waar nodig.",
+  },
+];
+
 export default function CareersPage() {
   const address = process.env.NAUVI_CAREERS_EMAIL?.trim();
-  const applicationUrl = address && /^[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(address)
-    ? `mailto:${address}?subject=${encodeURIComponent("Open sollicitatie bij Nauvi")}`
-    : undefined;
+  const canApplyByEmail = address && /^[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(address);
 
   return (
     <MarketingShell>
@@ -52,14 +60,23 @@ export default function CareersPage() {
 
       <section className={s.openings} id="vacatures" aria-labelledby="openings-heading">
         <h2 id="openings-heading">Vacatures</h2>
-        <div>
-          <p>Op dit moment staan er geen vacatures op deze pagina.</p>
-          {applicationUrl ? (
-            <a className={shared.darkButton} href={applicationUrl}>Stuur een open sollicitatie <ArrowUpRight size={15} aria-hidden="true" /></a>
-          ) : (
-            <Link className={shared.darkButton} href="/over-nauvi">Leer Nauvi kennen <ArrowRight size={15} aria-hidden="true" /></Link>
-          )}
-        </div>
+        <ul>
+          {openings.map(({ title, text }) => (
+            <li key={title}>
+              <h3>{title}</h3>
+              <p>{text}</p>
+              {canApplyByEmail && (
+                <a
+                  className={shared.darkButton}
+                  href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
+                  aria-label={`Solliciteer voor ${title}`}
+                >
+                  Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
     </MarketingShell>
   );

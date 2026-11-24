@@ -141,11 +141,9 @@
 
 .headerActions {
   margin-left: auto;
-  gap: 22px;
 }
 
-.desktopNav a:hover,
-.headerActions > a:hover {
+.desktopNav a:hover {
   text-decoration: underline;
 }
 

@@ -8,6 +8,9 @@ export default defineConfig({
   webServer: {
     command: "npm run dev -- --port 4411",
     url: baseURL,
-    env: { SYNAPS_APP_URL: "https://synaps.example.test/app" },
+    env: {
+      SYNAPS_APP_URL: "https://synaps.example.test/app",
+      NAUVI_CAREERS_EMAIL: "careers@example.test",
+    },
   },
 });

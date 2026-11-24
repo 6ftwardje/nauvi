@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     question: "Hoe krijg ik toegang als testgebruiker?",
-    answer: <p>Open je persoonlijke uitnodigingslink om toegang te krijgen tot de testomgeving. Heb je in deze browser al een actieve sessie? Dan kun je via ‘Inloggen’ verderwerken.</p>,
+    answer: <p>Open je persoonlijke uitnodigingslink om toegang te krijgen tot de testomgeving.</p>,
   },
 ];
 
