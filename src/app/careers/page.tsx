@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
 import { MarketingShell } from "@/components/marketing/marketing-page";
+import { marketingConfig } from "@/components/marketing/site-config";
 import shared from "@/components/marketing/cinematic.module.css";
 import s from "./careers.module.css";
 
@@ -28,8 +29,10 @@ const openings = [
 ];
 
 export default function CareersPage() {
-  const address = process.env.NAUVI_CAREERS_EMAIL?.trim();
-  const canApplyByEmail = address && /^[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(address);
+  const configuredAddress = process.env.NAUVI_CAREERS_EMAIL?.trim() ?? "";
+  const address = /^[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(configuredAddress)
+    ? configuredAddress
+    : marketingConfig.careersEmail;
 
   return (
     <MarketingShell>
@@ -65,15 +68,13 @@ export default function CareersPage() {
             <li key={title}>
               <h3>{title}</h3>
               <p>{text}</p>
-              {canApplyByEmail && (
-                <a
-                  className={shared.darkButton}
-                  href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
-                  aria-label={`Solliciteer voor ${title}`}
-                >
-                  Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
-              )}
+              <a
+                className={shared.darkButton}
+                href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
+                aria-label={`Solliciteer voor ${title}`}
+              >
+                Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
             </li>
           ))}
         </ul>
