@@ -36,6 +36,7 @@ const navigation = [
     links: [
       { label: "Over ons", href: "/over-nauvi", description: "Leer Nauvi kennen" },
       { label: "Werken bij Nauvi", href: "/careers", description: "Bouw mee aan AI voor het dagelijkse werk" },
+      { label: "Contact", href: "/contact", description: "Plan een kennismaking of stuur een mail" },
     ],
     features: [
       { image: photos.team, title: "Leer Nauvi kennen", href: "/over-nauvi" },
@@ -286,6 +287,7 @@ export function CinematicNav({ onBooking, overlay }: { onBooking: () => void; ov
           </div>
         ))}
         <Link href="/careers" onClick={closeMenus}>Werken bij Nauvi <ArrowUpRight size={19} aria-hidden="true" /></Link>
+        <Link href="/contact" onClick={closeMenus}>Contact <ArrowUpRight size={19} aria-hidden="true" /></Link>
         <button type="button" className={s.darkButton} onClick={book}>Plan een kennismaking</button>
       </nav>
     </header>
@@ -317,6 +319,8 @@ export function CinematicFooter({ onBooking }: { onBooking: () => void }) {
           <Link href="/over-nauvi">Over ons</Link>
           <Link href="/careers">Werken bij Nauvi</Link>
           <Link href="/#vragen">Veelgestelde vragen</Link>
+          <Link href="/contact">Contact</Link>
+          <Link href="/privacy">Privacy</Link>
         </nav>
       </div>
       <div className={s.footerWordmark} aria-hidden="true"><NauviWordmark /></div>

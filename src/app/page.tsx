@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import MarketingPage from "@/components/marketing/marketing-page";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/" },
   title: "Nauvi — Je bedrijf klaar voor AI-agents",
   description: "Jij deelt hoe je bedrijf werkt. Wij brengen je kennis samen in je Company Brain en bouwen agents die taken overnemen. Plan een kennismaking.",
 };

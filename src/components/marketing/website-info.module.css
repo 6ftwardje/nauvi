@@ -1,0 +1,89 @@
+.contact,
+.privacy {
+  padding: 0 var(--edge) clamp(65px, 9vw, 130px);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(30px, 6vw, 100px);
+  max-width: calc(var(--chapter-width) + 2 * var(--edge));
+}
+
+.contact > section {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 14px;
+  border-top: 1px solid #dedede;
+  padding-top: 23px;
+}
+
+.contact h2,
+.privacy h2 {
+  font-size: clamp(25px, 3vw, 36px);
+  text-wrap: initial;
+}
+
+.contact p,
+.privacy p {
+  color: #383838;
+  font-size: clamp(15px, 1.2vw, 17px);
+  line-height: 1.75;
+}
+
+.contact p {
+  max-width: 46ch;
+}
+
+.host {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.host img {
+  display: block;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
+.host strong,
+.host span {
+  display: block;
+}
+
+.host span {
+  color: #555;
+  font-size: 13px;
+}
+
+.contact .textLink,
+.privacy section a {
+  text-decoration: underline;
+  text-underline-offset: .18em;
+  overflow-wrap: anywhere;
+}
+
+.contact .note {
+  font-size: 14px;
+}
+
+.privacy {
+  display: grid;
+  gap: 30px;
+}
+
+.privacy > section {
+  display: grid;
+  gap: 10px;
+  max-width: 68ch;
+  border-top: 1px solid #dedede;
+  padding-top: 21px;
+}
+
+@media (max-width: 700px) {
+  .contact {
+    grid-template-columns: 1fr;
+  }
+}

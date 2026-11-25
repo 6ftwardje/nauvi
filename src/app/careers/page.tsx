@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
 import { MarketingShell } from "@/components/marketing/marketing-page";
@@ -7,6 +8,7 @@ import shared from "@/components/marketing/cinematic.module.css";
 import s from "./careers.module.css";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/careers" },
   title: "Werken bij Nauvi",
   description: "Bekijk de vacatures Sales en Forward Deployed Engineer bij Nauvi. Help kmo’s terugkerend werk uit handen geven met AI-agents.",
 };
@@ -63,21 +65,24 @@ export default function CareersPage() {
 
       <section className={s.openings} id="vacatures" aria-labelledby="openings-heading">
         <h2 id="openings-heading">Vacatures</h2>
-        <ul>
-          {openings.map(({ title, text }) => (
-            <li key={title}>
-              <h3>{title}</h3>
-              <p>{text}</p>
-              <a
-                className={shared.darkButton}
-                href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
-                aria-label={`Solliciteer voor ${title}`}
-              >
-                Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <ul>
+            {openings.map(({ title, text }) => (
+              <li key={title}>
+                <h3>{title}</h3>
+                <p>{text}</p>
+                <a
+                  className={shared.darkButton}
+                  href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
+                  aria-label={`Solliciteer voor ${title}`}
+                >
+                  Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+          <Link className={s.privacyLink} href="/privacy#sollicitaties">Privacy bij sollicitaties</Link>
+        </div>
       </section>
     </MarketingShell>
   );

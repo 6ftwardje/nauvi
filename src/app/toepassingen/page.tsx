@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ApplicationsPage } from "@/components/marketing/cinematic-subpage";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/toepassingen" },
   title: "AI voor bouwbedrijven | Nauvi",
   description: "Bekijk toepassingen voor offertes, werfverslagen, leveranciers en facturatie.",
 };

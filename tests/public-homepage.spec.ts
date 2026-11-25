@@ -13,6 +13,7 @@ test("login redirects to Synaps and forwards only invitation parameters", async 
   const login = await request.get("/app", { maxRedirects: 0 });
   expect(login.status()).toBe(307);
   expect(login.headers().location).toBe("https://synaps.example.test/app");
+  expect(login.headers()["x-robots-tag"]).toContain("noindex");
 
   for (const key of ["invite", "token"]) {
     const incoming = `/?${key}=fictional%2Broute%2Fcheck&campaign=nauvi`;
@@ -25,6 +26,46 @@ test("login redirects to Synaps and forwards only invitation parameters", async 
     expect(direct.headers().location).toBe(`https://synaps.example.test/app?${key}=fictional%2Broute%2Fcheck`);
     expect(direct.headers()["cache-control"]).toBe("no-store");
   }
+});
+
+test("the sitemap lists public canonical pages and robots advertises the sitemap", async ({ request }) => {
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.ok()).toBe(true);
+  const urls = [...(await sitemap.text()).matchAll(/<loc>(.*?)<\/loc>/g)].map(([, url]) => url);
+  expect(new Set(urls).size).toBe(urls.length);
+  expect(urls).toEqual(expect.arrayContaining([
+    "https://nauvi.ai/",
+    "https://nauvi.ai/contact",
+    "https://nauvi.ai/privacy",
+    "https://nauvi.ai/toepassingen/werfverslagen-maken",
+  ]));
+  expect(urls).not.toContain("https://nauvi.ai/app");
+
+  const robots = await request.get("/robots.txt");
+  expect(robots.ok()).toBe(true);
+  expect(await robots.text()).toContain("Sitemap: https://nauvi.ai/sitemap.xml");
+
+  for (const url of urls) {
+    const { origin, pathname } = new URL(url);
+    expect(origin).toBe("https://nauvi.ai");
+    const response = await request.get(pathname, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    const canonicals = [...(await response.text()).matchAll(/<link rel="canonical" href="([^"]+)"/g)]
+      .map(([, href]) => new URL(href).href);
+    expect(canonicals).toEqual([url]);
+  }
+});
+
+test("the footer opens Contact with booking and email, and links through to Privacy", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("contentinfo").getByRole("link", { name: "Contact", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Contact" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Kies een moment via Calendly" })).toHaveAttribute("href", /^https:\/\/calendly\.com\//);
+  await expect(page.getByRole("link", { name: "hello@nauvi.ai", exact: true })).toHaveAttribute("href", "mailto:hello@nauvi.ai");
+  await page.getByRole("main").getByRole("link", { name: "privacyverklaring", exact: true }).click();
+  await expect(page).toHaveURL(/\/privacy$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Privacy" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "hello@nauvi.ai", exact: true }).first()).toHaveAttribute("href", "mailto:hello@nauvi.ai");
 });
 
 test("desktop hover switches between the solutions and company menus, and Escape dismisses the menu", async ({ page }) => {
@@ -101,6 +142,9 @@ test("the mobile navigation opens the careers page and the vacancies section", a
     .toHaveAttribute("href", "mailto:careers@example.test?subject=Sollicitatie%20voor%20Sales%20bij%20Nauvi");
   await expect(openings.getByRole("link", { name: "Solliciteer voor Forward Deployed Engineer" }))
     .toHaveAttribute("href", "mailto:careers@example.test?subject=Sollicitatie%20voor%20Forward%20Deployed%20Engineer%20bij%20Nauvi");
+  await openings.getByRole("link", { name: "Privacy bij sollicitaties" }).click();
+  await expect(page).toHaveURL(/\/privacy#sollicitaties$/);
+  await expect(page.getByRole("heading", { name: "Sollicitaties", exact: true })).toBeInViewport();
 });
 
 test("the product walkthrough follows the hero and preserves edited approvals when switching demos", async ({ page }) => {

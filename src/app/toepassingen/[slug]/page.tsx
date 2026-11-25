@@ -13,7 +13,11 @@ export async function generateMetadata({ params }: ApplicationProps): Promise<Me
   const { slug } = await params;
   const application = applications.find(item => item.slug === slug);
   if (!application) notFound();
-  return { title: `${application.title} | Nauvi`, description: application.description };
+  return {
+    title: `${application.title} | Nauvi`,
+    description: application.description,
+    alternates: { canonical: `/toepassingen/${application.slug}` },
+  };
 }
 
 export default async function ApplicationPage({ params }: ApplicationProps) {
