@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ApplicationDemoHero } from "./application-demo";
+import { SiteReportExample } from "./site-report-example";
 import { applicationCategories, applications, photos, processSteps } from "./cinematic-content";
 import { ApplicationCard } from "./cinematic-home";
 import { MarketingShell } from "./marketing-page";
@@ -67,6 +69,15 @@ export function ApplicationsPage() {
 }
 
 export function ApplicationDetail({ application }: { application: typeof applications[number] }) {
+  if (application.slug === "werfverslagen-maken") {
+    return (
+      <MarketingShell>
+        <ApplicationDemoHero {...application} />
+        <SiteReportExample />
+      </MarketingShell>
+    );
+  }
+
   return (
     <MarketingShell>
       <MarketingIntro title={application.title} description={application.description} back={{ href: "/toepassingen", label: "Alle toepassingen" }} />

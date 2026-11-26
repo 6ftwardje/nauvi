@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: ApplicationProps): Promise<Me
   const application = applications.find(item => item.slug === slug);
   if (!application) notFound();
   return {
-    title: `${application.title} | Nauvi`,
-    description: application.description,
+    title: application.seo?.title ?? `${application.title} | Nauvi`,
+    description: application.seo?.description ?? application.description,
     alternates: { canonical: `/toepassingen/${application.slug}` },
   };
 }

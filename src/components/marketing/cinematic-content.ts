@@ -34,6 +34,10 @@ export const applications = [
     image: "/marketing/solutions/solution-voice-to-report.webp",
     description: "Spreek je update in op de werf. Een agent gebruikt je opname en werffoto’s om een verslag op te stellen volgens jullie werkwijze.",
     result: "Een werfverslag met de afgesproken actiepunten.",
+    seo: {
+      title: "Werfverslag maken met spraak en foto’s | Nauvi",
+      description: "Maak een werfverslag uit spraak en foto’s. Beluister de werfnotitie, bekijk de actiepunten en download het ingevulde voorbeeld of het Word-sjabloon.",
+    },
   },
   {
     slug: "leveranciers-vergelijken",
