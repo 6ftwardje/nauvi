@@ -26,6 +26,10 @@ export const applications = [
     image: "/marketing/solutions/solution-quotation-preparation.webp",
     description: "Een agent leest het bestek, haalt de posten eruit en past je prijslijsten en offertemodel toe.",
     result: "Een conceptofferte die je team kan nakijken.",
+    seo: {
+      title: "Bouwofferte voorbereiden vanuit je bestek | Nauvi",
+      description: "Bekijk hoe een AI-agent bestekposten en je prijslijst omzet in een conceptofferte. Met een rekenvoorbeeld en controlepunten voor je team.",
+    },
   },
   {
     slug: "werfverslagen-maken",

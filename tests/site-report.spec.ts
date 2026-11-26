@@ -56,5 +56,5 @@ test("the site report demo connects its sources, review and downloads", async ({
   const report = page.getByRole("region", { name: "Een werfverslag maken uit spraak en foto’s" });
   await expect(report.getByRole("link", { name: "Plan een kennismaking" })).toHaveAttribute("href", "/contact");
   await expect(report.getByRole("link", { name: "Bekijk onze werkwijze" })).toHaveAttribute("href", "/werkwijze");
-  await expect(report.getByRole("link", { name: "Bekijk Offertes voorbereiden" })).toHaveAttribute("href", "/toepassingen/offertes-voorbereiden");
+  await expect(report.getByRole("link", { name: "Bekijk het offertevoorbeeld" })).toHaveAttribute("href", "/toepassingen/offertes-voorbereiden#voorbeeld");
 });

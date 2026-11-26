@@ -1,0 +1,609 @@
+.hero,
+.quote {
+  --demo-width: 1180px;
+}
+
+.hero {
+  --demo-hero-columns: minmax(0, .96fr) minmax(0, 1.04fr);
+  --demo-hero-title-size: clamp(48px, 5.2vw, 70px);
+  --demo-hero-mobile-title-size: clamp(37px, 10vw, 48px);
+  --demo-hero-description-width: 42ch;
+  --demo-hero-image-ratio: 1.56;
+}
+
+.quote {
+  --demo-cta-columns: minmax(0, 1.45fr) minmax(218px, .65fr);
+}
+
+.hero[aria-labelledby] p {
+  line-height: 1.6;
+}
+
+.hero[aria-labelledby] img {
+  object-position: center 55%;
+}
+
+.hero[aria-labelledby] a:first-child {
+  margin-inline-start: -6px;
+  padding-inline: 6px;
+  border-radius: 7px;
+  transition: background-color .17s, color .17s;
+}
+
+.hero[aria-labelledby] a:first-child:is(:hover, :focus-visible) {
+  color: var(--ink);
+  background: var(--linen);
+}
+
+.quote h2[id="example-title"] {
+  max-width: 31ch;
+}
+
+@media (min-width: 881px) {
+  .quote h2[id="example-title"] {
+    font-size: clamp(32px, 3.55vw, 44px);
+    text-wrap: balance;
+  }
+}
+
+.quote > div:has(> h2[id="example-title"]) {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(26px, 4vw, 56px);
+}
+
+.illustration {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(11px, 2vw, 19px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--linen);
+}
+
+.illustration figcaption {
+  margin-bottom: 9px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.equation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr) auto) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(3px, .8vw, 9px);
+}
+
+.illustration .equation a {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  gap: 3px;
+  min-height: 58px;
+  padding: 6px clamp(4px, 1.1vw, 12px);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background-color .17s;
+}
+
+.illustration .equation a:last-child,
+.illustration .equation a:is(:hover, :focus-visible) {
+  background: var(--bone);
+}
+
+.equation a > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.equation strong {
+  font-size: clamp(14px, 1.65vw, 19px);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.operator {
+  display: grid;
+  place-items: center;
+  color: var(--label);
+}
+
+.operator svg {
+  width: clamp(12px, 1.4vw, 15px);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .illustration[data-quote-illustrated] .equation a::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: inherit;
+    background: var(--bone);
+    opacity: 0;
+    content: "";
+    pointer-events: none;
+    animation: quote-trace .44s ease-out;
+  }
+
+  .illustration[data-quote-illustrated] .equation a:nth-of-type(2)::before {
+    animation-delay: .18s;
+  }
+
+  .illustration[data-quote-illustrated] .equation a:nth-of-type(3)::before {
+    animation-delay: .36s;
+  }
+
+  @keyframes quote-trace {
+    0%, 100% { opacity: 0; }
+    34%, 60% { opacity: 1; }
+  }
+}
+
+@media (max-width: 880px) {
+  .quote > div:has(> h2[id="example-title"]) {
+    grid-template-columns: 1fr;
+  }
+
+  .illustration {
+    grid-column: auto;
+    grid-row: auto;
+    width: min(100%, 690px);
+    margin-top: 6px;
+  }
+}
+
+.workflow {
+  grid-column: 1;
+  margin-top: clamp(9px, 1.35vw, 16px);
+  max-width: 690px;
+}
+
+.workflow ol {
+  --step-arrow-width: clamp(11px, 2.2vw, 28px);
+  display: grid;
+  grid-template-columns: repeat(2, calc((100% + var(--step-arrow-width)) / 3)) minmax(0, 1fr);
+  margin: 0;
+  padding: 4px;
+  border-radius: 11px;
+  background: var(--linen);
+  list-style: none;
+}
+
+.workflow li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--step-arrow-width);
+  align-items: center;
+  max-width: none;
+}
+
+.workflow li:last-child {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workflow a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 10px);
+  min-height: 44px;
+  padding: 4px clamp(3px, 1.15vw, 13px);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: clamp(13px, 1.22vw, 15px);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color .17s, color .17s;
+}
+
+.stepSymbols {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--label);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepSymbols svg {
+  flex: none;
+}
+
+.workflow a:is(:hover, :focus-visible) {
+  color: var(--ink);
+  background: var(--white);
+}
+
+.workflow a[aria-current="location"] {
+  color: var(--ink);
+  background: var(--bone);
+}
+
+.workflowArrow {
+  justify-self: center;
+  width: clamp(10px, 1.35vw, 14px);
+  height: auto;
+  color: var(--label);
+  pointer-events: none;
+}
+
+.reference {
+  white-space: nowrap;
+}
+
+.sources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(14px, 2.8vw, 32px);
+}
+
+.source {
+  min-width: 0;
+  padding: clamp(13px, 2.2vw, 24px);
+  border-radius: 12px;
+  background: var(--linen);
+}
+
+.sourceHeading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+}
+
+.documentIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bone);
+  color: var(--ink);
+}
+
+.source .sourceHeading h4 {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 1.4;
+}
+
+.source .sourceHeading p {
+  margin-top: 3px;
+  color: var(--label);
+  font-size: 14px;
+}
+
+.source ul.sourceLines {
+  gap: 0;
+  margin-top: 13px;
+  padding: 0;
+  list-style: none;
+}
+
+.source .sourceLines li {
+  display: grid;
+  grid-template-columns: 5ch minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  max-width: none;
+  padding: 9px 6px;
+  border-top: 1px solid var(--border);
+  color: var(--ink);
+  font-size: 14px;
+  scroll-margin-top: calc(var(--nav-height) + var(--strip-height) + 14px);
+}
+
+.source .sourceLines li:is(:target, [data-quote-match]) {
+  border-color: transparent;
+  border-radius: 7px;
+  background: var(--bone);
+}
+
+.source .sourceLines li:is(:target, :focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.sourceLines .code,
+.sourceLines small {
+  color: var(--label);
+  font-size: 13px;
+}
+
+.sourceLines small {
+  display: block;
+  margin-top: 2px;
+}
+
+.sourceLines .value {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.openStatus {
+  justify-self: end;
+  padding-inline: 6px;
+  border-radius: 5px;
+  background: var(--bone);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.quote [id="demo-output-title"] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px 12px;
+}
+
+.documentReference {
+  color: var(--muted);
+  font-family: Inter, sans-serif;
+  font-size: clamp(14px, 1.6vw, 19px);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+.calculation table[data-columns="4"] :is(th, td) {
+  vertical-align: top;
+}
+
+.calculation table[data-columns="4"] thead th:first-child {
+  width: 49%;
+}
+
+.calculation table[data-columns="4"] td {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.calculation table[data-columns="4"] :is(td, th):not(:first-child) {
+  text-align: end;
+}
+
+.calculation table[data-columns="4"] tbody td:last-child {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.calculation table[data-columns="4"] tfoot :is(th, td) {
+  padding: 11px 13px;
+  border: 0;
+  background: var(--linen);
+  color: var(--ink);
+}
+
+.calculation table[data-columns="4"] tfoot th {
+  border-radius: 8px 0 0 8px;
+}
+
+.calculation table[data-columns="4"] tfoot td {
+  border-radius: 0 8px 8px 0;
+  font-size: clamp(18px, 1.9vw, 23px);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.lineItem {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+  scroll-margin-top: calc(var(--nav-height) + var(--strip-height) + 14px);
+}
+
+.lineItem:is(:target, :focus-visible) {
+  border-radius: 5px;
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.subtotalLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.sourceLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.postCode {
+  color: var(--label);
+  font-variant-numeric: tabular-nums;
+}
+
+.openLine {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 7px 15px;
+  margin-top: 3px;
+  padding: clamp(13px, 2.15vw, 21px);
+  border-radius: 10px;
+  background: var(--bone);
+}
+
+.quote .reviewStatus {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.openLine h5 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.openLine ul.missingInputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 7px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.openLine .missingInputs li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.quote .exclusion {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.openLine a {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 550;
+  text-decoration: none;
+  transition: background-color .17s;
+}
+
+.openLine a:is(:hover, :focus-visible) {
+  background: var(--linen);
+}
+
+.quote .downloads {
+  gap: clamp(18px, 2.3vw, 26px);
+}
+
+.quote .downloads a {
+  min-height: 70px;
+}
+
+.quote [id="demo-nazicht"] {
+  row-gap: 13px;
+}
+
+@media (max-width: 760px) {
+  .sources {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .workflow a {
+    flex-direction: column;
+    gap: 2px;
+    min-height: 49px;
+  }
+
+  .stepSymbols svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .calculation table[data-columns="4"] tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+  }
+
+  .calculation table[data-columns="4"] tbody th {
+    grid-column: 1 / -1;
+  }
+
+  .calculation table[data-columns="4"] tbody td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .calculation table[data-columns="4"] tbody td + td::before {
+    content: none;
+  }
+
+  .calculation table[data-columns="4"] td > span:first-child {
+    display: block;
+    color: var(--label);
+    font-size: 13px;
+  }
+
+  .calculation table[data-columns="4"] tbody td:last-child {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  .calculation table[data-columns="4"] tfoot {
+    display: block;
+  }
+
+  .calculation table[data-columns="4"] tfoot tr {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    align-items: center;
+    margin-top: 9px;
+    padding: 12px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--linen);
+  }
+
+  .calculation table[data-columns="4"] tfoot :is(th, td) {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .openLine {
+    grid-template-columns: 1fr;
+  }
+}

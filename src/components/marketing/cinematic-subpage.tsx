@@ -6,11 +6,14 @@ import { SiteReportExample } from "./site-report-example";
 import { applicationCategories, applications, photos, processSteps } from "./cinematic-content";
 import { ApplicationCard } from "./cinematic-home";
 import { MarketingShell } from "./marketing-page";
+import { QuoteExample } from "./quote-example";
+import quoteStyles from "./quote-example.module.css";
 import { marketingConfig } from "./site-config";
 import s from "./cinematic.module.css";
 
 const directoryImageSizes = "(max-width: 523px) calc(100vw - 44px), (max-width: 580px) 92vw, (max-width: 1310px) 30vw, 391px";
 const detailImageSizes = "(max-width: 523px) calc(100vw - 44px), (max-width: 1904px) 92vw, calc(100vw - 160px)";
+const quoteImageSizes = "(max-width: 590px) calc(100vw - 44px), (max-width: 800px) 93vw, (max-width: 1280px) 48vw, 592px";
 
 export function MarketingIntro({ title, description, image, back }: {
   title: string;
@@ -73,7 +76,16 @@ export function ApplicationDetail({ application }: { application: typeof applica
     return (
       <MarketingShell>
         <ApplicationDemoHero {...application} />
-        <SiteReportExample />
+        <SiteReportExample related={{ href: "/toepassingen/offertes-voorbereiden#voorbeeld", label: "Bekijk het offertevoorbeeld" }} />
+      </MarketingShell>
+    );
+  }
+
+  if (application.slug === "offertes-voorbereiden") {
+    return (
+      <MarketingShell>
+        <ApplicationDemoHero {...application} className={quoteStyles.hero} imageSizes={quoteImageSizes} />
+        <QuoteExample />
       </MarketingShell>
     );
   }

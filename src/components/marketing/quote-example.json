@@ -1,0 +1,18 @@
+{
+  "project": "Afwerking gelijkvloers",
+  "reference": "OFF-26024",
+  "date": "24 november 2026",
+  "specificationVersion": "Revisie 02",
+  "priceListVersion": "Versie 03",
+  "lines": [
+    { "code": "01", "rateCode": "VL-01", "item": "Vloertegels plaatsen", "quantity": 120, "unit": "m²", "priceCents": 2850, "scope": "De klant levert de tegels." },
+    { "code": "02", "rateCode": "PL-01", "item": "Plinten plaatsen", "quantity": 36, "unit": "lm", "priceCents": 1200 },
+    { "code": "03", "rateCode": "WI-01", "item": "Werfinrichting", "quantity": 1, "unit": "forfait", "priceCents": 48000 }
+  ],
+  "openLine": {
+    "code": "04",
+    "item": "Egalisatie indien nodig",
+    "unit": "m²",
+    "scope": "Oppervlakte en tarief te bevestigen."
+  }
+}

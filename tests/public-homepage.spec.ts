@@ -38,6 +38,7 @@ test("the sitemap lists public canonical pages and robots advertises the sitemap
     "https://nauvi.ai/contact",
     "https://nauvi.ai/privacy",
     "https://nauvi.ai/toepassingen/werfverslagen-maken",
+    "https://nauvi.ai/toepassingen/offertes-voorbereiden",
   ]));
   expect(urls).not.toContain("https://nauvi.ai/app");
 
@@ -66,6 +67,38 @@ test("the footer opens Contact with booking and email, and links through to Priv
   await expect(page).toHaveURL(/\/privacy$/);
   await expect(page.getByRole("heading", { level: 1, name: "Privacy" })).toBeVisible();
   await expect(page.getByRole("link", { name: "hello@nauvi.ai", exact: true }).first()).toHaveAttribute("href", "mailto:hello@nauvi.ai");
+});
+
+test("the quote example traces prices to their source and offers downloads", async ({ page }) => {
+  await page.goto("/toepassingen/werfverslagen-maken#voorbeeld");
+  await page.getByRole("link", { name: "Bekijk het offertevoorbeeld" }).click();
+  await expect(page).toHaveURL(/\/toepassingen\/offertes-voorbereiden#voorbeeld$/);
+  await expect(page.getByRole("heading", { name: "Conceptofferte OFF-26024", exact: true })).toBeVisible();
+  const illustration = page.getByRole("figure", { name: "02 · Plinten plaatsen" });
+  await expect(illustration.getByRole("link", { name: /Bestekpost 02.*36 lm/ })).toHaveAttribute("href", "#bestek-post-02");
+  await expect(illustration.getByRole("link", { name: /Tarief PL-01.*12,00/ })).toHaveAttribute("href", "#tarief-pl-01");
+  await illustration.getByRole("link", { name: /Offertepost 02.*432,00/ }).press("Enter");
+  await expect(page).toHaveURL(/#offerte-post-02$/);
+  await expect(page.locator("#offerte-post-02")).toBeFocused();
+  const workflow = page.getByRole("navigation", { name: "Stappen in de productdemo" });
+  const conceptStep = workflow.getByRole("link", { name: "Concept", exact: true });
+  await conceptStep.press("Enter");
+  await expect(page).toHaveURL(/#demo-concept$/);
+  await expect(conceptStep).toHaveAttribute("aria-current", "location");
+  const quote = page.getByRole("table", { name: "Berekende offerteposten" });
+  await expect(quote.getByText(/4[.\s]?332,00/)).toBeVisible();
+  await quote.getByRole("link", { name: "Bestekpost 01", exact: true }).click();
+  await expect(page).toHaveURL(/#bestek-post-01$/);
+  await expect(page.locator('[data-quote-post="01"][data-quote-match]')).toHaveCount(2);
+  await expect(workflow.getByRole("link", { name: "Invoer", exact: true })).toHaveAttribute("aria-current", "location");
+  await quote.getByRole("link", { name: "Tarief VL-01", exact: true }).click();
+  await expect(page).toHaveURL(/#tarief-vl-01$/);
+  await expect(page.getByText("De post staat buiten het subtotaal.", { exact: false })).toBeVisible();
+  for (const [name, filename] of [["Conceptofferte PDF", "conceptofferte-gelijkvloers.pdf"], ["Calculatieblad Excel", "calculatieblad-gelijkvloers.xlsx"]] as const) {
+    const [download] = await Promise.all([page.waitForEvent("download"), page.getByRole("link", { name, exact: true }).click()]);
+    expect(download.suggestedFilename()).toBe(filename);
+  }
+  await expect(page.getByRole("heading", { name: "Wat je team controleert" })).toBeVisible();
 });
 
 test("desktop hover switches between the solutions and company menus, and Escape dismisses the menu", async ({ page }) => {

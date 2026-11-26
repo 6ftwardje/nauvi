@@ -1,15 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Download, FileText, FileType } from "lucide-react";
+import type { ComponentType, ReactNode } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Download, FileSpreadsheet, FileText, FileType } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import shared from "./cinematic.module.css";
 import s from "./application-examples.module.css";
 
 const demoImageSizes = "(max-width: 590px) calc(100vw - 44px), (max-width: 800px) 93vw, (max-width: 1260px) 40vw, 484px";
 
-export function ApplicationDemoHero({ title, description, image }: { title: string; description: string; image: string }) {
+export function ApplicationDemoHero({ title, description, image, className, imageSizes = demoImageSizes }: {
+  title: string;
+  description: string;
+  image: string;
+  className?: string;
+  imageSizes?: string;
+}) {
   return (
-    <section className={`${s.hero} ${s.demoHero}`} aria-labelledby="application-title">
+    <section className={[s.hero, s.demoHero, className].filter(Boolean).join(" ")} aria-labelledby="application-title">
       <div className={s.heroCopy}>
         <Link className={`${shared.breadcrumb} ${s.backLink}`} href="/toepassingen"><ArrowLeft size={14} aria-hidden="true" />Alle toepassingen</Link>
         <h1 id="application-title">{title}</h1>
@@ -17,13 +24,14 @@ export function ApplicationDemoHero({ title, description, image }: { title: stri
         <a className={shared.darkButton} href="#voorbeeld">Bekijk het voorbeeld <ArrowRight size={15} aria-hidden="true" /></a>
       </div>
       <div className={s.heroImage}>
-        <Image src={image} alt="" fill sizes={demoImageSizes} loading="eager" fetchPriority="high" />
+        <Image src={image} alt="" fill sizes={imageSizes} loading="eager" fetchPriority="high" />
       </div>
     </section>
   );
 }
 
 export type RelatedExample = { href: string; label: string };
+type ReviewItem = string | { title: string; detail: string; icon: LucideIcon };
 
 const demoStages = [
   { id: "demo-invoer", label: "Invoer", description: "Bekijk de invoer" },
@@ -31,26 +39,30 @@ const demoStages = [
   { id: "demo-nazicht", label: "Controle", description: "Controleer het resultaat" },
 ];
 
-export function DemoFrame({ title, intro, sources, output, review, bring, related, downloads, detailed = false }: {
+export function DemoFrame({ title, intro, illustration, sources, output, review, bring, related, downloads, className, navigation: Navigation, detailed = false }: {
   title: string;
-  intro: string;
+  intro?: string;
+  illustration?: ReactNode;
   sources: ReactNode;
   output: ReactNode;
-  review: string[];
+  review: ReviewItem[];
   bring: string;
   related: RelatedExample;
   downloads?: ReactNode;
+  className?: string;
+  navigation?: ComponentType<{ steps: typeof demoStages }>;
   detailed?: boolean;
 }) {
   const ContactArrow = detailed ? ArrowRight : ArrowUpRight;
 
   return (
-    <section className={detailed ? `${s.example} ${s.detailed}` : s.example} id="voorbeeld" aria-labelledby="example-title">
+    <section className={[s.example, detailed && s.detailed, className].filter(Boolean).join(" ")} id="voorbeeld" aria-labelledby="example-title" tabIndex={Navigation ? -1 : undefined}>
       <div className={s.intro}>
         <p className={s.label}>Productdemo · Fictief dossier</p>
         <h2 id="example-title">{title}</h2>
-        <p>{intro}</p>
-        <nav aria-label="Stappen in de productdemo">
+        {intro && <p>{intro}</p>}
+        {illustration}
+        {Navigation ? <Navigation steps={demoStages} /> : <nav aria-label="Stappen in de productdemo">
           <ol className={s.stageLinks}>
             {demoStages.map(({ id, label, description }, index) => (
               <li key={id}>
@@ -58,7 +70,7 @@ export function DemoFrame({ title, intro, sources, output, review, bring, relate
               </li>
             ))}
           </ol>
-        </nav>
+        </nav>}
       </div>
 
       <section className={s.stage} id="demo-invoer" aria-labelledby="demo-invoer-title">
@@ -72,7 +84,16 @@ export function DemoFrame({ title, intro, sources, output, review, bring, relate
       <section className={s.review} id="demo-nazicht" aria-labelledby="demo-nazicht-title">
         <h3 id="demo-nazicht-title">Wat je team controleert</h3>
         <ul role={detailed ? "list" : undefined}>
-          {review.map(item => <li key={item}>{detailed && <Check size={16} aria-hidden="true" />}{item}</li>)}
+          {review.map(item => {
+            if (typeof item === "string") return <li key={item}>{detailed && <Check size={16} aria-hidden="true" />}{item}</li>;
+            const { title, detail, icon: Icon } = item;
+            return (
+              <li key={title}>
+                <Icon size={16} aria-hidden="true" />
+                <div className={s.reviewItem}><strong>{title}</strong><span>{detail}</span></div>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
@@ -90,12 +111,12 @@ export function DemoFrame({ title, intro, sources, output, review, bring, relate
   );
 }
 
-export function DemoOutput({ title, context, children }: { title: string; context: string; children: ReactNode }) {
+export function DemoOutput({ title, context, statusIcon, children }: { title: ReactNode; context: string; statusIcon?: ReactNode; children: ReactNode }) {
   return (
     <article className={s.output} aria-labelledby="demo-output-title">
       <header className={s.outputHeading}>
         <div><p className={s.label}>{context}</p><h4 id="demo-output-title">{title}</h4></div>
-        <p className={s.status}>Concept ter controle</p>
+        <p className={s.status}>{statusIcon}Concept ter controle</p>
       </header>
       <div className={s.outputContent}>{children}</div>
     </article>
@@ -129,8 +150,10 @@ export function DemoTable({ caption, headers, rows, footer }: {
   );
 }
 
-export function DownloadFileCard({ title, type, href }: { title: string; type: "PDF" | "Word"; href: string }) {
-  const Icon = type === "PDF" ? FileText : FileType;
+const fileIcons = { PDF: FileText, Word: FileType, Excel: FileSpreadsheet };
+
+export function DownloadFileCard({ title, type, href }: { title: string; type: keyof typeof fileIcons; href: string }) {
+  const Icon = fileIcons[type];
 
   return (
     <a className={s.fileCard} href={href} download>
