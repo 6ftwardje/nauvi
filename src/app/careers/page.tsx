@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight, Shield } from "lucide-react";
 import { photos } from "@/components/marketing/cinematic-content";
 import { MarketingShell } from "@/components/marketing/marketing-page";
-import { marketingConfig } from "@/components/marketing/site-config";
 import shared from "@/components/marketing/cinematic.module.css";
+import { applicationHref, openings } from "./openings";
 import s from "./careers.module.css";
 
 export const metadata: Metadata = {
@@ -19,69 +19,83 @@ const work = [
   { title: "Product & ontwerp", text: "Maak het voor teams eenvoudig om kennis vast te leggen en te zien welk werk hun aandacht nodig heeft." },
 ];
 
-const openings = [
-  {
-    title: "Sales",
-    text: "Je gaat in gesprek met zaakvoerders en teams bij bouwbedrijven. Je ontdekt waar ze tijd verliezen, laat zien wat Nauvi kan overnemen en begeleidt hen van het eerste gesprek tot een voorstel voor een eerste toepassing.",
-  },
-  {
-    title: "Forward Deployed Engineer",
-    text: "Je werkt rechtstreeks met klanten. Je brengt hun werkwijze in kaart, bouwt AI-agents en koppelt die aan hun bestaande tools. Met het team van de klant test je of de agent het werk goed uitvoert en stuur je bij waar nodig.",
-  },
-];
+function JobCard({ opening }: { opening: (typeof openings)[number] }) {
+  const { slug, title, contractType, summary } = opening;
+
+  return (
+    <li className={s.jobCard}>
+      <div className={s.jobCopy}>
+        <h3>{title}</h3>
+        <span className={s.contractType}>{contractType}</span>
+        <p>{summary}</p>
+      </div>
+      <div className={s.jobActions}>
+        <a className={shared.darkButton} href={applicationHref(title)} aria-label={`Solliciteer voor ${title}`}>
+          Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
+        </a>
+        <Link className={s.secondaryAction} href={`/careers/${slug}`} aria-label={`Bekijk vacature ${title}`}>
+          Bekijk vacature <ArrowRight size={15} aria-hidden="true" />
+        </Link>
+      </div>
+    </li>
+  );
+}
 
 export default function CareersPage() {
-  const configuredAddress = process.env.NAUVI_CAREERS_EMAIL?.trim() ?? "";
-  const address = /^[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(configuredAddress)
-    ? configuredAddress
-    : marketingConfig.careersEmail;
+  const openingCount: number = openings.length;
 
   return (
     <MarketingShell>
-      <section className={s.hero} aria-labelledby="careers-heading">
+      <section className={`${s.content} ${s.hero}`} aria-labelledby="careers-heading">
         <div className={s.intro}>
           <h1 id="careers-heading">Werken bij Nauvi</h1>
-          <div>
+          <div className={s.introCopy}>
             <p>We bouwen AI-agents die terugkerend werk overnemen voor kmo’s. Dat begint met begrijpen hoe het er op kantoor en op de werf aan toegaat.</p>
-            <a href="#vacatures">Bekijk de vacatures <ArrowRight size={15} aria-hidden="true" /></a>
+            <a className={shared.darkButton} href="#vacatures">Bekijk de vacatures <ArrowDown size={15} aria-hidden="true" /></a>
           </div>
         </div>
-        <div className={s.heroImage}>
-          <img src={photos.team} alt="" fetchPriority="high" decoding="async" />
-        </div>
+        <img
+          className={s.heroImage}
+          src={photos.team}
+          alt="Vijf mensen overleggen rond een tafel met een laptop en bouwplannen."
+          width={1344}
+          height={752}
+          fetchPriority="high"
+          decoding="async"
+        />
       </section>
 
-      <section className={s.statement} aria-labelledby="careers-work-heading">
-        <h2 id="careers-work-heading" data-reveal>Van een gesprek op de werf naar een agent die het werk begrijpt.</h2>
-        <p data-reveal>Een automatisering begint met de werkwijze van de mensen die de taak vandaag uitvoeren. We leggen hun afspraken vast, bouwen de koppelingen en testen samen waar een agent het werk uit handen kan nemen.</p>
+      <section className={`${s.content} ${s.statement}`} aria-labelledby="careers-work-heading">
+        <h2 className={s.sectionHeading} id="careers-work-heading">Van een gesprek op de werf naar een agent die het werk begrijpt.</h2>
+        <p>Een automatisering begint met de werkwijze van de mensen die de taak vandaag uitvoeren. We leggen hun afspraken vast, bouwen de koppelingen en testen samen waar een agent het werk uit handen kan nemen.</p>
       </section>
 
       <section className={s.disciplines} data-nav-tone="dark" aria-labelledby="careers-disciplines-heading">
-        <h2 id="careers-disciplines-heading" data-reveal>Waar we aan werken</h2>
-        <ul>
-          {work.map(({ title, text }) => <li key={title} data-reveal><h3>{title}</h3><p>{text}</p></li>)}
-        </ul>
-      </section>
-
-      <section className={s.openings} id="vacatures" aria-labelledby="openings-heading">
-        <h2 id="openings-heading">Vacatures</h2>
-        <div>
+        <div className={s.content}>
+          <h2 className={s.sectionHeading} id="careers-disciplines-heading">Waar we aan werken</h2>
           <ul>
-            {openings.map(({ title, text }) => (
+            {work.map(({ title, text }) => (
               <li key={title}>
                 <h3>{title}</h3>
                 <p>{text}</p>
-                <a
-                  className={shared.darkButton}
-                  href={`mailto:${address}?subject=${encodeURIComponent(`Sollicitatie voor ${title} bij Nauvi`)}`}
-                  aria-label={`Solliciteer voor ${title}`}
-                >
-                  Solliciteer <ArrowUpRight size={15} aria-hidden="true" />
-                </a>
               </li>
             ))}
           </ul>
-          <Link className={s.privacyLink} href="/privacy#sollicitaties">Privacy bij sollicitaties</Link>
+        </div>
+      </section>
+
+      <section className={`${s.content} ${s.openings}`} id="vacatures" aria-labelledby="openings-heading" tabIndex={-1}>
+        <div className={s.openingsIntro}>
+          <h2 className={s.sectionHeading} id="openings-heading">Vacatures</h2>
+          <p>{openingCount} {openingCount === 1 ? "openstaande functie" : "openstaande functies"}</p>
+        </div>
+        <div>
+          <ul className={s.jobList}>
+            {openings.map(opening => <JobCard key={opening.slug} opening={opening} />)}
+          </ul>
+          <Link className={`${s.secondaryAction} ${s.privacyLink}`} href="/privacy#sollicitaties">
+            <Shield size={15} aria-hidden="true" /> Privacy bij sollicitaties
+          </Link>
         </div>
       </section>
     </MarketingShell>
