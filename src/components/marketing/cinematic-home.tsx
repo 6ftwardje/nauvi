@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import {
@@ -105,10 +106,12 @@ export function ToolLogos() {
   );
 }
 
-export function ApplicationCard({ application }: { application: typeof applications[number] }) {
+const carouselImageSizes = "(max-width: 523px) calc(100vw - 44px), (max-width: 580px) 92vw, (max-width: 900px) 53vw, (max-width: 1530px) 41vw, 620px";
+
+export function ApplicationCard({ application, sizes }: { application: typeof applications[number]; sizes: string }) {
   return (
     <Link className={s.applicationCard} href={`/toepassingen/${application.slug}`}>
-      <img src={application.image} alt="" loading="lazy" decoding="async" />
+      <Image src={application.image} alt="" fill sizes={sizes} />
       <h3>{application.title}</h3>
       <ArrowUpRight size={23} aria-hidden="true" />
       <span>{application.category}</span>
@@ -156,7 +159,9 @@ export function ApplicationCarousel() {
         </div>
       </div>
       <div className={s.carouselTrack} id="application-carousel" ref={carousel}>
-        {applications.slice(0, 7).map(application => <ApplicationCard key={application.slug} application={application} />)}
+        {applications.slice(0, 7).map(application => (
+          <ApplicationCard key={application.slug} application={application} sizes={carouselImageSizes} />
+        ))}
       </div>
     </section>
   );

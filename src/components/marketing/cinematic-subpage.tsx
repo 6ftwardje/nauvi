@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { applicationCategories, applications, photos, processSteps } from "./cinematic-content";
@@ -5,6 +6,9 @@ import { ApplicationCard } from "./cinematic-home";
 import { MarketingShell } from "./marketing-page";
 import { marketingConfig } from "./site-config";
 import s from "./cinematic.module.css";
+
+const directoryImageSizes = "(max-width: 523px) calc(100vw - 44px), (max-width: 580px) 92vw, (max-width: 1310px) 30vw, 391px";
+const detailImageSizes = "(max-width: 523px) calc(100vw - 44px), (max-width: 1904px) 92vw, calc(100vw - 160px)";
 
 export function MarketingIntro({ title, description, image, back }: {
   title: string;
@@ -51,7 +55,9 @@ export function ApplicationsPage() {
             <section id={id} key={id} aria-labelledby={`${id}-title`}>
               <h2 id={`${id}-title`}>{label}</h2>
               <div className={s.directoryGrid}>
-                {applications.filter(application => application.category === label).map(application => <ApplicationCard key={application.slug} application={application} />)}
+                {applications.filter(application => application.category === label).map(application => (
+                  <ApplicationCard key={application.slug} application={application} sizes={directoryImageSizes} />
+                ))}
               </div>
             </section>
         ))}
@@ -63,7 +69,10 @@ export function ApplicationsPage() {
 export function ApplicationDetail({ application }: { application: typeof applications[number] }) {
   return (
     <MarketingShell>
-      <MarketingIntro title={application.title} description={application.description} image={application.image} back={{ href: "/toepassingen", label: "Alle toepassingen" }} />
+      <MarketingIntro title={application.title} description={application.description} back={{ href: "/toepassingen", label: "Alle toepassingen" }} />
+      <div className={`${s.subpagePhoto} ${s.applicationDetailPhoto}`}>
+        <Image src={application.image} alt="" fill sizes={detailImageSizes} loading="eager" fetchPriority="high" />
+      </div>
       <section className={s.detailSection} aria-labelledby="result-heading">
         <div><h2 id="result-heading">Wat je team terugkrijgt.</h2></div>
         <div>

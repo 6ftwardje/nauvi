@@ -614,7 +614,12 @@
   border-radius: 9px;
   background: #302b28;
   color: white;
+  text-shadow: 0 1px 4px #10101080;
   scroll-snap-align: start;
+}
+
+.applicationCard:focus-visible {
+  outline-offset: -4px;
 }
 
 .site .applicationCard h3 {
@@ -656,7 +661,9 @@
 }
 
 .applicationCard::after {
-  background: linear-gradient(180deg, #101010d9, #1010109c 32%, #10101003 57%, #101010d9);
+  background:
+    var(--card-title-shade, linear-gradient(180deg, #10101080, #1010104d 28%, transparent 48%)),
+    linear-gradient(0deg, #101010c4, #101010a6 52px, transparent 102px);
 }
 
 .statement {
@@ -1142,6 +1149,17 @@
   object-fit: cover;
 }
 
+.applicationDetailPhoto {
+  position: relative;
+  overflow: clip;
+  background: #302b28;
+}
+
+.applicationDetailPhoto img {
+  object-fit: cover;
+  object-position: center 72%;
+}
+
 .detailSection,
 .brainSection,
 .applicationDirectory {
@@ -1203,6 +1221,7 @@
 }
 
 .applicationDirectory .applicationCard {
+  --card-title-shade: linear-gradient(180deg, #101010b3, #101010a6 42%, transparent 66%);
   aspect-ratio: 1.2;
 }
 
@@ -1210,6 +1229,24 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+}
+
+@media (580px < width <= 900px) {
+  .applicationDirectory .applicationCard {
+    --card-title-shade: linear-gradient(180deg, #101010a6 54%, transparent 72%);
+    gap: 5px 6px;
+    padding: clamp(13px, 2vw, 18px);
+  }
+
+  .site .applicationDirectory .applicationCard h3 {
+    font-size: clamp(18px, 2.8vw, 25px);
+    overflow-wrap: anywhere;
+  }
+
+  .applicationDirectory .applicationCard > svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 @media (max-width: 900px) {
